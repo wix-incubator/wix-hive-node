@@ -1,0 +1,81 @@
+{
+    "type": "object",
+    "properties": {
+        "recipient": {
+            "type": "object",
+            "required" : "true",
+            "properties": {
+                "method" : {
+                    "type" : "string",
+                    "enum" : ["EMAIL", "SMS", "PHONE", "SOCIAL"],
+                    "required" : "true"
+                },
+                "destination" : {
+                    "type" : "object",
+                    "properties": {
+                        "destination" : {
+                            "type" : "string",
+                            "required" : "true"
+                        },
+                        "name" : {
+                            "type": "object",
+                            "properties": {
+                                "prefix": {
+                                    "type": "string"
+                                },
+                                "first": {
+                                    "type": "string"
+                                },
+                                "middle": {
+                                    "type": "string"
+                                },
+                                "last": {
+                                    "type": "string"
+                                },
+                                "suffix": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "required" : "true"
+                },
+                "contactId" : {
+                    "type" : "string",
+                    "required" : "false"
+                }
+            }
+        },
+        "messageId" : {
+            "type" : "string",
+            "required" : "false"
+        },
+        "conversionTarget" : {
+            "type": "object",
+            "required" : "false",
+            "properties" : {
+                "conversionType" : {
+                    "type": "string",
+                    "enum" : ["PAGEVIEW", "PURCHASE", "UPGRADE", "LIKE", "FAN", "NONE"],
+                    "required" : "true"
+                },
+                "metadata" : {
+                    "type" : "array",
+                    "items": {
+                        "type": "object",
+                        "properties" : {
+                            "property" : {
+                                "type" : "string",
+                                "required" : "true"
+                            },
+                            "value" : {
+                                "type" : "string",
+                                "required" : "true"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,242 @@
+{
+    "type": "object",
+    "properties": {
+        "cartId": {
+            "type": "string",
+            "required": true
+        },
+        "storeId": {
+            "type": "integer",
+            "required": true
+        },
+        "orderId": {
+            "type": "string"
+        },
+        "items": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "sku": {
+                        "type": "string"
+                    },
+                    "title": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "quantity": {
+                        "type": "integer",
+                        "required": true
+                    },
+                    "price": {
+                        "type": "number"
+                    },
+                    "formattedPrice": {
+                        "type": "string"
+                    },
+                    "currency": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "productLink": {
+                        "type": "string"
+                    },
+                    "weight": {
+                        "type": "number"
+                    },
+                    "formattedWeight": {
+                        "type": "string"
+                    },
+                    "media": {
+                        "type": "object",
+                        "properties": {
+                            "thumbnail": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "variants": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "title": {
+                                    "type": "string",
+                                    "required": true
+                                },
+                                "value": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "required": true
+                    }
+                }
+            },
+            "required": true
+        },
+        "payment": {
+            "type": "object",
+            "properties": {
+                "total": {
+                    "type": "number",
+                    "required": true
+                },
+                "subtotal": {
+                    "type": "number",
+                    "required": true
+                },
+                "formattedTotal": {
+                    "type": "string"
+                },
+                "formattedSubtotal": {
+                    "type": "string"
+                },
+                "currency": {
+                    "type": "string",
+                    "required": true
+                },
+                "coupon": {
+                    "type": "object",
+                    "properties": {
+                        "total": {
+                            "type": "number",
+                            "required": true
+                        },
+                        "formattedTotal": {
+                            "type": "string"
+                        },
+                        "title": {
+                            "type": "string",
+                            "required": true
+                        }
+                    }
+                },
+                "tax": {
+                    "type": "object",
+                    "properties": {
+                        "total": {
+                            "type": "number",
+                            "required": true
+                        },
+                        "formattedTotal": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "shipping": {
+                    "type": "object",
+                    "properties": {
+                        "total": {
+                            "type": "number",
+                            "required": true
+                        },
+                        "formattedTotal": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "required": true
+        },
+        "shippingAddress": {
+            "type": "object",
+            "properties": {
+                "firstName": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "country": {
+                    "type": "string"
+                },
+                "countryCode": {
+                    "type": "string"
+                },
+                "region": {
+                    "type": "string"
+                },
+                "regionCode": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "address1": {
+                    "type": "string"
+                },
+                "address2": {
+                    "type": "string"
+                },
+                "zip": {
+                    "type": "string"
+                },
+                "company": {
+                    "type": "string"
+                }
+            }
+        },
+        "billingAddress": {
+            "type": "object",
+            "properties": {
+                "firstName": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "country": {
+                    "type": "string"
+                },
+                "countryCode": {
+                    "type": "string"
+                },
+                "region": {
+                    "type": "string"
+                },
+                "regionCode": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "address1": {
+                    "type": "string"
+                },
+                "address2": {
+                    "type": "string"
+                },
+                "zip": {
+                    "type": "string"
+                },
+                "company": {
+                    "type": "string"
+                }
+            }
+        },
+        "paymentGateway": {
+            "type": "string"
+        },
+        "note": {
+            "type": "string"
+        },
+        "buyerAcceptsMarketing": null
+    }
+}

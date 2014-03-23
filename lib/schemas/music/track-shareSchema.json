@@ -1,0 +1,41 @@
+{
+    "type": "object",
+    "properties": {
+        "track" : {
+            "type" : "object",
+            "properties" : {
+
+                "name": {
+                    "type": "string",
+                    "required": true
+                },
+                "id" : {
+                    "type" : "string",
+                    "required": true
+                }
+            }
+        },
+        "album" : {
+            "type" : "object",
+            "properties" : {
+                "name": {
+                    "type": "string",
+                    "required": true
+                },
+                "id" : {
+                    "type" : "string",
+                    "required": true
+                }
+            }
+        },
+        "sharedTo" : {
+            "type" : "string",
+            "enum": [
+                "FACEBOOK",
+                "GOOGLE_PLUS",
+                "TWITTER"
+            ],
+            "required" : true
+        }
+    }
+}

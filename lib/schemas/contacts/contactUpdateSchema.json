@@ -1,0 +1,138 @@
+{
+    "type": "object",
+    "properties": {
+        "name": {
+            "type": "object",
+            "properties": {
+                "prefix": {
+                    "type": "string"
+                },
+                "first": {
+                    "type": "string"
+                },
+                "middle": {
+                    "type": "string"
+                },
+                "last": {
+                    "type": "string"
+                },
+                "suffix": {
+                    "type": "string"
+                }
+            }
+        },
+        "picture": {
+            "type": "string"
+        },
+        "company": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                }
+            }
+        },
+        "emails": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "tag": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "email": {
+                        "type": "string",
+                        "required": true
+                    }
+                }
+            },
+            "required": true
+        },
+        "phones": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "tag": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "phone": {
+                        "type": "string",
+                        "required": true
+                    }
+                }
+            },
+            "required": true
+        },
+        "addresses": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "tag": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "address": {
+                        "type": "string"
+                    },
+                    "neighborhood": {
+                        "type": "string"
+                    },
+                    "city": {
+                        "type": "string"
+                    },
+                    "region": {
+                        "type": "string"
+                    },
+                    "postalCode": {
+                        "type": "string"
+                    },
+                    "country": {
+                        "type": "string"
+                    }
+                }
+            },
+            "required": true
+        },
+        "dates": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "tag": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "date": {
+                        "type": "number",
+                        "required": true
+                    }
+                }
+            },
+            "required": true
+        },
+        "urls": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "tag": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "url": {
+                        "type": "string",
+                        "required": true
+                    }
+                }
+            },
+            "required": true
+        }
+    }
+}

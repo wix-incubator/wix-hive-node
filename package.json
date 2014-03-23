@@ -1,0 +1,30 @@
+{
+    "name": "openapi-node",
+    "version": "1.0.0",
+    "description": "A Node library to interact with the Wix RESTful API",
+    "main": "lib/wixapi.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/wix/openapi-node"
+    },
+    "dependencies": {
+        "crypto-js": "3.1.2-2",
+        "lodash-node" : "2.4.1",
+        "restler" : "3.2.0",
+        "q" : "1.0.0"
+    },
+    "engines": {
+        "node": ">= 0.10.20"
+    },
+    "keywords": [
+        "Wix"
+    ],
+    "author": "Wix <davidz@wix.com> (http://dev.wix.com/)",
+    "license": "Apache 2",
+    "bugs": {
+        "url": "https://github.com/wix/openapi-node/issues"
+    }
+}

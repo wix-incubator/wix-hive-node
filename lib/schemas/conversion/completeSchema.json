@@ -1,0 +1,30 @@
+{
+    "type": "object",
+    "properties": {
+        "conversionType" : {
+            "type": "string",
+            "enum" : ["PAGEVIEW", "PURCHASE", "UPGRADE", "LIKE", "FAN", "NONE"],
+            "required" : "true"
+        },
+        "messageId" : {
+            "type" : "string",
+            "required" : "false"
+        },
+        "metadata" : {
+            "type" : "array",
+            "items": {
+                "type": "object",
+                "properties" : {
+                    "property" : {
+                        "type" : "string",
+                        "required" : "true"
+                    },
+                    "value" : {
+                        "type" : "string",
+                        "required" : "true"
+                    }
+                }
+            }
+        }
+    }
+}
