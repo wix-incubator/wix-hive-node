@@ -2,7 +2,8 @@
     "name": "openapi-node",
     "version": "1.0.0",
     "description": "A Node library to interact with the Wix RESTful API",
-    "main": "lib/wixapi.js",
+    "main": "lib/WixClient.js",
+    "homepage" : "http://dev.wix.com",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     },
