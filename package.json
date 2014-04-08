@@ -1,6 +1,6 @@
 {
     "name": "openapi-node",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "A Node library to interact with the Wix RESTful API",
     "main": "lib/WixClient.js",
     "homepage" : "http://dev.wix.com",
