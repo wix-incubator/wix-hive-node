@@ -1,6 +1,6 @@
 {
     "name": "openapi-node",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "description": "A Node library to interact with the Wix RESTful API",
     "main": "lib/WixClient.js",
     "homepage" : "http://dev.wix.com",
@@ -16,6 +16,13 @@
         "lodash-node" : "2.4.1",
         "restler" : "3.2.0",
         "q" : "1.0.0"
+    },
+    "devDependencies" : {
+        "lodash" : "2.4.1",
+        "grunt" : "0.4.4",
+        "grunt-jsdox" : "0.1.3",
+        "grunt-contrib-clean" : "0.5.0",
+        "grunt-jsdoc" : "0.5.4"
     },
     "engines": {
         "node": ">= 0.10.20"

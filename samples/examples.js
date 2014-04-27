@@ -11,10 +11,8 @@
  */
 
 
-var wixapi = require('./../lib/WixClient.js');
-
+var wixapi = require('openapi-node');
 var wix = wixapi.getAPI("[YOUR SECRET KEY]", "[YOUR APP ID]", "[YOUR INSTANCE ID]");
-
 
 wix.Activities.getTypes().then(function(data) {
     console.log(data);
