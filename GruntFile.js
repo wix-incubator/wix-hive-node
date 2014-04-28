@@ -17,14 +17,17 @@ module.exports = function(grunt) {
         },
         jsdoc : {
             dist : {
-                src: ['lib/*.js'],
+                src: ['lib/*.js', 'README.md'],
                 options: {
-                    destination: 'doc'
+                    destination: 'doc',
+                    private : false,
+                    configure: 'jsdoc.conf.json',
+                    template: 'node_modules/grunt-jsdoc/node_modules/ink-docstrap/template'
                 }
             }
         },
         clean: {
-            all: ['doc']
+            all: ['doc', 'docs']
         }
     });
 
@@ -33,6 +36,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
 
     // Default task(s).
-    grunt.registerTask('default', ['clean', 'jsdox', 'jsdoc']);
+    grunt.registerTask('default', ['clean', 'jsdoc']);
 
 };
