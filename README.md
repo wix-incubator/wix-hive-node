@@ -37,14 +37,14 @@ app.get('/', function (req, res) {
         // Get a shortcut for the Wix RESTful API
         var wixAPI = wix.getAPI(APP_SECRET, APP_ID, instanceId);
 
-        // Once you've reached this point you're good to use the Wix API,
-        // Otherwise an exception will be thrown.
+        console.log("Once you've reached this point you're good to use the Wix API, otherwise an exception will be thrown.");
 
         title = 'Home - instance verified';
         res.send( title );
 
     } catch(e) {
-        console.log(e);
+        title = "Wix API init failed. Check your app key, secret and instance Id";
+        console.log( title );
         res.send( title );
     }
 });
