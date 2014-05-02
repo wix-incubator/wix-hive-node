@@ -79,6 +79,10 @@
 						</li>
 						
 						<li>
+							<a href="WixActivityData.html">WixActivityData</a>
+						</li>
+						
+						<li>
 							<a href="WixAPICaller.html">WixAPICaller</a>
 						</li>
 						
@@ -128,7 +132,7 @@
     
     
     <div class="description">
-        <p>Represents an Activity in the Wix ecosystem</p>
+        <p>Represents a new Activity in the Wix ecosystem, allowing for easy construction and creation</p>
     </div>
     
 
@@ -196,6 +200,8 @@
 
         <ul>
             <li><a href="BaseWixAPIObject.html">BaseWixAPIObject</a></li>
+        
+            <li><a href="WixActivityData.html">WixActivityData</a></li>
         </ul>
     
 
@@ -209,134 +215,6 @@
         <h3 class="subsection-title">Members</h3>
 
         <dl>
-            
-<dt>
-    <h4 class="name" id="activityDetails"><span class="type-signature"></span>activityDetails<span class="type-signature"> :<a href="WixActivity.html#ActivityDetails">WixActivity.ActivityDetails</a></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>Information about the Activity</p>
-    </div>
-    
-    
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type"><a href="WixActivity.html#ActivityDetails">WixActivity.ActivityDetails</a></span>
-
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        WixClient.js
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="activityLocationUrl"><span class="type-signature"></span>activityLocationUrl<span class="type-signature"> :String</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>The URL where the activity was performed</p>
-    </div>
-    
-    
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">String</span>
-
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        WixClient.js
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-    
-    
-</dd>
-
-        
             
 <dt>
     <h4 class="name" id="contactUpdate"><span class="type-signature"></span>contactUpdate<span class="type-signature"> :Object</span></h4>
@@ -400,70 +278,6 @@
     
 </dd>
 
-        
-            
-<dt>
-    <h4 class="name" id="createdAt"><span class="type-signature"></span>createdAt<span class="type-signature"> :Date</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>A timestamp to indicate when this Activity took place</p>
-    </div>
-    
-    
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">Date</span>
-
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        WixClient.js
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-    
-    
-</dd>
-
         </dl>
     
 
@@ -473,7 +287,7 @@
         <dl>
             
 <dt>
-    <h4 class="name" id="post"><span class="type-signature"></span>post<span class="signature">(sessionToken, wix)</span><span class="type-signature"> &rarr; {promise|Q.promise}</span></h4>
+    <h4 class="name" id="post"><span class="type-signature"></span>post<span class="signature">(sessionToken, wix)</span><span class="type-signature"> &rarr; {Promise.&lt;string, error>}</span></h4>
     
     
 </dt>
@@ -481,7 +295,7 @@
     
     
     <div class="description">
-        <p>Posts the Activity to Wix</p>
+        <p>Posts the Activity to Wix.  Returns a Promise for an id</p>
     </div>
     
 
@@ -610,6 +424,10 @@
     <h5>Returns:</h5>
     
             
+<div class="param-desc">
+    <p>A new id, or an error</p>
+</div>
+
 
 
 <dl>
@@ -618,10 +436,7 @@
 	</dt>
 	<dd>
 		
-<span class="param-type">promise</span>
-|
-
-<span class="param-type">Q.promise</span>
+<span class="param-type">Promise.&lt;string, error></span>
 
 
 	</dd>
@@ -1071,167 +886,6 @@
     
 
     
-        <h3 class="subsection-title">Type Definitions</h3>
-
-        <dl>
-                
-<dt>
-    <h4 class="name" id="ActivityDetails">ActivityDetails</h4>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>Information about the Activity</p>
-    </div>
-    
-    
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">Object</span>
-
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-
-        <h5 class="subsection-title">Properties:</h5>
-
-        <dl>
-
-<table class="props table table-striped">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-
-		<th>Type</th>
-
-		
-		<th>Argument</th>
-		
-
-		
-
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-
-	<tbody>
-	
-
-        <tr>
-            
-                <td class="name"><code>additionalInfoUrl</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-                    &lt;nullable><br>
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>Url linking to more specific contextual information about the activity for use in the Dashboard</p></td>
-        </tr>
-
-	
-
-        <tr>
-            
-                <td class="name"><code>summary</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-                    &lt;nullable><br>
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>A short description about the activity for use in the Dashboard</p></td>
-        </tr>
-
-	
-	</tbody>
-</table>
-</dl>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        WixClient.js
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-    
-    
-</dd>
-
-            </dl>
-    
 
     
 </article>
@@ -1257,7 +911,7 @@
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a>
-		on Thu May 01 2014 23:39:37 GMT+0300 (IDT) using the <a href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
+		on Fri May 02 2014 20:05:27 GMT+0300 (IDT) using the <a href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>
 			</div>

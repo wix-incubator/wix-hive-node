@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>Wix openapi-node Class: Activities</title>
+	<title>Wix openapi-node Class: WixActivityData</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -107,12 +107,12 @@
 					
 
 
-	<h1 class="page-title">Class: Activities</h1>
+	<h1 class="page-title">Class: WixActivityData</h1>
 <section>
 
 <header>
     <h2>
-    Activities
+    WixActivityData
     </h2>
     
 </header>
@@ -124,7 +124,7 @@
     
         
 <dt>
-    <h4 class="name" id="Activities"><span class="type-signature"></span>new Activities<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="WixActivityData"><span class="type-signature"></span>new WixActivityData<span class="signature">()</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -132,7 +132,7 @@
     
     
     <div class="description">
-        <p>Handles interactions with the Activities RESTful API</p>
+        <p>Represents an Activity in the Wix ecosystem</p>
     </div>
     
 
@@ -196,12 +196,6 @@
     
 
     
-        <h3 class="subsection-title">Mixes In</h3>
-
-        <ul>
-            <li><a href="WixAPICaller.html">WixAPICaller</a></li>
-        </ul>
-    
 
     
 
@@ -210,103 +204,226 @@
     
 
     
-
-    
-        <h3 class="subsection-title">Methods</h3>
+        <h3 class="subsection-title">Members</h3>
 
         <dl>
             
 <dt>
-    <h4 class="name" id="getActivities"><span class="type-signature"></span>getActivities<span class="signature">(cursor, dateRange)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="WixPagingData.html">WixPagingData</a>, error>}</span></h4>
+    <h4 class="name" id="activityDetails"><span class="type-signature"></span>activityDetails<span class="type-signature"> :<a href="WixActivityData.html#ActivityDetails">WixActivityData.ActivityDetails</a></span></h4>
     
     
 </dt>
 <dd>
     
-    
     <div class="description">
-        <p>Navigates the Activities found on the current site</p>
+        <p>Information about the Activity</p>
     </div>
     
+    
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type"><a href="WixActivityData.html#ActivityDetails">WixActivityData.ActivityDetails</a></span>
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        WixClient.js
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
 
     
     
-    
-    
-    
-        <h5>Parameters:</h5>
+</dd>
+
         
-
-<table class="params table table-striped">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-
-		<th>Type</th>
-
-		
-
-		
-
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-
-	<tbody>
-	
-
-        <tr>
             
-                <td class="name"><code>cursor</code></td>
-            
+<dt>
+    <h4 class="name" id="activityInfo"><span class="type-signature"></span>activityInfo<span class="type-signature"> :Object</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Schema information about the Activity</p>
+    </div>
+    
+    
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Object</span>
 
-            <td class="type">
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        WixClient.js
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+    
+    
+</dd>
+
+        
             
+<dt>
+    <h4 class="name" id="activityLocationUrl"><span class="type-signature"></span>activityLocationUrl<span class="type-signature"> :String</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>The URL where the activity was performed</p>
+    </div>
+    
+    
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">String</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        WixClient.js
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="activityType"><span class="type-signature"></span>activityType<span class="type-signature"> :string</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>The type of Activity</p>
+    </div>
+    
+    
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
                 
 <span class="param-type">string</span>
 
 
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The current cursor, or -1 if no cursor exists</p></td>
-        </tr>
-
-	
-
-        <tr>
-            
-                <td class="name"><code>dateRange</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Activities.html#DateRange">Activities.DateRange</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>An object specifying the date range to filter against</p></td>
-        </tr>
-
-	
-	</tbody>
-</table>
-
+            </li>
+        </ul>
     
-    
+
     
 <dl class="details">
     
@@ -343,37 +460,68 @@
 
     
     
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    <p>A promise for a <a href="WixPagingData.html"><code>WixPagingData</code></a> object to navigate results, or an error</p>
-</div>
-
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">Promise.&lt;<a href="WixPagingData.html">WixPagingData</a>, error></span>
-
-
-	</dd>
-</dl>
-
+</dd>
 
         
+            
+<dt>
+    <h4 class="name" id="createdAt"><span class="type-signature"></span>createdAt<span class="type-signature"> :Date</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>A timestamp to indicate when this Activity took place</p>
+    </div>
+    
+    
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Date</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        WixClient.js
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
     
     
 </dd>
@@ -381,73 +529,29 @@
         
             
 <dt>
-    <h4 class="name" id="getActivityById"><span class="type-signature"></span>getActivityById<span class="signature">(activityId)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="WixActivity.html">WixActivity</a>, error>}</span></h4>
+    <h4 class="name" id="id"><span class="type-signature"></span>id<span class="type-signature"> :string</span></h4>
     
     
 </dt>
 <dd>
     
-    
     <div class="description">
-        <p>Returns an Activity by a given ID</p>
+        <p>The id of the Activity</p>
     </div>
     
-
     
     
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-
-		<th>Type</th>
-
-		
-
-		
-
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-
-	<tbody>
-	
-
-        <tr>
-            
-                <td class="name"><code>activityId</code></td>
-            
-
-            <td class="type">
-            
+        <h5>Type:</h5>
+        <ul>
+            <li>
                 
 <span class="param-type">string</span>
 
 
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The id of the Activity to return</p></td>
-        </tr>
-
-	
-	</tbody>
-</table>
-
+            </li>
+        </ul>
     
-    
+
     
 <dl class="details">
     
@@ -482,436 +586,6 @@
     
 </dl>
 
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    <p>An Activity, or an error</p>
-</div>
-
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">Promise.&lt;<a href="WixActivity.html">WixActivity</a>, error></span>
-
-
-	</dd>
-</dl>
-
-
-        
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="getTypes"><span class="type-signature"></span>getTypes<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;Array.&lt;string>, error>}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Returns a list of all activity types contained within the Wix system</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        WixClient.js
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    <p>A promise for an array of strings</p>
-</div>
-
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">Promise.&lt;Array.&lt;string>, error></span>
-
-
-	</dd>
-</dl>
-
-
-        
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="newActivity"><span class="type-signature"></span>newActivity<span class="signature">(type)</span><span class="type-signature"> &rarr; {<a href="WixActivity.html">WixActivity</a>}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Creates a new WixActivity for the given <a href="ActivityType.html"><code>ActivityType</code></a></p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-
-		<th>Type</th>
-
-		
-
-		
-
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-
-	<tbody>
-	
-
-        <tr>
-            
-                <td class="name"><code>type</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="ActivityType.html">ActivityType</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>the type of Activity</p></td>
-        </tr>
-
-	
-	</tbody>
-</table>
-
-    
-    
-    
-<dl class="details">
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        WixClient.js
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    <p>returns an empty Wix Activity</p>
-</div>
-
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type"><a href="WixActivity.html">WixActivity</a></span>
-
-
-	</dd>
-</dl>
-
-
-        
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="postActivity"><span class="type-signature"></span>postActivity<span class="signature">(activity, userSessionToken)</span><span class="type-signature"> &rarr; {Promise.&lt;string, error>}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Posts the Activity to Wix.  Returns a Promise for an id</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-
-		<th>Type</th>
-
-		
-
-		
-
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-
-	<tbody>
-	
-
-        <tr>
-            
-                <td class="name"><code>activity</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="WixActivity.html">WixActivity</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>the Activity to post to Wix</p></td>
-        </tr>
-
-	
-
-        <tr>
-            
-                <td class="name"><code>userSessionToken</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The current session token for active Wix user</p></td>
-        </tr>
-
-	
-	</tbody>
-</table>
-
-    
-    
-    
-<dl class="details">
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        WixClient.js
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    <p>A new id, or an error</p>
-</div>
-
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">Promise.&lt;string, error></span>
-
-
-	</dd>
-</dl>
-
-
-        
     
     
 </dd>
@@ -920,19 +594,21 @@
     
 
     
+
+    
         <h3 class="subsection-title">Type Definitions</h3>
 
         <dl>
                 
 <dt>
-    <h4 class="name" id="DateRange">DateRange</h4>
+    <h4 class="name" id="ActivityDetails">ActivityDetails</h4>
     
     
 </dt>
 <dd>
     
     <div class="description">
-        <p>Date range used to filter Activities</p>
+        <p>Information about the Activity</p>
     </div>
     
     
@@ -980,42 +656,13 @@
 
         <tr>
             
-                <td class="name"><code>from</code></td>
+                <td class="name"><code>additionalInfoUrl</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Date</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>The start date of our filter</p></td>
-        </tr>
-
-	
-
-        <tr>
-            
-                <td class="name"><code>until</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Date</span>
+<span class="param-type">String</span>
 
 
             
@@ -1033,7 +680,38 @@
 
             
 
-            <td class="description last"><p>The end date of our filter.  If not specified, until includes the most recent Activities</p></td>
+            <td class="description last"><p>Url linking to more specific contextual information about the activity for use in the Dashboard</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>summary</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>A short description about the activity for use in the Dashboard</p></td>
         </tr>
 
 	
