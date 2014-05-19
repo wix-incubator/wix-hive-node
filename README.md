@@ -12,6 +12,10 @@ Read all about (developing a third party app for the Wix platform)[http://dev.wi
 ## Installation
     $ npm install openapi-node
 
+
+## API Documentation
+[Read the docs](http://wix.github.io/openapi-node/)
+
 ## Quick Start
 
 ```js
