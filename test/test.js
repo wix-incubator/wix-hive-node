@@ -31,8 +31,9 @@ describe('OpenAPI-Node', function() {
     });
 
     describe('Activities', function() {
-        describe('Activity Types', function() {
-            it('should return list of activities', function(done) {
+
+        describe('getActivityTpes', function() {
+            it('should return list of activity types', function(done) {
                 api.Activities.getTypes().then(
                     function(types){
                         var expectedTypes = {
@@ -70,13 +71,16 @@ describe('OpenAPI-Node', function() {
                 );
             });
         });
-        describe('Activity Creation', function() {
+
+        describe('newActivity', function() {
             it('should create new activity without throwing error', function(done) {
                 var activity = api.Activities.newActivity(api.Activities.TYPES.ALBUM_FAN);
                 activity.should.not.equal(undefined);
                 done();
             });
+        });
 
+        describe('postActivity', function() {
             it('should throw error when posting activity missing required fields', function(done) {
                 var activity = api.Activities.newActivity(api.Activities.TYPES.ALBUM_FAN);
                 expect(api.Activities.postActivity).withArgs(activity, "THINGS").to.throwException();
@@ -134,11 +138,263 @@ describe('OpenAPI-Node', function() {
                         data.should.not.equal(undefined);
                         data.should.be.a.String;
                         data.should.not.be.empty;
+                        data.should.not.be.length(0)
                         done();
                     }, function(error) {
                         throw error;
                     });
             });
+        });
+
+        describe('getActivityById', function() {
+            it('should return posted activity', function(done) {
+                var activity = api.Activities.newActivity(api.Activities.TYPES.CONTACT_FORM);
+
+                var cu = activity.contactUpdate;
+                cu.addEmail(cu.newEmail().withTag("main").withEmail("name@wexample.com"));
+
+                cu.name.withFirst("Your").withLast("Customer");
+
+                activity.withLocationUrl("http://www.test.com/").withActivityDetails("This is a test activity post", "http://www.test1.com/");
+                var ai = activity.activityInfo;
+                ai.addField(ai.newField().withName("email").withValue("john@mail.com"));
+                ai.addField(ai.newField().withName("first").withValue("John"));
+
+                api.Activities.postActivity(activity, SESSION_ID)
+                    .then(function(data) {
+                        api.Activities.getActivityById(data).then(
+                            function(data){
+                                var activity = data;
+                                activity.activityType.should.eql(api.Activities.TYPES.CONTACT_FORM.name);
+                                activity.activityDetails.additionalInfoUrl.should.eql("http://www.test1.com/");
+                                activity.activityDetails.summary.should.eql("This is a test activity post");
+                                activity.activityLocationUrl.should.eql("http://www.test.com/");
+                                activity.activityInfo.fields[0].name.should.eql("email");
+                                activity.activityInfo.fields[1].name.should.eql("first");
+                                activity.activityInfo.fields[0].value.should.eql("john@mail.com");
+                                activity.activityInfo.fields[1].value.should.eql("John");
+                                done();
+                            },
+                            function(error){
+                                throw error;
+                            }
+                        );
+                    }, function(error) {
+                        throw error;
+                    });
+            });
+        });
+
+        describe('getActivities', function() {
+            it('should return a on-empty list of activities', function(done) {
+
+                api.Activities.getActivities(null, null)
+                    .then(function(data) {
+                        data.should.not.equal(undefined);
+                        data.should.be.a.Object; //TODO Make this 'WixPagingData'
+                        data.should.not.be.empty;
+                        data.currentData.results.should.be.a.Array;
+                        data.currentData.results.should.not.have.length(0);
+                        done();
+                    }, function(error) {
+                        throw error;
+                    });
+            });
+        });
+    });
+
+    describe('Insights', function() {
+        describe('getActivitiesSummary', function() {
+            it('should return activities summary for App', function(done) {
+
+                api.Insights.getActivitiesSummary(api.Insights.Scope.APP)
+                    .then(function(data) {
+                        data.should.not.equal(undefined);
+                        data.activityTypes.should.be.a.Array;
+                        data.activityTypes.should.not.have.length(0);
+                        data.total.should.not.eql(0);
+                        done();
+                    }, function(error) {
+                        throw error;
+                    });
+            });
+            it('should return activities summary for Site', function(done) {
+
+                api.Insights.getActivitiesSummary(api.Insights.Scope.Site)
+                    .then(function(data) {
+                        data.should.not.equal(undefined);
+                        data.activityTypes.should.be.a.Array;
+                        data.activityTypes.should.not.have.length(0);
+                        data.total.should.not.eql(0);
+                        done();
+                    }, function(error) {
+                        throw error;
+                    });
+            });
+            it('should throw error when not given scope', function(done) {
+
+                api.Insights.getActivitiesSummary(null)
+                    .then(function(data) {
+                        data.should.not.equal(undefined);
+                        data.activityTypes.should.be.a.Array;
+                        data.activityTypes.should.not.have.length(0);
+                        data.total.should.not.eql(0);
+                        done();
+                    }, function(error) {
+                        throw error;
+                    });
+            });
+        });
+
+        describe('getActivitySummaryForContact', function() {
+            it('should throw error when not given scope', function(done) {
+
+                api.Insights.getActivitySummaryForContact()
+                    .then(function(data) {
+                        data.should.not.equal(undefined);
+                        data.activityTypes.should.be.a.Array;
+                        data.activityTypes.should.not.have.length(0);
+                        data.total.should.not.eql(0);
+                        done();
+                    }, function(error) {
+                        throw error;
+                    });
+            });
+        });
+    });
+
+    describe('Contacts', function() {
+
+        it('should create new contact', function (done) {
+            var contact = api.Contacts.newContact();
+            api.Contacts.create(contact).then(
+                function (data) {
+                    data.should.not.equal(undefined);
+                    data.should.be.a.String;
+                    data.should.not.be.length(0);
+                    done();
+                },
+                function (error) {
+                    throw error;
+                }
+            );
+        });
+
+        it('should create new contact with information', function (done) {
+            var contact = api.Contacts.newContact();
+            contact.name.withFirst("Karen").withLast("Meep");
+            api.Contacts.create(contact).then(
+                function (data) {
+                    data.should.not.equal(undefined);
+                    data.should.be.a.String;
+                    data.should.not.be.length(0);
+                    done();
+                },
+                function (error) {
+                    throw error;
+                }
+            );
+        });
+
+        it('should return existing contact with information', function (done) {
+            var contact = api.Contacts.newContact();
+            contact.name.withFirst("Karen").withLast("Meep");
+            api.Contacts.create(contact).then(
+                function (data) {
+
+                    api.Contacts.getContactById(data).then(
+                        function(data){
+                            var contact = data;
+                            contact.name.first.should.eql("Karen");
+                            contact.name.last.should.eql("Meep");
+                            contact.addresses.should.have.length(0);
+                            done();
+                        },
+                        function(error){
+                            throw(error);
+                        }
+                    );
+                },
+                function (error) {
+                    throw error;
+                }
+            );
+        });
+
+        it('should post activity for contact', function (done) {
+            var contact1 = api.Contacts.newContact();
+            contact1.name.withFirst("Karen").withLast("Meep");
+            api.Contacts.create(contact1).then(
+                function (data) {
+
+                    api.Contacts.getContactById(data).then(
+                        function(data){
+                            var contact = data;
+                            var activity = api.Activities.newActivity(api.Activities.TYPES.ALBUM_FAN);
+                            activity.activityLocationUrl = "http://www.test.com";
+                            activity.activityDetails.summary = "test";
+                            activity.activityDetails.additionalInfoUrl = "http://www.test.com";
+                            activity.activityInfo.album.name = "Test";
+                            activity.activityInfo.album.id = "4321";
+                            contact.postActivity(activity, SESSION_ID)
+                                .then(function(data) {
+                                    done();
+                                }, function(error) {
+                                    throw error;
+                                });
+                        },
+                        function(error){
+                            throw(error);
+                        }
+                    );
+                },
+                function (error) {
+                    throw error;
+                }
+            );
+        });
+
+        it('should edit existing contact information: Name', function (done) {
+            var contact = api.Contacts.newContact();
+            contact.name.withFirst("Karen").withLast("Meep");
+            api.Contacts.create(contact).then(
+                function (data) {
+
+                    api.Contacts.getContactById(data).then(
+                        function(data){
+                            var contact = data;
+                            contact.name.prefix = "Sir";
+                            contact.name.first = "David";
+                            contact.name.middle = "Mix";
+                            contact.name.last = "A";
+                            contact.name.suffix = "Lot";
+                            contact.save();
+                            done();
+                        },
+                        function(error){
+                            throw(error);
+                        }
+                    );
+                },
+                function (error) {
+                    throw error;
+                }
+            );
+        });
+
+        it('should return a non-empty list of contacts', function (done) {
+
+            api.Contacts.getContacts(null)
+                .then(function(data) {
+                    data.should.not.equal(undefined);
+                    data.should.be.a.Object; //TODO Make this 'WixPagingData'
+                    data.should.not.be.empty;
+                    data.currentData.results.should.be.a.Array;
+                    data.currentData.results.should.not.have.length(0);
+                    done();
+                }, function(error) {
+                    throw error;
+                });
         });
     });
 });
