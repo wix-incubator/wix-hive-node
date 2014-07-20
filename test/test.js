@@ -263,6 +263,48 @@ describe('OpenAPI-Node', function() {
         });
     });
 
+    describe('Contact', function() {
+        var Contact = require( '../lib/Contact.js' );
+
+        describe('Name', function() {
+            it('should ignore an attempt to be set null', function(done) {
+
+                var contact = new Contact();
+                contact.name({first: 'Karen', last: 'Meep'});
+                contact.name(null);
+                contact.name().first().should.be.eql('Karen');
+                contact.name().last().should.be.eql('Meep');
+                done();
+            });
+            it('should allow setters', function(done) {
+
+                var contact = new Contact();
+                contact.name({first: 'Karen', last: 'Meep'});
+                contact.name().prefix('Sir');
+                contact.name().first('Mix');
+                contact.name().middle('A');
+                contact.name().last('Very');
+                contact.name().suffix('Lot');
+                contact.name().prefix().should.be.eql('Sir');
+                contact.name().first().should.be.eql('Mix');
+                contact.name().middle().should.be.eql('A');
+                contact.name().last().should.be.eql('Very');
+                contact.name().suffix().should.be.eql('Lot');
+                done();
+//                contact.addEmail({tag: 'work', email: 'davidz@wix.com'});
+//                contact.addEmail({tag: 'work', email: 'david@home.com'});
+//
+//                var emails = contact.emails();
+//                emails.forEach(function(email) {
+//                    if (email.email == 'david@home.com') {
+//                        email.tag('home');
+//                    }
+//                });
+
+            });
+        });
+    });
+
     describe('Contacts', function() {
 
         it('should create new contact', function (done) {
