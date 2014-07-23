@@ -266,24 +266,16 @@ describe('OpenAPI-Node', function() {
     describe('Contacts', function() {
 
         it('should create new contact', function (done) {
-            var contact = api.Contacts.newContact();
-            api.Contacts.create(contact).then(
-                function (data) {
-                    data.should.not.equal(undefined);
-                    data.should.be.a.String;
-                    data.should.not.be.length(0);
-                    done();
-                },
-                function (error) {
-                    throw error;
-                }
-            );
+            var contact = api.Contacts.newContact(api);
+            contact.should.not.equal(undefined);
+            contact.should.be.a.Contact;
+            done();
         });
 
-        it('should create new contact with information', function (done) {
-            var contact = api.Contacts.newContact();
-            contact.name.withFirst("Karen").withLast("Meep");
-            api.Contacts.create(contact).then(
+        it('should save new contact with information and return contact id', function (done) {
+            var contact = api.Contacts.newContact(api);
+            contact.name({first: 'Karen', last: 'Meep'});
+            api.Contacts.save(contact).then(
                 function (data) {
                     data.should.not.equal(undefined);
                     data.should.be.a.String;
@@ -297,9 +289,9 @@ describe('OpenAPI-Node', function() {
         });
 
         it('should return existing contact with information', function (done) {
-            var contact = api.Contacts.newContact();
-            contact.name.withFirst("Karen").withLast("Meep");
-            api.Contacts.create(contact).then(
+            var contact = api.Contacts.newContact(api);
+            contact.name({first: 'Karen', last: 'Meep'});
+            api.Contacts.save(contact).then(
                 function (data) {
 
                     api.Contacts.getContactById(data).then(
@@ -322,9 +314,9 @@ describe('OpenAPI-Node', function() {
         });
 
         it('should post activity for contact', function (done) {
-            var contact1 = api.Contacts.newContact();
-            contact1.name.withFirst("Karen").withLast("Meep");
-            api.Contacts.create(contact1).then(
+            var contact = api.Contacts.newContact(api);
+            contact.name({first: 'Karen', last: 'Meep'});
+            api.Contacts.save(contact).then(
                 function (data) {
 
                     api.Contacts.getContactById(data).then(
@@ -355,9 +347,9 @@ describe('OpenAPI-Node', function() {
         });
 
         it('should edit existing contact information: Name', function (done) {
-            var contact = api.Contacts.newContact();
-            contact.name.withFirst("Karen").withLast("Meep");
-            api.Contacts.create(contact).then(
+            var contact = api.Contacts.newContact(api);
+            contact.name({first: 'Karen', last: 'Meep'});
+            api.Contacts.save(contact).then(
                 function (data) {
 
                     api.Contacts.getContactById(data).then(
@@ -400,46 +392,135 @@ describe('OpenAPI-Node', function() {
 });
 
 describe('Objects', function() {
+    var wixLib = require( '../lib/WixClient.js' );
+    var api = wixLib.getAPI(APP_SECRET,APP_KEY, INSTANCE_ID);
 
     describe('Contact', function() {
-        var Contact = require( '../lib/Contact.js' );
+        var Contact = require( '../lib/WixClient.js').Contact;
 
-        describe('Name', function() {
-            it('should ignore an attempt to be set null', function(done) {
+        describe('Properties', function() {
+            describe('Name', function() {
+                it('should ignore an attempt to be set null', function(done) {
 
-                var contact = new Contact();
-                contact.name({first: 'Karen', last: 'Meep'});
-                contact.name(null);
-                contact.name().first().should.be.eql('Karen');
-                contact.name().last().should.be.eql('Meep');
-                done();
+                    var contact = new Contact(api);
+                    contact.name({first: 'Karen', last: 'Meep'});
+                    contact.name(null);
+                    contact.name().first().should.be.eql('Karen');
+                    contact.name().last().should.be.eql('Meep');
+                    done();
+                });
+                it('should allow setters', function(done) {
+
+                    var contact = new Contact(api);
+                    contact.name({first: 'Karen', last: 'Meep'});
+                    contact.name().prefix('Sir');
+                    contact.name().first('Mix');
+                    contact.name().middle('A');
+                    contact.name().last('Very');
+                    contact.name().suffix('Lot');
+                    contact.name().prefix().should.be.eql('Sir');
+                    contact.name().first().should.be.eql('Mix');
+                    contact.name().middle().should.be.eql('A');
+                    contact.name().last().should.be.eql('Very');
+                    contact.name().suffix().should.be.eql('Lot');
+                    done();
+                });
             });
-            it('should allow setters', function(done) {
 
-                var contact = new Contact();
-                contact.name({first: 'Karen', last: 'Meep'});
-                contact.name().prefix('Sir');
-                contact.name().first('Mix');
-                contact.name().middle('A');
-                contact.name().last('Very');
-                contact.name().suffix('Lot');
-                contact.name().prefix().should.be.eql('Sir');
-                contact.name().first().should.be.eql('Mix');
-                contact.name().middle().should.be.eql('A');
-                contact.name().last().should.be.eql('Very');
-                contact.name().suffix().should.be.eql('Lot');
-                done();
-//                contact.addEmail({tag: 'work', email: 'davidz@wix.com'});
-//                contact.addEmail({tag: 'work', email: 'david@home.com'});
+            describe('Emails', function() {
+                it('should not allow delete', function(done) {
+
+                    var contact = new Contact(api);
+                    contact.addEmail({tag: 'work', email: 'karenc@wix.com'});
+                    contact.addEmail({tag: 'work', email: 'karen@home.com'});
+                    var emails = contact.emails();
+                    delete emails[0];
+                    contact.emails.should.have.length(2);
+                    done();
+                });
+                it('should allow edit', function(done) {
+
+                    var contact = new Contact(api);
+                    contact.addEmail({tag: 'work', email: 'karenc@wix.com'});
+                    contact.addEmail({tag: 'work', email: 'karen@home.com'});
+                    var emails = contact.emails();
+                    emails[1].tag('home');
+                    contact.emails()[1].tag().should.be.eql('home');
+                    done();
+                });
+            });
+        });
+
+        describe('Methods', function() {
+
+            this.timeout(10000);
+
+            describe('Save', function() {
+                it('should save Contact without throwing errors', function(done) {
+                    var contact = new Contact(api);
+                    contact.name({first: 'Karen', last: 'Meep'});
+                    contact.addEmail({tag: 'work', email: 'karenc@wix.com'});
+                    contact.addEmail({tag: 'home', email: 'karen@home.com'});
+                    api.Contacts.save(contact).then(
+                        function(data){
+                            done();
+                        },
+                        function(error){
+                            throw error;
+                        }
+                    );
+                });
+            });
+
+//            describe('AddActivity', function() {
+//                var activity = api.Activities.newActivity(api.Activities.TYPES.ALBUM_FAN);
+//                activity.activityLocationUrl = "http://www.wix.com";
+//                activity.activityDetails.summary = "test";
+//                activity.activityDetails.additionalInfoUrl = "http://www.wix.com";
+//                activity.activityInfo.album.name = "Wix";
+//                activity.activityInfo.album.id = "1234";
 //
-//                var emails = contact.emails();
-//                emails.forEach(function(email) {
-//                    if (email.email == 'david@home.com') {
-//                        email.tag('home');
-//                    }
+//                it('should throw error when trying to post against a Contact which has not been saved', function(done) {
+//                    var contact = new Contact(api);
+//                    contact.name({first: 'Karen', last: 'Meep'});
+//                    expect(contact.addActivity).withArgs(activity, api).to.throwException();
+//                    done();
 //                });
+//                it('should throw error when not providing a Wix API', function(done) {
+//                    var contact = new Contact(api);
+//                    contact.name({first: 'Karen', last: 'Meep'});
+//                    expect(contact.addActivity).withArgs(activity).to.throwException();
+//                    done();
+//                });
+//                it('should add Activity for Contact without throwing error', function(done) {
+//                    var contact = new Contact(api);
+//                    contact.name({first: 'Karen', last: 'Meep'});
+//                    contact.save(
+//                        function(data){
+//                            contact.addActivity(activity, api).then(
+//                                function(data){
+//
+//                                    done();
+//                                },
+//                                function(error){
+//                                    throw error;
+//                                }
+//                            );
+//                        },
+//                        function(error){
+//                            throw error;
+//                        }
+//                    );
+//                });
+//            });
 
-            });
+//            describe('GetActivities', function() {
+//                it('should return all activities for Contact', function(done) {
+//                    var contact = new Contact(api);
+//                    contact.name({first: 'Karen', last: 'Meep'});
+//                    done();
+//                });
+//            });
         });
     });
 
