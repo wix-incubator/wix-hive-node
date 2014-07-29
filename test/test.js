@@ -279,10 +279,11 @@ describe('OpenAPI-Node', function() {
                 var contact = api.Contacts.newContact(api);
                 contact.name({first: 'Karen', last: 'Meep'});
                 api.Contacts.create(contact).then(
-                    function (data) {
-                        data.should.not.equal(undefined);
-                        data.should.be.a.String;
-                        data.should.not.be.length(0);
+                    function (contact) {
+                        contact.id().exists().should.be.eql(true);
+                        contact.id().should.not.equal(undefined);
+                        contact.id().id().should.be.a.String;
+                        contact.id().id().should.not.be.length(0);
                         done();
                     },
                     function (error) {
@@ -338,7 +339,7 @@ describe('OpenAPI-Node', function() {
             it('should return existing Contact when given an email shared with another Contact', function(done) {
                 var contact = api.Contacts.newContact();
                 contact.addEmail({tag: 'work', email: 'karenc@wix.com'});
-                contact.upsert(contact).then(
+                api.Contacts.upsert(contact).then(
                     function(existingContact){
                         api.Contacts.getContactById(existingContact.id().id()).then(
                             function(contact){
@@ -489,25 +490,110 @@ describe('Objects', function() {
 
             describe('updateName', function() {
 
+                this.timeout(10000);
                 it('should throw error when given an unsaved Contact', function (done) {
                     var contact = api.Contacts.newContact();
                     contact.name({first: 'Karen', last: 'Meep'});
                     contact.addEmail({tag: 'work', email: 'karenc@wix.com'});
-                    expect(contact.save).to.throwException();
-//                    done();
-                    throw 'not implemented'
+                    expect(contact.updateName).to.throwException();
+                    done();
                 });
 
-                it('should edit existing contact non-list information', function (done) {
-                    throw 'not implemented'
+                it('should edit name', function (done) {
+                    var contact = api.Contacts.newContact();
+                    contact.name({first: 'Karen', last: 'Meep'});
+                    api.Contacts.create(contact).then(
+                        function(contact){
+                            contact.name().prefix('Sir');
+                            contact.name().first('Mix');
+                            contact.name().middle('A');
+                            contact.name().last('Very');
+                            contact.name().suffix('Lot');
+                            contact.updateName().then(
+                                function(contact){
+                                    contact.name().prefix().should.be.eql('Sir');
+                                    contact.name().first().should.be.eql('Mix');
+                                    contact.name().middle().should.be.eql('A');
+                                    contact.name().last().should.be.eql('Very');
+                                    contact.name().suffix().should.be.eql('Lot');
+                                    done();
+                                },
+                                function(error){
+                                    throw error;
+                                }
+                            );
+                        },
+                        function(error){
+                            throw error;
+                        }
+                    );
+                });
+            });
+
+            describe('updatePicture', function() {
+
+                this.timeout(10000);
+                it('should throw error when given an unsaved Contact', function (done) {
+                    var contact = api.Contacts.newContact();
+                    contact.picture('http://elcaminodeamanda.files.wordpress.com/2011/03/mc_hammer.png');
+                    expect(contact.updatePicture).to.throwException();
+                    done();
                 });
 
-                it('should add new list information to Contact', function (done) {
-                    throw 'not implemented'
+                it('should edit picture', function (done) {
+                    var contact = api.Contacts.newContact();
+                    contact.picture('http://elcaminodeamanda.files.wordpress.com/2011/03/mc_hammer.png');
+                    api.Contacts.create(contact).then(
+                        function(contact){
+                            contact.picture('http://assets.objectiface.com/hashed_silo_content/silo_content/6506/resized/mchammer.jpg');
+                            contact.updatePicture().then(
+                                function(contact){
+                                    contact.picture().should.be.eql('http://assets.objectiface.com/hashed_silo_content/silo_content/6506/resized/mchammer.jpg');
+                                    done();
+                                },
+                                function(error){
+                                    throw error;
+                                }
+                            );
+                        },
+                        function(error){
+                            throw error;
+                        }
+                    );
+                });
+            });
+
+            describe('updateCompany', function() {
+
+                this.timeout(10000);
+                it('should throw error when given an unsaved Contact', function (done) {
+                    var contact = api.Contacts.newContact();
+                    contact.company({role:'MyRole', name:'MyName'});
+                    expect(contact.updateCompany).to.throwException();
+                    done();
                 });
 
-                it('should edit existing list information Contact', function (done) {
-                    throw 'not implemented'
+                it('should edit company', function (done) {
+                    var contact = api.Contacts.newContact();
+                    contact.company({role:'MyRole', name:'MyName'});
+                    api.Contacts.create(contact).then(
+                        function(contact){
+                            contact.company({role:'MyRole1', name:'MyName1'});
+                            contact.updateCompany().then(
+                                function(contact){
+                                    contact.company().role().should.be.eql('MyRole1');
+                                    contact.company().name().should.be.eql('MyName1');
+                                    done();
+                                },
+                                function(error){
+                                    throw error;
+                                }
+                            );
+                        },
+                        function(error){
+                            throw error;
+                        }
+                    );
                 });
             });
 
@@ -515,31 +601,372 @@ describe('Objects', function() {
 
                 it('should throw error when given an unsaved Contact', function (done) {
                     var contact = api.Contacts.newContact();
-                    contact.name({first: 'Karen', last: 'Meep'});
                     contact.addEmail({tag: 'work', email: 'karenc@wix.com'});
-                    expect(contact.save).to.throwException();
-//                    done();
-                    throw 'not implemented'
+                    expect(contact.updateEmail).to.throwException();
+                    done();
                 });
 
-                it('should edit email for Contact', function (done) {
-                    throw 'not implemented'
+                it('should throw error when given an unsaved Email', function (done) {
+                    var contact = api.Contacts.newContact();
+                    api.Contacts.create(contact).then(
+                        function(contact){
+                            contact.addEmail({tag: 'work', email: 'karenc@wix.com'});
+                            expect(contact.updateEmail).withArgs(contact.emails()[0]).to.throwException();
+                            done();
+                        },
+                        function(error){
+                            throw error;
+                        }
+                    );
                 });
+
+//                it('should edit email for Contact', function (done) {
+//                    var contact = api.Contacts.newContact();
+//                    api.Contacts.create(contact).then(
+//                        function(contact){
+//
+//                            api.Contacts.getContactById(contact.id().id()).then(
+//                                function(contact){
+//
+//                                    contact.addEmail({tag: 'work', email: 'karenc@wix.com'});
+//                                    var email = contact.emails()[0];
+//                                    email.email('karen@home.com');
+//                                    email.tag('home');
+//                                    contact.updateEmail(email).then(
+//                                        function(contact){
+//                                            contact.email().email().should.be.eql('karen@home.com');
+//                                            contact.email().tag().should.be.eql('home');
+//                                            done();
+//                                        },
+//                                        function(error){
+//                                            throw error;
+//                                        }
+//                                    );
+//                                },
+//                                function(error){
+//                                    throw error;
+//                                }
+//                            );
+//                        },
+//                        function(error){
+//                            throw error;
+//                        }
+//                    );
+//                });
             });
 
             describe('postEmail', function() {
 
                 it('should throw error when given an unsaved Contact', function (done) {
                     var contact = api.Contacts.newContact();
-                    contact.name({first: 'Karen', last: 'Meep'});
                     contact.addEmail({tag: 'work', email: 'karenc@wix.com'});
-                    expect(contact.save).to.throwException();
-//                    done();
-                    throw 'not implemented'
+                    var email = contact.emails()[0];
+                    expect(contact.postEmail).withArgs(email).to.throwException();
+                    done();
                 });
 
                 it('should add new email to Contact', function (done) {
-                    throw 'not implemented'
+                    var contact = api.Contacts.newContact();
+                    api.Contacts.create(contact).then(
+                        function(contact){
+                            contact.addEmail({tag: 'work', email: 'karenc@wix.com'});
+                            var email = contact.emails()[0];
+                            contact.postEmail(email).then(
+                                function(contact){
+                                    var email = contact.emails()[0];
+                                    email.id().should.be.a.Number;
+                                    email.id().should.not.be.eql(undefined);
+                                    email.email().should.be.eql('karenc@wix.com');
+                                    email.tag().should.be.eql('work');
+                                    done();
+                                },
+                                function(error){
+                                    throw error;
+                                }
+                            )
+                        },
+                        function(error){
+                            throw error;
+                        }
+                    );
+                });
+            });
+
+            describe('postAddress', function() {
+
+                it('should throw error when given an unsaved Contact', function (done) {
+                    var contact = api.Contacts.newContact();
+                    contact.addAddress(
+                        {
+                            tag: 'work',
+                            address: '500 Terry A Francois',
+                            city: 'San Francisco',
+                            region: 'CA',
+                            country: 'USA',
+                            postalCode: 94158
+                        });
+                    var address = contact.addresses()[0];
+                    expect(contact.postAddress).withArgs(address).to.throwException();
+                    done();
+                });
+
+                it('should add new email to Contact', function (done) {
+                    var contact = api.Contacts.newContact();
+                    api.Contacts.create(contact).then(
+                        function(contact){
+                            contact.addAddress(
+                                {
+                                    tag: 'work',
+                                    address: '500 Terry A Francois',
+                                    city: 'San Francisco',
+                                    neighborhood: 'Awesomeville',
+                                    region: 'CA',
+                                    country: 'USA',
+                                    postalCode: 94158
+                                });
+                            var address = contact.addresses()[0];
+                            contact.postAddress(address).then(
+                                function(contact){
+                                    var address = contact.addresses()[0];
+                                    address.id().should.be.a.Number;
+                                    address.id().should.not.be.eql(undefined);
+                                    address.tag().should.be.eql('work');
+                                    address.address().should.be.eql('500 Terry A Francois');
+                                    address.neighborhood().should.be.eql('Awesomeville');
+                                    address.city().should.be.eql('San Francisco');
+                                    address.region().should.be.eql('CA');
+                                    address.country().should.be.eql('USA');
+                                    address.postalCode().should.be.eql(94158);
+                                    done();
+                                },
+                                function(error){
+                                    throw error;
+                                }
+                            )
+                        },
+                        function(error){
+                            throw error;
+                        }
+                    );
+                });
+            });
+
+            describe('postPhone', function() {
+
+                it('should throw error when given an unsaved Contact', function (done) {
+                    var contact = api.Contacts.newContact();
+                    contact.addPhone({ tag: 'work', phone: '+1-415-639-9034'});
+                    var phone = contact.phones()[0];
+                    expect(contact.postPhone).withArgs(phone).to.throwException();
+                    done();
+                });
+
+                it('should add new phone to Contact', function (done) {
+                    var contact = api.Contacts.newContact();
+                    api.Contacts.create(contact).then(
+                        function(contact){
+                            contact.addPhone({ tag: 'work', phone: '+1-415-639-9034'});
+                            var phone = contact.phones()[0];
+                            contact.postPhone(phone).then(
+                                function(contact){
+                                    var phone = contact.phones()[0];
+                                    phone.id().should.be.a.Number;
+                                    phone.id().should.not.be.eql(undefined);
+                                    phone.tag().should.be.eql('work');
+                                    phone.phone().should.be.eql('+1-415-639-9034');
+                                    done();
+                                },
+                                function(error){
+                                    throw error;
+                                }
+                            )
+                        },
+                        function(error){
+                            throw error;
+                        }
+                    );
+                });
+            });
+
+            describe('postUrl', function() {
+
+                it('should throw error when given an unsaved Contact', function (done) {
+                    var contact = api.Contacts.newContact();
+                    contact.addUrl({ tag: 'work', url: '+1-415-639-9034'});
+                    var url = contact.urls()[0];
+                    expect(contact.postUrl).withArgs(url).to.throwException();
+                    done();
+                });
+
+                it('should add new url to Contact', function (done) {
+                    var contact = api.Contacts.newContact();
+                    api.Contacts.create(contact).then(
+                        function(contact){
+                            contact.addUrl({ tag: 'work', url: 'http://www.wix.com/'});
+                            var url = contact.urls()[0];
+                            contact.postUrl(url).then(
+                                function(contact){
+                                    var url = contact.urls()[0];
+                                    url.id().should.be.a.Number;
+                                    url.id().should.not.be.eql(undefined);
+                                    url.tag().should.be.eql('work');
+                                    url.url().should.be.eql('http://www.wix.com/');
+                                    done();
+                                },
+                                function(error){
+                                    throw error;
+                                }
+                            )
+                        },
+                        function(error){
+                            throw error;
+                        }
+                    );
+                });
+            });
+
+            describe('postDate', function() {
+
+                it('should throw error when given an unsaved Contact', function (done) {
+                    var contact = api.Contacts.newContact();
+                    contact.addDate({ tag: 'work', date: '1997-07-16T19:20:30.45+01:00'});
+                    var date = contact.dates()[0];
+                    expect(contact.postDate).withArgs(date).to.throwException();
+                    done();
+                });
+
+                it('should add new date to Contact', function (done) {
+                    var contact = api.Contacts.newContact();
+                    api.Contacts.create(contact).then(
+                        function(contact){
+                            contact.addDate({ tag: 'work', date: '1997-07-16T19:20:30.45+01:00'});
+                            var date = contact.dates()[0];
+                            contact.postDate(date).then(
+                                function(contact){
+                                    var date = contact.dates()[0];
+                                    date.id().should.be.a.Number;
+                                    date.id().should.not.be.eql(undefined);
+                                    date.tag().should.be.eql('work');
+                                    date.date().should.be.eql('1997-07-16T19:20:30.45+01:00');
+                                    done();
+                                },
+                                function(error){
+                                    throw error;
+                                }
+                            )
+                        },
+                        function(error){
+                            throw error;
+                        }
+                    );
+                });
+            });
+
+            describe('postNote', function() {
+
+                it('should throw error when given an unsaved Contact', function (done) {
+                    var contact = api.Contacts.newContact();
+                    contact.addNote({ content: 'Your rent is due'});
+                    var note = contact.notes()[0];
+                    expect(contact.postNote).withArgs(note).to.throwException();
+                    done();
+                });
+
+                it('should add new note to Contact', function (done) {
+                    var contact = api.Contacts.newContact();
+                    api.Contacts.create(contact).then(
+                        function(contact){
+                            contact.addNote({ content: 'Your rent is due'});
+                            var note = contact.notes()[0];
+                            contact.postNote(note).then(
+                                function(contact){
+                                    var note = contact.notes()[0];
+                                    note.id().should.be.a.Number;
+                                    note.id().should.not.be.eql(undefined);
+                                    note.modifiedAt().should.not.be.eql(undefined);
+                                    note.content().should.be.eql('Your rent is due');
+                                    done();
+                                },
+                                function(error){
+                                    throw error;
+                                }
+                            )
+                        },
+                        function(error){
+                            throw error;
+                        }
+                    );
+                });
+            });
+
+            describe('postCustomField', function() {
+
+                it('should throw error when given an unsaved Contact', function (done) {
+                    var contact = api.Contacts.newContact();
+                    contact.addCustomField({ field: 'whats the time?', value: 'Hammer time!'});
+                    var customField = contact.customFields()[0];
+                    expect(contact.postCustomField).withArgs(customField).to.throwException();
+                    done();
+                });
+
+                it('should add new customField to Contact', function (done) {
+                    var contact = api.Contacts.newContact();
+                    api.Contacts.create(contact).then(
+                        function(contact){
+                            contact.addCustomField({ field: 'whats the time?', value: 'Hammer time!'});
+                            var customField = contact.customFields()[0];
+                            contact.postCustomField(customField).then(
+                                function(contact){
+                                    var customField = contact.customFields()[0];
+                                    customField.id().should.be.a.Number;
+                                    customField.id().should.not.be.eql(undefined);
+                                    customField.field().should.be.eql('whats the time?');
+                                    customField.value().should.be.eql('Hammer time!');
+                                    done();
+                                },
+                                function(error){
+                                    throw error;
+                                }
+                            )
+                        },
+                        function(error){
+                            throw error;
+                        }
+                    );
+                });
+            });
+
+            describe('postTags', function() {
+
+                it('should throw error when given an unsaved Contact', function (done) {
+                    var contact = api.Contacts.newContact();
+                    contact.addTag('VIP');
+                    var tag = contact.tags()[0];
+                    expect(contact.postTags).withArgs(tag).to.throwException();
+                    done();
+                });
+
+                it('should add new tag to Contact', function (done) {
+                    var contact = api.Contacts.newContact();
+                    api.Contacts.create(contact).then(
+                        function(contact){
+                            contact.addTag('VIP');
+                            var tag = contact.tags()[0];
+                            contact.postTags(tag).then(
+                                function(contact){
+                                    var tag = contact.tags()[0];
+                                    tag.tag().should.be.eql('VIP');
+                                    done();
+                                },
+                                function(error){
+                                    throw error;
+                                }
+                            )
+                        },
+                        function(error){
+                            throw error;
+                        }
+                    );
                 });
             });
 
@@ -595,63 +1022,63 @@ describe('Objects', function() {
 
 });
 
-//describe('REST API', function() {
-//    var url = 'https://openapi.wix.com/v1';
-//    var wixConnect = require( '../lib/WixConnect.js' );
-//    var wixLib = require( '../lib/WixClient.js' );
-//    var api = wixLib.getAPI(APP_SECRET,APP_KEY, INSTANCE_ID);
-//
-//    describe('Activities', function() {
-//        describe('Activity Types', function() {
-//
-//            var requestPath = '/activities/types';
-//            var wixRequest = wixConnect.createRequest('GET', url + requestPath, APP_SECRET, APP_KEY, INSTANCE_ID);
-//            var options = wixRequest.toHttpsOptions();
-//
-//            it('should return a bad request status code for request with no wix headers', function(done) {
-//                request(url)
-//                    .get(requestPath)
-//                    .set('Content-Type','*/*')
-//                    .expect(400)
-//                    .end(function(err, res) {
-//                        if (err) {
-//                            throw err;
-//                        }
-//                        done();
-//                    });
-//            });
-//            it('should return a forbidden response status code for request with expired signature', function(done) {
-//                request(url)
-//                    .get(requestPath)
-//                    .set('Content-Type','*/*')
-//                    .set('x-wix-application-id', options.headers["x-wix-application-id"])
-//                    .set('x-wix-instance-id', options.headers['x-wix-instance-id'])
-//                    .set('x-wix-signature', options.headers['x-wix-signature'])
-//                    .set('x-wix-timestamp', '1980-07-16T13:57:50.213Z')
-//                    .expect(403)
-//                    .end(function(err, res) {
-//                        if (err) {
-//                            throw err;
-//                        }
-//                        done();
-//                    });
-//            });
-//            it('should return a bad request status code for request with bad signature', function(done) {
-//                request(url)
-//                    .get(requestPath)
-//                    .set('Content-Type','*/*')
-//                    .set('x-wix-application-id', options.headers["x-wix-application-id"])
-//                    .set('x-wix-instance-id', options.headers['x-wix-instance-id'])
-//                    .set('x-wix-signature', 'MOOOOOOO')
-//                    .set('x-wix-timestamp', options.headers['x-wix-timestamp'])
-//                    .expect(403)
-//                    .end(function(err, res) {
-//                        if (err) {
-//                            throw err;
-//                        }
-//                        done();
-//                    });
-//            });
-//        });
-//    });
-//});
+describe('REST API', function() {
+    var url = 'https://openapi.wix.com/v1';
+    var wixConnect = require( '../lib/WixConnect.js' );
+    var wixLib = require( '../lib/WixClient.js' );
+    var api = wixLib.getAPI(APP_SECRET,APP_KEY, INSTANCE_ID);
+
+    describe('Activities', function() {
+        describe('Activity Types', function() {
+
+            var requestPath = '/activities/types';
+            var wixRequest = wixConnect.createRequest('GET', url + requestPath, APP_SECRET, APP_KEY, INSTANCE_ID);
+            var options = wixRequest.toHttpsOptions();
+
+            it('should return a bad request status code for request with no wix headers', function(done) {
+                request(url)
+                    .get(requestPath)
+                    .set('Content-Type','*/*')
+                    .expect(400)
+                    .end(function(err, res) {
+                        if (err) {
+                            throw err;
+                        }
+                        done();
+                    });
+            });
+            it('should return a forbidden response status code for request with expired signature', function(done) {
+                request(url)
+                    .get(requestPath)
+                    .set('Content-Type','*/*')
+                    .set('x-wix-application-id', options.headers["x-wix-application-id"])
+                    .set('x-wix-instance-id', options.headers['x-wix-instance-id'])
+                    .set('x-wix-signature', options.headers['x-wix-signature'])
+                    .set('x-wix-timestamp', '1980-07-16T13:57:50.213Z')
+                    .expect(403)
+                    .end(function(err, res) {
+                        if (err) {
+                            throw err;
+                        }
+                        done();
+                    });
+            });
+            it('should return a bad request status code for request with bad signature', function(done) {
+                request(url)
+                    .get(requestPath)
+                    .set('Content-Type','*/*')
+                    .set('x-wix-application-id', options.headers["x-wix-application-id"])
+                    .set('x-wix-instance-id', options.headers['x-wix-instance-id'])
+                    .set('x-wix-signature', 'MOOOOOOO')
+                    .set('x-wix-timestamp', options.headers['x-wix-timestamp'])
+                    .expect(403)
+                    .end(function(err, res) {
+                        if (err) {
+                            throw err;
+                        }
+                        done();
+                    });
+            });
+        });
+    });
+});
