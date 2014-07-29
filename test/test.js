@@ -30,6 +30,8 @@ describe('OpenAPI-Node', function() {
         });
     });
 
+    this.timeout(10000);
+
     describe('Activities', function() {
 
         describe('getActivityTpes', function() {
@@ -233,32 +235,16 @@ describe('OpenAPI-Node', function() {
             });
             it('should throw error when not given scope', function(done) {
 
-                api.Insights.getActivitiesSummary(null)
-                    .then(function(data) {
-                        data.should.not.equal(undefined);
-                        data.activityTypes.should.be.a.Array;
-                        data.activityTypes.should.not.have.length(0);
-                        data.total.should.not.eql(0);
-                        done();
-                    }, function(error) {
-                        throw error;
-                    });
+                expect(api.Insights.getActivitiesSummary).to.throwException();
+                done();
             });
         });
 
         describe('getActivitySummaryForContact', function() {
             it('should throw error when not given scope', function(done) {
 
-                api.Insights.getActivitySummaryForContact()
-                    .then(function(data) {
-                        data.should.not.equal(undefined);
-                        data.activityTypes.should.be.a.Array;
-                        data.activityTypes.should.not.have.length(0);
-                        data.total.should.not.eql(0);
-                        done();
-                    }, function(error) {
-                        throw error;
-                    });
+                expect(api.Insights.getActivitySummaryForContact).to.throwException();
+                done();
             });
         });
     });
@@ -303,8 +289,8 @@ describe('OpenAPI-Node', function() {
                         api.Contacts.getContactById(savedContact.id().id()).then(
                             function(data){
                                 var contact = data;
-                                contact.name().first.should.eql("Karen");
-                                contact.name().last.should.eql("Meep");
+                                contact.name().first().should.eql("Karen");
+                                contact.name().last().should.eql("Meep");
                                 contact.addresses().should.have.length(0);
                                 done();
                             },
@@ -321,14 +307,31 @@ describe('OpenAPI-Node', function() {
         });
 
         describe('upsert', function() {
-            it('should create new Contact when no email or phone is given', function(done) {
-                var contact = api.Contacts.newContact();
-                contact.name({first: 'Karen', last: 'Meep'});
-                api.Contacts.upsert(contact).then(
-                    function(contact){
-                        contact.emails().should.have.length(0);
-                        contact.phones().should.have.length(0);
-                        done();
+            this.timeout(10000);
+
+            it('should throw error when no email or phone is given', function(done) {
+                expect(api.Contacts.upsert).to.throwException();
+                done()
+            });
+
+            it('should return Contact when given an email shared with another Contact', function(done) {
+                var email = 'karenc@wix.com';
+                api.Contacts.upsert(null, email).then(
+                    function(contactId){
+                        contactId.should.not.eql(undefined);
+                        contactId.should.be.a.String;
+                        api.Contacts.getContactById(contactId).then(
+                            function(contact){
+                                var emails = contact.emails();
+                                emails.should.have.length(2);
+                                contact.name().first().should.eql("Karen");
+                                contact.name().last().should.eql("Meep");
+                                done();
+                            },
+                            function(error){
+                                throw error;
+                            }
+                        );
                     },
                     function(error){
                         throw error;
@@ -336,24 +339,13 @@ describe('OpenAPI-Node', function() {
                 );
             });
 
-            it('should return existing Contact when given an email shared with another Contact', function(done) {
-                var contact = api.Contacts.newContact();
-                contact.addEmail({tag: 'work', email: 'karenc@wix.com'});
-                api.Contacts.upsert(contact).then(
-                    function(existingContact){
-                        api.Contacts.getContactById(existingContact.id().id()).then(
-                            function(contact){
-                                var emails = contact.emails();
-                                emails[0].email.should.containEql("karenc@wix.com");
-                                emails[0].email.should.containEql("karen@home.com");
-                                contact.name().first.should.eql("Karen");
-                                contact.name().last.should.eql("Meep");
-                                done();
-                            },
-                            function(error){
-                                throw(error);
-                            }
-                        );
+            it('should return Contact when given a phone shared with another Contacts', function(done) {
+                var phone = '+1-415-639-9034';
+                api.Contacts.upsert(phone).then(
+                    function(contactId){
+                        contactId.should.not.eql(undefined);
+                        contactId.should.be.a.String;
+                        done();
                     },
                     function(error){
                         throw error;
@@ -419,16 +411,6 @@ describe('Objects', function() {
             });
 
             describe('Emails', function() {
-                it('should not allow delete', function(done) {
-
-                    var contact = api.Contacts.newContact();
-                    contact.addEmail({tag: 'work', email: 'karenc@wix.com'});
-                    contact.addEmail({tag: 'work', email: 'karen@home.com'});
-                    var emails = contact.emails();
-                    delete emails[0];
-                    contact.emails.should.have.length(2);
-                    done();
-                });
                 it('should allow edit', function(done) {
 
                     var contact = api.Contacts.newContact();
@@ -446,32 +428,13 @@ describe('Objects', function() {
 
             this.timeout(10000);
 
-            describe('Save', function() {
-
-                it('should save new Contact and return it with an id', function(done) {
-                    var contact = api.Contacts.newContact();
-                    contact.name({first: 'Karen', last: 'Meep'});
-                    contact.addEmail({tag: 'work', email: 'karenc@wix.com'});
-                    contact.addEmail({tag: 'home', email: 'karen@home.com'});
-                    contact.save().then(
-                        function(contact){
-                            contact.id().exists().should.be.eql(true);
-                            contact.name().first().should.be.eql('Karen');
-                            contact.name().last().should.be.eql('Meep');
-                            contact.emails().should.have.length(2);
-                            done();
-                        },
-                        function(error){
-                            throw error;
-                        }
-                    );
-                });
+            describe('Update', function() {
 
                 it('should throw error when given an unsaved Contact', function (done) {
                     var contact = api.Contacts.newContact();
                     contact.name({first: 'Karen', last: 'Meep'});
                     contact.addEmail({tag: 'work', email: 'karenc@wix.com'});
-                    expect(contact.save).to.throwException();
+                    expect(contact.update).to.throwException();
                     done();
                 });
 
@@ -490,7 +453,6 @@ describe('Objects', function() {
 
             describe('updateName', function() {
 
-                this.timeout(10000);
                 it('should throw error when given an unsaved Contact', function (done) {
                     var contact = api.Contacts.newContact();
                     contact.name({first: 'Karen', last: 'Meep'});
@@ -532,7 +494,6 @@ describe('Objects', function() {
 
             describe('updatePicture', function() {
 
-                this.timeout(10000);
                 it('should throw error when given an unsaved Contact', function (done) {
                     var contact = api.Contacts.newContact();
                     contact.picture('http://elcaminodeamanda.files.wordpress.com/2011/03/mc_hammer.png');
@@ -565,7 +526,6 @@ describe('Objects', function() {
 
             describe('updateCompany', function() {
 
-                this.timeout(10000);
                 it('should throw error when given an unsaved Contact', function (done) {
                     var contact = api.Contacts.newContact();
                     contact.company({role:'MyRole', name:'MyName'});
@@ -993,11 +953,13 @@ describe('Objects', function() {
                 it('should add Activity for Contact without throwing error', function(done) {
                     var contact = api.Contacts.newContact();
                     contact.name({first: 'Karen', last: 'Meep'});
-                    contact.save(
+                    api.Contacts.create(contact).then(
                         function(contact){
                             contact.addActivity(activity, api).then(
                                 function(data){
-
+                                    data.activityId.should.be.a.String;
+                                    data.contactId.should.be.a.String;
+                                    data.contactId.should.be.eql(contact.id().id());
                                     done();
                                 },
                                 function(error){
@@ -1022,63 +984,65 @@ describe('Objects', function() {
 
 });
 
-describe('REST API', function() {
-    var url = 'https://openapi.wix.com/v1';
-    var wixConnect = require( '../lib/WixConnect.js' );
-    var wixLib = require( '../lib/WixClient.js' );
-    var api = wixLib.getAPI(APP_SECRET,APP_KEY, INSTANCE_ID);
-
-    describe('Activities', function() {
-        describe('Activity Types', function() {
-
-            var requestPath = '/activities/types';
-            var wixRequest = wixConnect.createRequest('GET', url + requestPath, APP_SECRET, APP_KEY, INSTANCE_ID);
-            var options = wixRequest.toHttpsOptions();
-
-            it('should return a bad request status code for request with no wix headers', function(done) {
-                request(url)
-                    .get(requestPath)
-                    .set('Content-Type','*/*')
-                    .expect(400)
-                    .end(function(err, res) {
-                        if (err) {
-                            throw err;
-                        }
-                        done();
-                    });
-            });
-            it('should return a forbidden response status code for request with expired signature', function(done) {
-                request(url)
-                    .get(requestPath)
-                    .set('Content-Type','*/*')
-                    .set('x-wix-application-id', options.headers["x-wix-application-id"])
-                    .set('x-wix-instance-id', options.headers['x-wix-instance-id'])
-                    .set('x-wix-signature', options.headers['x-wix-signature'])
-                    .set('x-wix-timestamp', '1980-07-16T13:57:50.213Z')
-                    .expect(403)
-                    .end(function(err, res) {
-                        if (err) {
-                            throw err;
-                        }
-                        done();
-                    });
-            });
-            it('should return a bad request status code for request with bad signature', function(done) {
-                request(url)
-                    .get(requestPath)
-                    .set('Content-Type','*/*')
-                    .set('x-wix-application-id', options.headers["x-wix-application-id"])
-                    .set('x-wix-instance-id', options.headers['x-wix-instance-id'])
-                    .set('x-wix-signature', 'MOOOOOOO')
-                    .set('x-wix-timestamp', options.headers['x-wix-timestamp'])
-                    .expect(403)
-                    .end(function(err, res) {
-                        if (err) {
-                            throw err;
-                        }
-                        done();
-                    });
-            });
-        });
-    });
-});
+//describe('REST API', function() {
+//    var url = 'https://openapi.wix.com/v1';
+//    var wixConnect = require( '../lib/WixConnect.js' );
+//    var wixLib = require( '../lib/WixClient.js' );
+//    var api = wixLib.getAPI(APP_SECRET,APP_KEY, INSTANCE_ID);
+//
+//    this.timeout(10000);
+//
+//    describe('Activities', function() {
+//        describe('Activity Types', function() {
+//
+//            var requestPath = '/activities/types';
+//            var wixRequest = wixConnect.createRequest('GET', url + requestPath, APP_SECRET, APP_KEY, INSTANCE_ID);
+//            var options = wixRequest.toHttpsOptions();
+//
+//            it('should return a bad request status code for request with no wix headers', function(done) {
+//                request(url)
+//                    .get(requestPath)
+//                    .set('Content-Type','*/*')
+//                    .expect(400)
+//                    .end(function(err, res) {
+//                        if (err) {
+//                            throw err;
+//                        }
+//                        done();
+//                    });
+//            });
+//            it('should return a forbidden response status code for request with expired signature', function(done) {
+//                request(url)
+//                    .get(requestPath)
+//                    .set('Content-Type','*/*')
+//                    .set('x-wix-application-id', options.headers["x-wix-application-id"])
+//                    .set('x-wix-instance-id', options.headers['x-wix-instance-id'])
+//                    .set('x-wix-signature', options.headers['x-wix-signature'])
+//                    .set('x-wix-timestamp', '1980-07-16T13:57:50.213Z')
+//                    .expect(403)
+//                    .end(function(err, res) {
+//                        if (err) {
+//                            throw err;
+//                        }
+//                        done();
+//                    });
+//            });
+//            it('should return a bad request status code for request with bad signature', function(done) {
+//                request(url)
+//                    .get(requestPath)
+//                    .set('Content-Type','*/*')
+//                    .set('x-wix-application-id', options.headers["x-wix-application-id"])
+//                    .set('x-wix-instance-id', options.headers['x-wix-instance-id'])
+//                    .set('x-wix-signature', 'MOOOOOOO')
+//                    .set('x-wix-timestamp', options.headers['x-wix-timestamp'])
+//                    .expect(403)
+//                    .end(function(err, res) {
+//                        if (err) {
+//                            throw err;
+//                        }
+//                        done();
+//                    });
+//            });
+//        });
+//    });
+//});
