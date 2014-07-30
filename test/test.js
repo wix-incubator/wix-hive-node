@@ -276,10 +276,40 @@ describe('OpenAPI-Node', function() {
                         country: 'USA',
                         postalCode: 94158
                     });
-                contact.addTag('VIP');
-                contact.addUrl({ tag: 'work', url: 'http://www.wix.com/'});
-                contact.addNote({ content: 'blah blah blah'});
                 contact.addDate({ tag: 'work', date: '1994-11-05T13:15:30Z'});
+                contact.addUrl({ tag: 'work', url: 'http://www.wix.com/'});
+                api.Contacts.create(contact).then(
+                    function (contact) {
+                        contact.id().exists().should.be.eql(true);
+                        contact.id().should.not.equal(undefined);
+                        contact.id().id().should.be.a.String;
+                        contact.id().id().should.not.be.length(0);
+                        done();
+                    },
+                    function (error) {
+                        throw error;
+                    }
+                );
+            });
+            it('should create new contact with tag, note and customField and return contact id', function (done) {
+                var contact = api.Contacts.newContact(api);
+                contact.name({first: 'Karen', last: 'Meep'});
+                contact.company({role: 'MyRole', name: 'MyName'});
+                contact.picture('http://elcaminodeamanda.files.wordpress.com/2011/03/mc_hammer.png');
+                contact.addPhone({ tag: 'work', phone: '+1-415-639-9034'});
+                contact.addAddress(
+                    {
+                        tag: 'work',
+                        address: '500 Terry A Francois',
+                        city: 'San Francisco',
+                        region: 'CA',
+                        country: 'USA',
+                        postalCode: 94158
+                    });
+                contact.addDate({ tag: 'work', date: '1994-11-05T13:15:30Z'});
+                contact.addUrl({ tag: 'work', url: 'http://www.wix.com/'});
+                contact.addTag('VIP');
+                contact.addNote({ content: 'blah blah blah'});
                 contact.addCustomField({ field: 'Host', value: 'Wayne Campbell'});
                 api.Contacts.create(contact).then(
                     function (contact) {
@@ -337,16 +367,7 @@ describe('OpenAPI-Node', function() {
                     function(contactId){
                         contactId.should.not.eql(undefined);
                         contactId.should.be.a.String;
-                        api.Contacts.getContactById(contactId).then(
-                            function(contactId){
-                                contactId.should.not.eql(undefined);
-                                contactId.should.be.a.String;
-                                done();
-                            },
-                            function(error){
-                                throw error;
-                            }
-                        );
+                        done();
                     },
                     function(error){
                         throw error;
@@ -923,7 +944,9 @@ describe('Objects', function() {
                                             function (contact) {
                                                 var date = contact.dates()[0];
                                                 date.id().should.be.a.Number;
-                                                date.date().should.be.eql('1995-11-05T13:15:30Z');
+                                                var dExpected = new Date('1995-11-05T13:15:30Z').toString();
+                                                var dActual = new Date(date.date().toString()).toString();
+                                                dExpected.should.be.eql(dActual);
                                                 date.tag().should.be.eql('A year later');
                                                 done();
                                             },
@@ -1018,7 +1041,7 @@ describe('Objects', function() {
                         var contact = api.Contacts.newContact();
                         contact.addCustomField({ field: 'Host', value: 'Wayne Campbell'});
                         var customField = contact.customFields()[0];
-                        expect(contact.addCustomField).withArgs(customField).to.throwException();
+                        expect(contact.updateCustomField).withArgs(customField).to.throwException();
                         done();
                     });
 
@@ -1278,7 +1301,9 @@ describe('Objects', function() {
                                         date.id().should.be.a.Number;
                                         date.id().should.not.be.eql(undefined);
                                         date.tag().should.be.eql('work');
-                                        date.date().should.be.eql('1994-11-05T13:15:30Z');
+                                        var dExpected = new Date('1994-11-05T13:15:30Z').toString();
+                                        var dActual = new Date(date.date().toString()).toString();
+                                        dExpected.should.be.eql(dActual);
                                         done();
                                     },
                                     function (error) {
