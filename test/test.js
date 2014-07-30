@@ -266,6 +266,7 @@ describe('OpenAPI-Node', function() {
                 contact.name({first: 'Karen', last: 'Meep'});
                 contact.company({role: 'MyRole', name: 'MyName'});
                 contact.picture('http://elcaminodeamanda.files.wordpress.com/2011/03/mc_hammer.png');
+                contact.addEmail({tag: 'home', email: 'karen@home.com'});
                 contact.addPhone({ tag: 'work', phone: '+1-415-639-9034'});
                 contact.addAddress(
                     {
@@ -474,12 +475,86 @@ describe('Objects', function() {
                     done();
                 });
 
-                it('should edit existing contact non-list information', function (done) {
-                    throw 'not implemented'
-                });
+                it('should edit existing contact information', function (done) {
+                    var contact = api.Contacts.newContact(api);
+                    api.Contacts.create(contact).then(
+                        function (contact) {
 
-                it('should add new list information to Contact', function (done) {
-                    throw 'not implemented'
+                            contact.name().prefix('Sir');
+                            contact.name().first('Mix');
+                            contact.name().middle('A');
+                            contact.name().last('Very');
+                            contact.name().suffix('Lot');
+                            contact.company({role: 'MyRole', name: 'MyName'});
+                            contact.picture('http://assets.objectiface.com/hashed_silo_content/silo_content/6506/resized/mchammer.jpg');
+                            contact.addPhone({ tag: 'work', phone: '+1-415-639-9034'});
+                            contact.addEmail({tag: 'work', email: 'karenc@wix.com'});
+                            contact.addAddress(
+                                {
+                                    tag: 'work',
+                                    address: '500 Terry A Francois',
+                                    city: 'San Francisco',
+                                    region: 'CA',
+                                    country: 'USA',
+                                    postalCode: 94158
+                                });
+                            contact.addDate({ tag: 'work', date: '1994-11-05T13:15:30Z'});
+                            contact.addUrl({ tag: 'work', url: 'http://www.wix.com/'});
+
+                            contact.update().then(
+                                function(contact){
+
+                                    contact.name().prefix().should.be.eql('Sir');
+                                    contact.name().first().should.be.eql('Mix');
+                                    contact.name().middle().should.be.eql('A');
+                                    contact.name().last().should.be.eql('Very');
+                                    contact.name().suffix().should.be.eql('Lot');
+                                    contact.picture().should.be.eql('http://assets.objectiface.com/hashed_silo_content/silo_content/6506/resized/mchammer.jpg');
+                                    contact.company().role().should.be.eql('MyRole');
+                                    contact.company().name().should.be.eql('MyName');
+                                    var email = contact.emails()[0];
+                                    email.id().should.be.a.Number;
+                                    email.id().should.not.be.eql(undefined);
+                                    email.email().should.be.eql('karenc@wix.com');
+                                    email.tag().should.be.eql('work');
+                                    var address = contact.addresses()[0];
+                                    address.id().should.be.a.Number;
+                                    address.id().should.not.be.eql(undefined);
+                                    address.tag().should.be.eql('work');
+                                    address.address().should.be.eql('500 Terry A Francois');
+                                    address.neighborhood().should.be.eql('Awesomeville');
+                                    address.city().should.be.eql('San Francisco');
+                                    address.region().should.be.eql('CA');
+                                    address.country().should.be.eql('USA');
+                                    address.postalCode().should.be.eql(94158);
+                                    var phone = contact.phones()[0];
+                                    phone.id().should.be.a.Number;
+                                    phone.id().should.not.be.eql(undefined);
+                                    phone.tag().should.be.eql('work');
+                                    phone.phone().should.be.eql('+1-415-639-9034');
+                                    var url = contact.urls()[0];
+                                    url.id().should.be.a.Number;
+                                    url.id().should.not.be.eql(undefined);
+                                    url.tag().should.be.eql('work');
+                                    url.url().should.be.eql('http://www.wix.com/');
+                                    var date = contact.dates()[0];
+                                    date.id().should.be.a.Number;
+                                    date.id().should.not.be.eql(undefined);
+                                    date.tag().should.be.eql('work');
+                                    var dExpected = new Date('1994-11-05T13:15:30Z').toString();
+                                    var dActual = new Date(date.date().toString()).toString();
+                                    dExpected.should.be.eql(dActual);
+                                    done();
+                                },
+                                function(error){
+                                    throw error;
+                                }
+                            );
+                        },
+                        function (error) {
+                            throw error;
+                        }
+                    );
                 });
 
                 it('should edit existing list information Contact', function (done) {
