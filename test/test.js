@@ -392,15 +392,85 @@ describe('OpenAPI-Node', function() {
         });
 
         describe('getContacts', function() {
-            it('should return a non-empty list of contacts', function (done) {
+            it('should not throw error when called with no parameters', function (done) {
 
                 api.Contacts.getContacts().then(
-                    function(data) {
-                        data.should.not.equal(undefined);
-                        data.should.be.a.Object; //TODO Make this 'WixPagingData'
-                        data.should.not.be.empty;
-                        data.currentData.results.should.be.a.Array;
-                        data.currentData.results.should.not.have.length(0);
+                    function(pagingContactsResult) {
+                        pagingContactsResult.should.not.equal(undefined);
+                        pagingContactsResult.should.be.a.Object;
+                        pagingContactsResult.should.not.be.empty;
+                        done();
+                    },
+                    function(error) {
+                        throw error;
+                    }
+                );
+            });
+            it('should return a non-empty list of contacts when called with no parameters', function (done) {
+
+                api.Contacts.getContacts().then(
+                    function(pagingContactsResult) {
+                        pagingContactsResult.should.not.equal(undefined);
+                        pagingContactsResult.should.be.a.Object;
+                        pagingContactsResult.should.not.be.empty;
+                        pagingContactsResult.currentData.results.should.be.a.Array;
+                        pagingContactsResult.currentData.results.should.not.have.length(0);
+                        done();
+                    },
+                    function(error) {
+                        throw error;
+                    }
+                );
+            });
+            it('should return a non-empty list of contacts when called with pageSize parameter', function (done) {
+
+                api.Contacts.getContacts(
+                    {
+                        pageSize: 50
+                    }
+                ).then(
+                    function(pagingContactsResult) {
+                        pagingContactsResult.should.not.equal(undefined);
+                        pagingContactsResult.should.be.a.Object;
+                        pagingContactsResult.should.not.be.empty;
+                        pagingContactsResult.currentData.results.should.be.a.Array;
+                        pagingContactsResult.currentData.results.should.not.have.length(0);
+                        done();
+                    },
+                    function(error) {
+                        throw error;
+                    }
+                );
+            });
+        });
+
+        describe('getContactsSubscribers', function() {
+            it('should not throw error when called with no parameters', function (done) {
+
+                api.Contacts.getContactsSubscribers().then(
+                    function(pagingContactsResult) {
+                        pagingContactsResult.should.not.equal(undefined);
+                        pagingContactsResult.should.be.a.Object;
+                        pagingContactsResult.should.not.be.empty;
+                        done();
+                    },
+                    function(error) {
+                        throw error;
+                    }
+                );
+            });
+            it('should return a non-empty list of contacts when called with pageSize parameter', function (done) {
+
+                api.Contacts.getContactsSubscribers(
+                    {
+                        status: notSet,
+                        pageSize: 50
+                    }
+                ).then(
+                    function(pagingContactsResult) {
+                        pagingContactsResult.should.not.equal(undefined);
+                        pagingContactsResult.should.be.a.Object;
+                        pagingContactsResult.should.not.be.empty;
                         done();
                     },
                     function(error) {

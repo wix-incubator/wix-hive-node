@@ -270,6 +270,27 @@ api.Contacts.getContactById('SOME_CONTACT_ID).then(
 );
 ```
 
+### Get a list of site Contact Subscribers
+Subscribers are Contacts for the given site that have opted in to receiving communications from applications.
+
+
+```js
+api.Contacts.getContactsSubscribers(
+    {
+        status: notSet, // or optIn
+        pageSize: 50
+    }
+).then(
+    function(pagingContactsResult) {
+
+        // Contact the site's subscribers
+    },
+    function(error) {
+        throw error;
+    }
+);
+```
+
 ### Post an activity
 
 This is where the [Javascript SDK](http://dev.wix.com/docs/display/DRAF/JavaScript+SDK) comes in to play. Use it to obtain a user session token, then use the token to create an activity on behalf of the user.
