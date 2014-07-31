@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>Wix openapi-node Module: Wix/API</title>
+	<title>Wix openapi-node Global</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -115,12 +115,12 @@
 					
 
 
-	<h1 class="page-title">Module: Wix/API</h1>
+	<h1 class="page-title">Global</h1>
 <section>
 
 <header>
     <h2>
-    Wix/API
+    
     </h2>
     
 </header>
@@ -153,11 +153,6 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        WixClient.js
-    </li></ul></dd>
-    
 
     
 
@@ -182,92 +177,47 @@
     
 
     
-        <h3 class="subsection-title">Members</h3>
+
+    
+
+    
+        <h3 class="subsection-title">Type Definitions</h3>
 
         <dl>
-            
+                
 <dt>
-    <h4 class="name" id="API"><span class="type-signature">&lt;static, readonly> </span>API<span class="type-signature"></span></h4>
+    <h4 class="name" id="GetActivitiesOptions">GetActivitiesOptions</h4>
     
     
 </dt>
 <dd>
     
     <div class="description">
-        <p>Access to the <a href="APIBuilder.html"><code>APIBuilder</code></a> for more control over creating a <a href="Wix.html"><code>Wix</code></a> object</p>
+        <p>Get Activities Query Options</p>
     </div>
     
     
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Object</span>
+
+
+            </li>
+        </ul>
     
 
     
 <dl class="details">
     
 
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        WixClient.js
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-    
-    
-</dd>
-
-        </dl>
-    
-
-    
-        <h3 class="subsection-title">Methods</h3>
+        <h5 class="subsection-title">Properties:</h5>
 
         <dl>
-            
-<dt>
-    <h4 class="name" id="getAPI"><span class="type-signature">&lt;static> </span>getAPI<span class="signature">(secretKey, appId, instanceId)</span><span class="type-signature"> &rarr; {<a href="Wix.html">Wix</a>}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Returns an interface to the Wix API</p>
-    </div>
-    
 
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
+<table class="props table table-striped">
     <thead>
 	<tr>
 		
@@ -276,6 +226,8 @@
 
 		<th>Type</th>
 
+		
+		<th>Argument</th>
 		
 
 		
@@ -289,79 +241,162 @@
 
         <tr>
             
-                <td class="name"><code>secretKey</code></td>
+                <td class="name"><code>pageSize</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type">Number</span>
 
 
             
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+                </td>
+            
 
             
 
-            <td class="description last"><p>Your applications Secret Key</p></td>
+            <td class="description last"><p>The number of results to return per page of data. Valid options are: 25, 50 and 100. Defaults to 25</p></td>
         </tr>
 
 	
 
         <tr>
             
-                <td class="name"><code>appId</code></td>
+                <td class="name"><code>activityTypes</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type">string</span>
 
 
             
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+                </td>
+            
 
             
 
-            <td class="description last"><p>Your applications App Id</p></td>
+            <td class="description last"><p>The activity types to filter against. Multiple activity types are separated by a comma</p></td>
         </tr>
 
 	
 
         <tr>
             
-                <td class="name"><code>instanceId</code></td>
+                <td class="name"><code>until</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type">dateTime</span>
 
 
             
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+                </td>
+            
 
             
 
-            <td class="description last"><p>Your applications instanceId</p></td>
+            <td class="description last"><p>The ending date for activities we want to return, as an ISO 8601 timestamp This field is only relevant when a cursor is not present</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>from</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">dateTime</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The     beginning date for activities we want to return, as an ISO 8601 timestamp. This field is only relevant when a cursor is not present</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>scope</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The scope of the results to return, either for the entire site or limited to the current application. Can either be site or app. By default, all activities for the site will be returned</p></td>
         </tr>
 
 	
 	</tbody>
 </table>
+</dl>
 
-    
-    
-    
-<dl class="details">
     
 
     
@@ -396,136 +431,9 @@
 
     
     
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    <p>Wix API interface object</p>
-</div>
-
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type"><a href="Wix.html">Wix</a></span>
-
-
-	</dd>
-</dl>
-
-
-        
-    
-    
 </dd>
 
-        
-            
-<dt>
-    <h4 class="name" id="getConnect"><span class="type-signature">&lt;static> </span>getConnect<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Connect_.html">module:Wix/Connect</a>}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Returns an interface to a {module:Wix/Connect} module</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        WixClient.js
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    <p>the Wix Connect module</p>
-</div>
-
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type"><a href="Connect_.html">module:Wix/Connect</a></span>
-
-
-	</dd>
-</dl>
-
-
-        
-    
-    
-</dd>
-
-        </dl>
-    
-
+            </dl>
     
 
     
@@ -552,7 +460,7 @@
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a>
-		on Thu Jul 31 2014 13:41:26 GMT+0300 (IDT) using the <a href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
+		on Thu Jul 31 2014 13:41:25 GMT+0300 (IDT) using the <a href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>
 			</div>
