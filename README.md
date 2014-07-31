@@ -60,22 +60,6 @@ app.listen(3000);
 
 ### Working with the Contact Object
 
-
-#### Get a list of Contacts from The Wix Hive
-
-```js
-api.Contacts.getContacts().then(
-    function(wixCursor) {
-
-        // Do something with the Contacts
-    },
-    function(error) {
-        throw error;
-    }
-);
-```
-
-
 #### Create a Contact a post it to the Wix Hive
 
 The newContact function returns a Contact object. The Contact created is only known locally, it has not been saved to the Wix Hive and does not have an ID.
@@ -256,10 +240,29 @@ contact.getActivities(nextCursor,
 );
 ```
 
-### Get an existing Contact from The Wix Hive
+
+### Get a list of Contacts from The Wix Hive
 
 ```js
-api.Contacts.getContactById('SOME_CONTACT_ID).then(
+api.Contacts.getContacts(
+    null, // or cursor
+    {
+        pageSize: 100 // or 25, 50
+    }).then(
+    function(wixCursor) {
+
+        // Do something with the Contacts
+    },
+    function(error) {
+        throw error;
+    }
+);
+```
+
+### Get a Contact from The Wix Hive
+
+```js
+api.Contacts.getContactById('SOME_CONTACT_ID').then(
     function(contact){
 
         // Do stuff with this Contact
@@ -271,14 +274,13 @@ api.Contacts.getContactById('SOME_CONTACT_ID).then(
 ```
 
 ### Get a list of site Contact Subscribers
-Subscribers are Contacts for the given site that have opted in to receiving communications from applications.
-
+Subscribers are Contacts (for the given site) that have opted in to receiving communications from applications.
 
 ```js
 api.Contacts.getContactsSubscribers(
     {
         status: notSet, // or optIn
-        pageSize: 50
+        pageSize: 50 // or 25, 100. Default is 25
     }
 ).then(
     function(pagingContactsResult) {

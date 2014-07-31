@@ -188,15 +188,41 @@ describe('OpenAPI-Node', function() {
         });
 
         describe('getActivities', function() {
-            it('should return a on-empty list of activities', function(done) {
+            it('should not throw errors when called without parameters', function(done) {
 
-                api.Activities.getActivities(null, null)
-                    .then(function(data) {
+                api.Activities.getActivities(null, null).then(
+                    function(data) {
                         data.should.not.equal(undefined);
-                        data.should.be.a.Object; //TODO Make this 'WixPagingData'
+                        data.should.be.a.Object;
                         data.should.not.be.empty;
                         data.currentData.results.should.be.a.Array;
                         data.currentData.results.should.not.have.length(0);
+                        done();
+                    }, function(error) {
+                        throw error;
+                    });
+            });
+            it('should not throw errors when called with parameters', function(done) {
+                var ONE_HOUR = 60 * 60 * 1000;
+                var oneHourAgo = new Date(new Date().getTime() - ONE_HOUR);
+                api.Activities.getActivities(null,
+                    {
+                        from: oneHourAgo.toISOString(),
+                        until: new Date().toISOString(),
+                        activityTypes: [api.Activities.TYPES.ALBUM_FAN.name, api.Activities.TYPES.ALBUM_SHARE.name],
+                        scope: 'app',
+                        pageSize: 50
+                    }
+                ).then(function(pagingActivitiesResult) {
+                        pagingActivitiesResult.should.not.equal(undefined);
+                        pagingActivitiesResult.should.be.a.Object;
+                        pagingActivitiesResult.should.not.be.empty;
+                        pagingActivitiesResult.currentData.results.should.be.a.Array;
+                        pagingActivitiesResult.currentData.results.should.not.have.length(0);
+                        pagingActivitiesResult.total.should.be.eql(1);
+                        pagingActivitiesResult.pageSize.should.be.eql(1);
+                        pagingActivitiesResult.previousCursor.should.be.eql(0);
+                        pagingActivitiesResult.nextCursor.should.be.eql(0);
                         done();
                     }, function(error) {
                         throw error;
@@ -424,7 +450,7 @@ describe('OpenAPI-Node', function() {
             });
             it('should return a non-empty list of contacts when called with pageSize parameter', function (done) {
 
-                api.Contacts.getContacts(
+                api.Contacts.getContacts(null,
                     {
                         pageSize: 50
                     }
@@ -435,6 +461,8 @@ describe('OpenAPI-Node', function() {
                         pagingContactsResult.should.not.be.empty;
                         pagingContactsResult.currentData.results.should.be.a.Array;
                         pagingContactsResult.currentData.results.should.not.have.length(0);
+                        pagingContactsResult.currentData.total.should.not.be.eql(0);
+                        pagingContactsResult.currentData.pageSize.should.be.eql(50);
                         done();
                     },
                     function(error) {
@@ -461,7 +489,7 @@ describe('OpenAPI-Node', function() {
             });
             it('should return a non-empty list of contacts when called with pageSize parameter', function (done) {
 
-                api.Contacts.getContactsSubscribers(
+                api.Contacts.getContactsSubscribers(null,
                     {
                         status: notSet,
                         pageSize: 50
@@ -471,6 +499,7 @@ describe('OpenAPI-Node', function() {
                         pagingContactsResult.should.not.equal(undefined);
                         pagingContactsResult.should.be.a.Object;
                         pagingContactsResult.should.not.be.empty;
+                        pagingContactsResult.currentData.pageSize.should.be.eql(50);
                         done();
                     },
                     function(error) {
@@ -1639,7 +1668,7 @@ describe('Objects', function() {
                 activity.activityInfo.album.name = "Wix";
                 activity.activityInfo.album.id = "1234";
 
-                it('should return all activities when no options are given', function(done) {
+                it('should not throw errors when no options are given', function(done) {
                     var contact = api.Contacts.newContact();
                     contact.name({first: 'Karen', last: 'Meep'});
                     api.Contacts.create(contact).then(
@@ -1676,7 +1705,7 @@ describe('Objects', function() {
                     );
                 });
 
-                it('should return all activities when options are given', function(done) {
+                it('should not throw errors when options are given', function(done) {
                     var contact = api.Contacts.newContact();
                     contact.name({first: 'Karen', last: 'Meep'});
                     api.Contacts.create(contact).then(
@@ -1695,7 +1724,8 @@ describe('Objects', function() {
                                             from: oneHourAgo.toISOString(),
                                             until: new Date().toISOString(),
                                             activityTypes: [api.Activities.TYPES.ALBUM_FAN.name, api.Activities.TYPES.ALBUM_SHARE.name],
-                                            scope: 'app'
+                                            scope: 'app',
+                                            pageSize: 50
                                         }).then(
                                         function(pagingActivitiesResult){
                                             var activities = pagingActivitiesResult.results;
