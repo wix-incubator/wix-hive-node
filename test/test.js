@@ -267,7 +267,7 @@ describe('OpenAPI-Node', function() {
                 contact.company({role: 'MyRole', name: 'MyName'});
                 contact.picture('http://elcaminodeamanda.files.wordpress.com/2011/03/mc_hammer.png');
                 contact.addEmail({tag: 'home', email: 'karen@home.com'});
-                contact.addPhone({ tag: 'work', phone: '+1-415-639-9034'});
+                contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                 contact.addAddress(
                     {
                         tag: 'work',
@@ -297,7 +297,7 @@ describe('OpenAPI-Node', function() {
                 contact.name({first: 'Karen', last: 'Meep'});
                 contact.company({role: 'MyRole', name: 'MyName'});
                 contact.picture('http://elcaminodeamanda.files.wordpress.com/2011/03/mc_hammer.png');
-                contact.addPhone({ tag: 'work', phone: '+1-415-639-9034'});
+                contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                 contact.addAddress(
                     {
                         tag: 'work',
@@ -377,7 +377,7 @@ describe('OpenAPI-Node', function() {
             });
 
             it('should return Contact Id when given a phone shared with another Contacts', function(done) {
-                var phone = '+1-415-639-9034';
+                var phone = '+1-415-639-5555';
                 api.Contacts.upsert(phone).then(
                     function(contactId){
                         contactId.should.not.eql(undefined);
@@ -436,13 +436,13 @@ describe('Objects', function() {
                     contact.name().prefix('Sir');
                     contact.name().first('Mix');
                     contact.name().middle('A');
-                    contact.name().last('Very');
-                    contact.name().suffix('Lot');
+                    contact.name().last('Lot');
+                    contact.name().suffix('The III');
                     contact.name().prefix().should.be.eql('Sir');
                     contact.name().first().should.be.eql('Mix');
                     contact.name().middle().should.be.eql('A');
-                    contact.name().last().should.be.eql('Very');
-                    contact.name().suffix().should.be.eql('Lot');
+                    contact.name().last().should.be.eql('Lot');
+                    contact.name().suffix().should.be.eql('The III');
                     done();
                 });
             });
@@ -483,11 +483,11 @@ describe('Objects', function() {
                             contact.name().prefix('Sir');
                             contact.name().first('Mix');
                             contact.name().middle('A');
-                            contact.name().last('Very');
-                            contact.name().suffix('Lot');
+                            contact.name().last('Lot');
+                            contact.name().suffix('The III');
                             contact.company({role: 'MyRole', name: 'MyName'});
                             contact.picture('http://assets.objectiface.com/hashed_silo_content/silo_content/6506/resized/mchammer.jpg');
-                            contact.addPhone({ tag: 'work', phone: '+1-415-639-9034'});
+                            contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                             contact.addEmail({tag: 'work', email: 'karenc@wix.com'});
                             contact.addAddress(
                                 {
@@ -507,8 +507,8 @@ describe('Objects', function() {
                                     contact.name().prefix().should.be.eql('Sir');
                                     contact.name().first().should.be.eql('Mix');
                                     contact.name().middle().should.be.eql('A');
-                                    contact.name().last().should.be.eql('Very');
-                                    contact.name().suffix().should.be.eql('Lot');
+                                    contact.name().last().should.be.eql('Lot');
+                                    contact.name().suffix().should.be.eql('The III');
                                     contact.picture().should.be.eql('http://assets.objectiface.com/hashed_silo_content/silo_content/6506/resized/mchammer.jpg');
                                     contact.company().role().should.be.eql('MyRole');
                                     contact.company().name().should.be.eql('MyName');
@@ -531,7 +531,7 @@ describe('Objects', function() {
                                     phone.id().should.be.a.Number;
                                     phone.id().should.not.be.eql(undefined);
                                     phone.tag().should.be.eql('work');
-                                    phone.phone().should.be.eql('+1-415-639-9034');
+                                    phone.phone().should.be.eql('+1-415-639-5555');
                                     var url = contact.urls()[0];
                                     url.id().should.be.a.Number;
                                     url.id().should.not.be.eql(undefined);
@@ -581,15 +581,15 @@ describe('Objects', function() {
                                 contact.name().prefix('Sir');
                                 contact.name().first('Mix');
                                 contact.name().middle('A');
-                                contact.name().last('Very');
-                                contact.name().suffix('Lot');
+                                contact.name().last('Lot');
+                                contact.name().suffix('The III');
                                 contact.updateName().then(
                                     function (contact) {
                                         contact.name().prefix().should.be.eql('Sir');
                                         contact.name().first().should.be.eql('Mix');
                                         contact.name().middle().should.be.eql('A');
-                                        contact.name().last().should.be.eql('Very');
-                                        contact.name().suffix().should.be.eql('Lot');
+                                        contact.name().last().should.be.eql('Lot');
+                                        contact.name().suffix().should.be.eql('The III');
                                         done();
                                     },
                                     function (error) {
@@ -837,7 +837,7 @@ describe('Objects', function() {
 
                     it('should throw error when given an unsaved Contact', function (done) {
                         var contact = api.Contacts.newContact();
-                        contact.addPhone({ tag: 'work', phone: '+1-415-639-9034'});
+                        contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                         var phone = contact.phones()[0];
                         expect(contact.updatePhone).withArgs(phone).to.throwException();
                         done();
@@ -853,7 +853,7 @@ describe('Objects', function() {
                         var contact = api.Contacts.newContact();
                         api.Contacts.create(contact).then(
                             function (contact) {
-                                contact.addPhone({ tag: 'work', phone: '+1-415-639-9034'});
+                                contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                                 var phone = contact.phones()[0];
                                 expect(contact.updatePhone).withArgs(phone).to.throwException();
                                 done();
@@ -866,7 +866,7 @@ describe('Objects', function() {
 
                     it('should edit phone for Contact', function (done) {
                         var contact = api.Contacts.newContact();
-                        contact.addPhone({ tag: 'work', phone: '+1-415-639-9034'});
+                        contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                         api.Contacts.create(contact).then(
                             function (contact) {
 
@@ -1075,25 +1075,33 @@ describe('Objects', function() {
 
                     it('should edit note for Contact', function (done) {
                         var contact = api.Contacts.newContact();
-                        contact.addNote({ content: 'I like big Wix and I cannot lie'});
-                        contact.notes().should.have.length(1);
                         api.Contacts.create(contact).then(
                             function (contact) {
 
                                 api.Contacts.getContactById(contact.id().id()).then(
                                     function (contact) {
 
-                                        var note = contact.notes()[0];
                                         note.id().should.be.a.Number;
-                                        note.content('I like big butts and I cannot lie');
-                                        contact.updateNote(note).then(
-                                            function (contact) {
+                                        contact.addNote({ content: 'I like big Wix and I cannot lie'});
+                                        var note = contact.notes()[0];
+                                        contact.postNote(note).then(
+                                            function(contact){
                                                 var note = contact.notes()[0];
-                                                note.id().should.be.a.Number;
-                                                note.content().should.be.eql('I like big butts and I cannot lie');
-                                                done();
+                                                note.content('I like big butts and I cannot lie');
+                                                contact.updateNote(note).then(
+                                                    function (contact) {
+                                                        var note = contact.notes()[0];
+                                                        note.id().should.be.a.Number;
+                                                        note.content().should.be.eql('I like big butts and I cannot lie');
+                                                        done();
+                                                    },
+                                                    function (error) {
+                                                        throw error;
+                                                    }
+                                                );
+
                                             },
-                                            function (error) {
+                                            function(error){
                                                 throw error;
                                             }
                                         );
@@ -1143,28 +1151,35 @@ describe('Objects', function() {
 
                     it('should edit customField for Contact', function (done) {
                         var contact = api.Contacts.newContact();
-                        contact.addCustomField({ field: 'Host', value: 'Wayne Campbell'});
-                        contact.customFields().should.have.length(1);
                         api.Contacts.create(contact).then(
                             function (contact) {
 
                                 api.Contacts.getContactById(contact.id().id()).then(
                                     function (contact) {
 
-                                        var customField = contact.customFields()[0];
-                                        customField.id().should.be.a.Number;
-                                        customField.field('Party Time');
-                                        customField.value('Excellent');
-                                        contact.updateCustomField(customField).then(
-                                            function (contact) {
+                                        contact.addCustomField({ field: 'Host', value: 'Wayne Campbell'});
+                                        var cf = contact.customFields()[0];
+                                        contact.postCustomField(cf).then(
+                                            function(contact) {
                                                 var customField = contact.customFields()[0];
                                                 customField.id().should.be.a.Number;
-                                                customField.field().should.be.eql('Party Time');
-                                                customField.value().should.be.eql('Excellent');
-                                                done();
+                                                customField.field('Party Time');
+                                                customField.value('Excellent');
+                                                contact.updateCustomField(customField).then(
+                                                    function (contact) {
+                                                        var customField = contact.customFields()[0];
+                                                        customField.id().should.be.a.Number;
+                                                        customField.field().should.be.eql('Party Time');
+                                                        customField.value().should.be.eql('Excellent');
+                                                        done();
+                                                    },
+                                                    function (error) {
+                                                        throw error;
+                                                    }
+                                                );
                                             },
-                                            function (error) {
-                                                throw error;
+                                            function(error){
+                                                throw(error);
                                             }
                                         );
                                     },
@@ -1284,7 +1299,7 @@ describe('Objects', function() {
 
                     it('should throw error when given an unsaved Contact', function (done) {
                         var contact = api.Contacts.newContact();
-                        contact.addPhone({ tag: 'work', phone: '+1-415-639-9034'});
+                        contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                         var phone = contact.phones()[0];
                         expect(contact.postPhone).withArgs(phone).to.throwException();
                         done();
@@ -1294,7 +1309,7 @@ describe('Objects', function() {
                         var contact = api.Contacts.newContact();
                         api.Contacts.create(contact).then(
                             function (contact) {
-                                contact.addPhone({ tag: 'work', phone: '+1-415-639-9034'});
+                                contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                                 var phone = contact.phones()[0];
                                 contact.postPhone(phone).then(
                                     function (contact) {
@@ -1302,7 +1317,7 @@ describe('Objects', function() {
                                         phone.id().should.be.a.Number;
                                         phone.id().should.not.be.eql(undefined);
                                         phone.tag().should.be.eql('work');
-                                        phone.phone().should.be.eql('+1-415-639-9034');
+                                        phone.phone().should.be.eql('+1-415-639-5555');
                                         done();
                                     },
                                     function (error) {
@@ -1321,7 +1336,7 @@ describe('Objects', function() {
 
                     it('should throw error when given an unsaved Contact', function (done) {
                         var contact = api.Contacts.newContact();
-                        contact.addUrl({ tag: 'work', url: '+1-415-639-9034'});
+                        contact.addUrl({ tag: 'work', url: '+1-415-639-5555'});
                         var url = contact.urls()[0];
                         expect(contact.postUrl).withArgs(url).to.throwException();
                         done();
@@ -1547,8 +1562,94 @@ describe('Objects', function() {
             });
 
             describe('GetActivities', function() {
-                it('should return all activities for Contact', function(done) {
-                    throw 'not implemented'
+                var activity = api.Activities.newActivity(api.Activities.TYPES.ALBUM_FAN);
+                activity.activityLocationUrl = "http://www.wix.com";
+                activity.activityDetails.summary = "test";
+                activity.activityDetails.additionalInfoUrl = "http://www.wix.com";
+                activity.activityInfo.album.name = "Wix";
+                activity.activityInfo.album.id = "1234";
+
+                it('should return all activities when no options are given', function(done) {
+                    var contact = api.Contacts.newContact();
+                    contact.name({first: 'Karen', last: 'Meep'});
+                    api.Contacts.create(contact).then(
+                        function(contact){
+                            contact.addActivity(activity, api).then(
+                                function(data){
+                                    data.activityId.should.be.a.String;
+                                    data.contactId.should.be.a.String;
+                                    data.contactId.should.be.eql(contact.id().id());
+
+                                    contact.getActivities().then(
+                                        function(pagingActivitiesResult){
+                                            var activities = pagingActivitiesResult.results;
+                                            activities.should.have.length(1);
+                                            pagingActivitiesResult.total.should.be.eql(1);
+                                            pagingActivitiesResult.pageSize.should.be.eql(1);
+                                            pagingActivitiesResult.previousCursor.should.be.eql(0);
+                                            pagingActivitiesResult.nextCursor.should.be.eql(0);
+                                            done();
+                                        },
+                                        function(error){
+                                            throw error;
+                                        }
+                                    );
+                                },
+                                function(error){
+                                    throw error;
+                                }
+                            );
+                        },
+                        function(error){
+                            throw error;
+                        }
+                    );
+                });
+
+                it('should return all activities when options are given', function(done) {
+                    var contact = api.Contacts.newContact();
+                    contact.name({first: 'Karen', last: 'Meep'});
+                    api.Contacts.create(contact).then(
+                        function(contact){
+                            contact.addActivity(activity, api).then(
+                                function(data){
+                                    data.activityId.should.be.a.String;
+                                    data.contactId.should.be.a.String;
+                                    data.contactId.should.be.eql(contact.id().id());
+
+                                    var ONE_HOUR = 60 * 60 * 1000;
+                                    var oneHourAgo = new Date(new Date().getTime() - ONE_HOUR);
+
+                                    contact.getActivities(null,
+                                        {
+                                            from: oneHourAgo.toISOString(),
+                                            until: new Date().toISOString(),
+                                            activityTypes: [api.Activities.TYPES.ALBUM_FAN.name, api.Activities.TYPES.ALBUM_SHARE.name],
+                                            scope: 'app'
+                                        }).then(
+                                        function(pagingActivitiesResult){
+                                            var activities = pagingActivitiesResult.results;
+                                            activities.should.have.length(1);
+                                            pagingActivitiesResult.total.should.be.eql(1);
+                                            pagingActivitiesResult.pageSize.should.be.eql(1);
+                                            pagingActivitiesResult.previousCursor.should.be.eql(0);
+                                            pagingActivitiesResult.nextCursor.should.be.eql(0);
+                                            done();
+                                        },
+                                        function(error){
+                                            throw error;
+                                        }
+                                    );
+                                },
+                                function(error){
+                                    throw error;
+                                }
+                            );
+                        },
+                        function(error){
+                            throw error;
+                        }
+                    );
                 });
             });
         });

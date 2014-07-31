@@ -86,7 +86,7 @@ var contact = api.Contacts.newContact(api); // Created a new Contact object. Thi
 contact.name({first: 'Karen', last: 'Meep'});
 contact.company({role: 'MyRole', name: 'MyName'});
 contact.picture('http://elcaminodeamanda.files.wordpress.com/2011/03/mc_hammer.png');
-contact.addPhone({ tag: 'work', phone: '+1-415-639-9034'});
+contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
 contact.addAddress(
     {
         tag: 'work',
@@ -121,11 +121,11 @@ api.Contacts.create(contact).then(
         contact.name().prefix('Sir');
         contact.name().first('Mix');
         contact.name().middle('A');
-        contact.name().last('Very');
-        contact.name().suffix('Lot');
+        contact.name().last('Lot');
+        contact.name().suffix('The III');
         contact.company({role: 'MyRole', name: 'MyName'});
         contact.picture('http://assets.objectiface.com/hashed_silo_content/silo_content/6506/resized/mchammer.jpg');
-        contact.addPhone({ tag: 'work', phone: '+1-415-639-9034'});
+        contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
         contact.addEmail({tag: 'work', email: 'karenc@wix.com'});
         contact.addAddress(
             {
@@ -169,8 +169,8 @@ api.Contacts.create(contact).then(
         contact.name().prefix('Sir');
         contact.name().first('Mix');
         contact.name().middle('A');
-        contact.name().last('Very');
-        contact.name().suffix('Lot');
+        contact.name().last('Lot');
+        contact.name().suffix('The III');
 
         contact.updateName().then(
             function (contact) {
@@ -217,6 +217,38 @@ api.Contacts.create(contact).then(
                 throw error;
             }
         );
+    },
+    function(error){
+        throw error;
+    }
+);
+```
+
+#### Get Contact Activities
+The code below posts an Activity against the given Contact.
+
+Note: Use the Activities.postActivity function to post an Activity in no relation to a Contact.
+
+```js
+contact.getActivities(nextCursor,
+    {
+        from: date1.toISOString(),
+        until: date2.toISOString(),
+        activityTypes: [api.Activities.TYPES.ALBUM_FAN.name, api.Activities.TYPES.ALBUM_SHARE.name],
+        scope: 'app'
+    }
+).then(
+    function(pagingActivitiesResult){
+        var activities = pagingActivitiesResult.results;
+        array.forEach(function(activity) {
+            // Do something with the activity
+        });
+
+        if (pagingActivitiesResult.nextCursor !== 0) {
+
+            // Get more activities using the cursor
+            contact.getActivities(pagingActivitiesResult.nextCursor).then(...)
+        }
     },
     function(error){
         throw error;
