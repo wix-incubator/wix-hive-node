@@ -293,6 +293,28 @@ api.Contacts.getContactsSubscribers(
 );
 ```
 
+### Get a list of site Activities
+```js
+
+api.Activities.getActivities(
+    null, // supply a cursor
+    {
+        from: date1.toISOString(), // Filter by date range
+        until: date2.toISOString(),
+        activityTypes: [api.Activities.TYPES.ALBUM_FAN.name, api.Activities.TYPES.ALBUM_SHARE.name], // Filter by Activity type
+        scope: 'app', // or 'site'
+        pageSize: 50 // or 25, 100
+    }
+).then(function(pagingActivitiesResult) {
+
+        // Use the cursor to page through more Activities..
+
+}, function(error) {
+    throw error;
+});
+```
+
+
 ### Post an activity
 
 This is where the [Javascript SDK](http://dev.wix.com/docs/display/DRAF/JavaScript+SDK) comes in to play. Use it to obtain a user session token, then use the token to create an activity on behalf of the user.

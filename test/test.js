@@ -224,9 +224,9 @@ describe('OpenAPI-Node', function() {
                         pagingActivitiesResult.previousCursor.should.be.eql(0);
                         pagingActivitiesResult.nextCursor.should.be.eql(0);
                         done();
-                    }, function(error) {
-                        throw error;
-                    });
+                }, function(error) {
+                    throw error;
+                });
             });
         });
     });
