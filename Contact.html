@@ -391,7 +391,7 @@
         
             
 <dt>
-    <h4 class="name" id="getActivities"><span class="type-signature"></span>getActivities<span class="signature">(options, onSuccess, onFailure)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="getActivities"><span class="type-signature"></span>getActivities<span class="signature">(cursor, options)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -433,6 +433,29 @@
 
         <tr>
             
+                <td class="name"><code>cursor</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The current cursor</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
                 <td class="name"><code>options</code></td>
             
 
@@ -450,52 +473,6 @@
             
 
             <td class="description last"><p>The Activity to post</p></td>
-        </tr>
-
-	
-
-        <tr>
-            
-                <td class="name"><code>onSuccess</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Contact.html#GetActivitiesCallback">Contact.GetActivitiesCallback</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>a callback function that receives a WixDataCursor object</p></td>
-        </tr>
-
-	
-
-        <tr>
-            
-                <td class="name"><code>onFailure</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Contact.html#GetActivitiesFailureCallback">Contact.GetActivitiesFailureCallback</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>failure callback</p></td>
         </tr>
 
 	
@@ -1563,265 +1540,6 @@ If no match is found, a new Contact will be created</p>
     
 </dl>
 
-    
-    
-</dd>
-
-            
-                
-<dt>
-    <h4 class="name" id="GetActivitiesCallback"><span class="type-signature"></span>GetActivitiesCallback<span class="signature">(data)</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>A callback that returns if the get operation completed successfully</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-
-		<th>Type</th>
-
-		
-
-		
-
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-
-	<tbody>
-	
-
-        <tr>
-            
-                <td class="name"><code>data</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Contact.html">Contact</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>the retrieved <a href="Contact.html"><code>Contact</code></a></p></td>
-        </tr>
-
-	
-	</tbody>
-</table>
-
-    
-    
-    
-<dl class="details">
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        WixClient.js
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-            
-                
-<dt>
-    <h4 class="name" id="GetActivitiesFailureCallback"><span class="type-signature"></span>GetActivitiesFailureCallback<span class="signature">(errorCode, errorMessage)</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>A callback that returns if the get operation failed</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-
-		<th>Type</th>
-
-		
-
-		
-
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-
-	<tbody>
-	
-
-        <tr>
-            
-                <td class="name"><code>errorCode</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>the error code for this failure</p></td>
-        </tr>
-
-	
-
-        <tr>
-            
-                <td class="name"><code>errorMessage</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>the error message for this failure</p></td>
-        </tr>
-
-	
-	</tbody>
-</table>
-
-    
-    
-    
-<dl class="details">
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        WixClient.js
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
     
     
 </dd>
@@ -2919,7 +2637,7 @@ A HATEOAS link to operations applicable to this Contact resource</p>
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a>
-		on Thu Jul 31 2014 13:41:26 GMT+0300 (IDT) using the <a href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
+		on Thu Jul 31 2014 16:11:40 GMT+0300 (IDT) using the <a href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>
 			</div>
