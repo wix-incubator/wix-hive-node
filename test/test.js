@@ -557,6 +557,36 @@ describe('Objects', function() {
                     contact.emails()[1].tag().should.be.eql('home');
                     done();
                 });
+                it('should throw exception with creating email without email property', function(done) {
+
+                    var contact = api.Contacts.newContact();
+                    expect(contact.addEmail).withArgs({tag: 'wix'}).to.throwException();
+                    done();
+                });
+                it('should throw exception with creating email without tag property', function(done) {
+
+                    var contact = api.Contacts.newContact();
+                    expect(contact.addEmail).withArgs({email: 'karenc@wix.com'}).to.throwException();
+                    done();
+                });
+                it('should ignore when setting tag property as null', function(done) {
+
+                    var contact = api.Contacts.newContact();
+                    contact.addEmail({tag: 'work', email: 'karenc@wix.com'});
+                    var email = contact.emails()[0];
+                    email.tag(null);
+                    email.tag().should.be.eql('work');
+                    done();
+                });
+                it('should ignore when setting email property as null', function(done) {
+
+                    var contact = api.Contacts.newContact();
+                    contact.addEmail({tag: 'work', email: 'karenc@wix.com'});
+                    var email = contact.emails()[0];
+                    email.email(null);
+                    email.email().should.be.eql('karenc@wix.com');
+                    done();
+                });
             });
         });
 
