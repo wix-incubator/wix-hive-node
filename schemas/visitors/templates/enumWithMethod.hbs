@@ -1,0 +1,12 @@
+/**
+* @param value the value of '{{property}}'
+* @returns {@link {{ClassName}} }
+*/
+{{ClassName}}.prototype.with{{methodName}} = function(value) {
+    var enumProperties = [{{enumValues}}];
+    if (!_.contains(enumProperties, value)) {
+        return this;
+    }
+    this['{{property}}'] = value;
+    return this;
+};

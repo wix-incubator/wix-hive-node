@@ -32,7 +32,8 @@
     "ink-docstrap": "latest",
     "grunt-gh-pages": "latest",
     "grunt-jsbeautifier" : "latest",
-     "mkdirp" : "0.3.5"
+    "mkdirp" : "0.3.5",
+    "handlebars" : "latest"
   },
   "engines": {
     "node": ">= 0.10.20"

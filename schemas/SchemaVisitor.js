@@ -4,7 +4,7 @@ function SchemaVisitor() {
 SchemaVisitor.prototype = {
     startVisiting : function(name) {
     },
-    endVisiting : function() {
+    endVisiting : function(name) {
     },
     arrayItemEncountered : function(typeName) {
     },

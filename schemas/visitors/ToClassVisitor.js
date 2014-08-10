@@ -1,5 +1,7 @@
 var sv = require("../SchemaVisitor.js");
 var _ = require('lodash-node');
+var HandleBars = require("Handlebars");
+var fs = require('fs');
 
 "use strict";
 
@@ -7,24 +9,50 @@ function ObjectRep(objName) {
     this.methods = "";
     this.properties = "";
     this.objName = objName;
+    this.withTemplate = HandleBars.compile(fs.readFileSync("./schemas/visitors/templates/withMethod.hbs", { encoding: "utf8"}));
+    this.enumWithTemplate = HandleBars.compile(fs.readFileSync("./schemas/visitors/templates/enumWithMethod.hbs", { encoding: "utf8"}));
+    this.propertyTemplate = HandleBars.compile(fs.readFileSync("./schemas/visitors/templates/property.hbs", { encoding: "utf8"}));
+    this.typedPropertyTemplate = HandleBars.compile(fs.readFileSync("./schemas/visitors/templates/typedProperty.hbs", { encoding: "utf8"}));
+    this.newTemplate = HandleBars.compile(fs.readFileSync("./schemas/visitors/templates/newMethod.hbs", { encoding: "utf8"}));
+    this.addTemplate = HandleBars.compile(fs.readFileSync("./schemas/visitors/templates/addMethod.hbs", { encoding: "utf8"}));
+    this.schemaClassTemplate = HandleBars.compile(fs.readFileSync("./schemas/visitors/templates/schemaClass.hbs", { encoding: "utf8"}));
 }
 
 ObjectRep.prototype.addProperty = function(name, value) {
-    this.properties += "\tthis." + name + " = " + value + ";\n";
+    this.properties += this.propertyTemplate({property : name, value : value});
 }
 
-ObjectRep.prototype.addMethod = function(name, params, body) {
-    this.methods += this.objName + ".prototype." + name + " = function(" + params.join(",") + ") {\n" + body + "\n};\n";
+ObjectRep.prototype.addTypedProperty = function(name, type) {
+    this.properties += this.typedPropertyTemplate({property : name, propertyType : type});
+}
+
+ObjectRep.prototype.newArrayItemMethod = function(methodName, typeName) {
+    this.methods += this.newTemplate({ClassName : this.objName, methodName : methodName, type : typeName});
+}
+
+ObjectRep.prototype.addArrayItemMethod = function(methodName, propertyName, valueType) {
+    this.methods += this.addTemplate({ClassName : this.objName, methodName : methodName, property: propertyName, valueType : valueType});
+}
+
+ObjectRep.prototype.addWithMethod = function(withName, propertyName, enumProperties) {
+    var template = enumProperties !== undefined ? this.enumWithTemplate : this.withTemplate;
+    var props = {ClassName : this.objName, methodName : withName, property : propertyName};
+    if(enumProperties !== undefined) {
+        props['enumProperties'] = enumProperties;
+    }
+    this.methods += template(props);
 }
 
 ObjectRep.prototype.toClass = function() {
-    return "function " + this.objName + "() {\n" + this.properties + "}\n" + this.methods + "\n";
+    return this.schemaClassTemplate({ClassName : this.objName, properties : this.properties, methods : this.methods});
 };
 
 function ToClassVisitor() {
     "use strict";
     this.objects = [];
     this.currentItem = [];
+    this.schemaContainerTemplate = HandleBars.compile(fs.readFileSync("./schemas/visitors/templates/schemaContainer.hbs", { encoding: "utf8"}));
+
 }
 ToClassVisitor.prototype = new sv();
 
@@ -35,39 +63,24 @@ ToClassVisitor.prototype.startVisiting = function(name) {
 ToClassVisitor.prototype.stringPropEncountered = function(name, enumProperties) {
     var current = this.current();
     current.addProperty(name, "null");
-    var setter = "this['" + name + "'] = value;\n" + "return this;";
-    var out = setter;
     if(enumProperties !== null && enumProperties !== undefined && enumProperties.length > 0) {
         var enumString = "'" + _.values(enumProperties).join("','") + "'";
-        out = "var enumProperties = [" + enumString + "];\n" +
-        "if(!_.contains(enumProperties, value)) {\n" +
-        "return this;\n" +
-        "}\n" + setter;
+        current.addWithMethod(this.toUpperName(name), name, enumString);
+    } else {
+        current.addWithMethod(this.toUpperName(name), name);
     }
-    current.addMethod("with" + this.toUpperName(name), ["value"], out);
 }
 
 ToClassVisitor.prototype.current = function() {
-    "use strict";
     return this.currentItem[this.currentItem.length - 1];
 }
 
 ToClassVisitor.prototype.arrayItemEncountered = function(propertyName) {
-    "use strict";
-    this.current().addMethod('new' + this.toSingular(this.toUpperName(propertyName)), [],
-        "return Object.create(" + this.toUpperName(propertyName) + "Item);"
-    );
-
-    this.current().addMethod('add' + this.toSingular(this.toUpperName(propertyName)), ["value"],
-        "if(!this.hasOwnProperty('" + propertyName + "')) {\n" +
-        "    this['" + propertyName + "'] = [];\n" +
-        "}\n" +
-        "this['" + propertyName + "'].push(value);\n" +
-        "return this;\n");
+    this.current().newArrayItemMethod(this.toSingular(this.toUpperName(propertyName)), this.toUpperName(propertyName) + "Item");
+    this.current().addArrayItemMethod(this.toSingular(this.toUpperName(propertyName)), propertyName, this.toUpperName(propertyName) + "Item");
 }
 
 ToClassVisitor.prototype.objectEncountered = function(name, isArrayItem) {
-    "use strict";
     if(this.currentItem.length === 0) {
         this.currentItem.push(this.root);
     } else {
@@ -78,32 +91,23 @@ ToClassVisitor.prototype.objectEncountered = function(name, isArrayItem) {
 ToClassVisitor.prototype.otherPropEncountered = function(name) {
     var current = this.current();
     current.addProperty(name, "null");
-    current.addMethod("with" + this.toUpperName(name), ["value"],
-        "this['" + name + "'] = value;" +
-        "return this;"
-    );
+    current.addWithMethod(this.toUpperName(name), name);
 }
 
 ToClassVisitor.prototype.objectFinished = function(name, isArrayItem) {
-    "use strict";
-    var objName = isArrayItem ? name + "Item" : name;
     var classItem = this.currentItem.pop();
     this.objects.push(classItem);
-    if(this.currentItem.length > 0) {
-        this.current().addProperty(name,  "Object.create(" + classItem.objName + ")");
+    if(this.currentItem.length > 0 && !isArrayItem) {
+        this.current().addTypedProperty(name,  classItem.objName);
     }
 }
 
 ToClassVisitor.prototype.endVisiting = function(name) {
-    "use strict";
-    var message = "/**\n THIS IS A GENERATED FILE, DON'T EDIT THIS\n **/\n";
-    var out = message + "var _ = require('lodash-node');\n";
+    var classes = "";
     for(var i = 0; i < this.objects.length; i++) {
-        out += this.objects[i].toClass();
+        classes += this.objects[i].toClass();
     }
-    out += "\n" +  "module.exports = " + name + ";";
-
-    return out;
+    return this.schemaContainerTemplate({classes : classes, ExportName: name, date : new Date().toISOString()});
 }
 
 module.exports = ToClassVisitor;

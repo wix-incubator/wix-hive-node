@@ -1,0 +1,16 @@
+/**
+THIS IS A GENERATED FILE, DO NOT EDIT THIS
+
+Generated on {{date}}
+**/
+{{#each requires}}var {{this.schema}} = require('{{this.path}}');{{/each}}
+
+function createSchemaObject(type) {
+
+{{#each typeList}}if(type === '{{this.type}}') {
+            return new {{this.schema}}();
+        } {{/each}}
+
+}
+
+module.exports = createSchemaObject;

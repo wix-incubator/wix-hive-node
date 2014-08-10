@@ -133,7 +133,8 @@ module.exports = function(grunt) {
             src: ['**']
         },
         clean: {
-            all: ['doc', 'docs']
+            all: ['doc', 'docs'],
+            schemas : ['lib/schemas']
         }
     });
 
@@ -153,8 +154,10 @@ module.exports = function(grunt) {
         var generator = require("./schemas/visitors/ToClassVisitor.js");
         var fs = require('fs');
         var pathp = require('mkdirp');
-        var factoryBuffer = "";
-        var requireBuffer = "";
+        var HandleBars = require("Handlebars");
+
+        var factories = [];
+        var requires = [];
         var schemaList = grunt.config('schemas').schemas;
         for(var i = 0; i < schemaList.length; i++) {
             var sc = schemaList[i];
@@ -163,16 +166,15 @@ module.exports = function(grunt) {
                 pathp.sync(sc.out);
             }
             fs.writeFileSync(sc.out + sc.name + ".js", out);
-            factoryBuffer += "if(type ==='" + sc.type + "') return new " + sc.name + "();\n";
-            requireBuffer += "var " + sc.name + " = require('./" + sc.out + "');\n";
+            factories.push({type : sc.type, schema : sc.name});
+            requires.push({schema : sc.name, path: sc.out + sc.name + ".js"});
         }
-        var factoryContent = "/** GENERATED FILE **/\n" + requireBuffer +
-            "function createSchemaObject(type) {\n" + factoryBuffer + "\n}\n module.exports = createSchemaObject;";
-        fs.writeFileSync(grunt.config('schemas').factory, factoryContent);
+        var template = HandleBars.compile(fs.readFileSync("schemas/visitors/templates/schemaFactory.hbs", { encoding: "utf8"}));
+        fs.writeFileSync(grunt.config('schemas').factory, template({requires : requires, typeList : factories}));
 
 
     });
 
-    grunt.registerTask('schemas-prod', ['schemas', 'jsbeautifier']);
+    grunt.registerTask('schemas-prod', ['clean:schemas', 'schemas', 'jsbeautifier']);
 
 };

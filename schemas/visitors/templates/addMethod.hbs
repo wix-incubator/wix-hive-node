@@ -1,0 +1,11 @@
+/**
+* @param { {{valueType}} } arrayItem the {@link {{valueType}} } object to add
+* @returns {@link {{ClassName}} }
+*/
+{{ClassName}}.prototype.add{{methodName}} = function(arrayItem) {
+    if (!this.hasOwnProperty('{{property}}')) {
+        this['{{property}}'] = [];
+    }
+    this['{{property}}'].push(arrayItem);
+    return this;
+};
