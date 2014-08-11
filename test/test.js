@@ -85,7 +85,22 @@ describe('OpenAPI-Node', function() {
         describe('postActivity', function() {
             it('should throw error when posting activity missing required fields', function(done) {
                 var activity = api.Activities.newActivity(api.Activities.TYPES.ALBUM_FAN);
+                expect(api.Activities.postActivity).to.throwException();
+                done();
+            });
+
+            it('should throw error when posting activity missing required fields', function(done) {
+                var activity = api.Activities.newActivity(api.Activities.TYPES.ALBUM_FAN);
                 expect(api.Activities.postActivity).withArgs(activity, "THINGS").to.throwException();
+                done();
+            });
+
+            it('should throw error when posting read only activity ContactCreate', function(done) {
+                var activity = api.Activities.newActivity(api.Activities.TYPES.CONTACT_CREATE);
+                activity.activityLocationUrl = "http://www.wix.com";
+                activity.activityDetails.summary = "test";
+                activity.activityDetails.additionalInfoUrl = "http://www.wix.com";
+                expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
                 done();
             });
 
