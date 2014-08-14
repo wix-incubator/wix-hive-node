@@ -34,7 +34,7 @@ describe('OpenAPI-Node', function() {
 
     describe('Activities', function() {
 
-        describe('getActivityTpes', function() {
+        describe('getActivityTypes', function() {
             it('should return list of activity types', function(done) {
                 api.Activities.getTypes().then(
                     function(types){
@@ -68,9 +68,9 @@ describe('OpenAPI-Node', function() {
                         done();
                     },
                     function(error){
-                        throw error;
+                        done(error);
                     }
-                );
+                ).done(null, done);
             });
         });
 
@@ -115,7 +115,7 @@ describe('OpenAPI-Node', function() {
                 }, function(error) {
                     error.errorCode.should.eql(400);
                     done();
-                });
+                }).done(null, done);
             });
 
             it('should post album fan activity without throwing error', function(done) {
@@ -129,8 +129,8 @@ describe('OpenAPI-Node', function() {
                     .then(function(data) {
                         done();
                     }, function(error) {
-                        throw error;
-                    });
+                        done(error);
+                    }).done(null, done);
             });
 
             it('should post contact form activity without throwing error', function(done) {
@@ -158,8 +158,8 @@ describe('OpenAPI-Node', function() {
                         data.should.not.be.length(0)
                         done();
                     }, function(error) {
-                        throw error;
-                    });
+                        done(error);
+                    }).done(null, done);
             });
         });
 
@@ -193,12 +193,12 @@ describe('OpenAPI-Node', function() {
                                 done();
                             },
                             function(error){
-                                throw error;
+                                done(error);
                             }
                         );
                     }, function(error) {
-                        throw error;
-                    });
+                        done(error);
+                    }).done(null, done);
             });
         });
 
@@ -214,8 +214,9 @@ describe('OpenAPI-Node', function() {
                         data.currentData.results.should.not.have.length(0);
                         done();
                     }, function(error) {
-                        throw error;
-                    });
+                        done(error);
+                    }
+                ).done(null, done);
             });
             it('should not throw errors when called with parameters', function(done) {
                 var ONE_HOUR = 60 * 60 * 1000;
@@ -234,14 +235,14 @@ describe('OpenAPI-Node', function() {
                         pagingActivitiesResult.should.not.be.empty;
                         pagingActivitiesResult.currentData.results.should.be.a.Array;
                         pagingActivitiesResult.currentData.results.should.not.have.length(0);
-                        pagingActivitiesResult.total.should.be.eql(1);
+                        should.exist(pagingActivitiesResult.pageSize);
                         pagingActivitiesResult.pageSize.should.be.eql(1);
                         pagingActivitiesResult.previousCursor.should.be.eql(0);
                         pagingActivitiesResult.nextCursor.should.be.eql(0);
                         done();
                 }, function(error) {
-                    throw error;
-                });
+                    done(error);
+                }).done(null, done);
             });
         });
     });
@@ -258,8 +259,8 @@ describe('OpenAPI-Node', function() {
                         data.total.should.not.eql(0);
                         done();
                     }, function(error) {
-                        throw error;
-                    });
+                        done(error);
+                    }).done(null, done);
             });
             it('should return activities summary for Site', function(done) {
 
@@ -271,8 +272,8 @@ describe('OpenAPI-Node', function() {
                         data.total.should.not.eql(0);
                         done();
                     }, function(error) {
-                        throw error;
-                    });
+                        done(error);
+                    }).done(null, done);
             });
             it('should throw error when not given scope', function(done) {
 
@@ -329,9 +330,9 @@ describe('OpenAPI-Node', function() {
                         done();
                     },
                     function (error) {
-                        throw error;
+                        done(error);
                     }
-                );
+                ).done(null, done);
             });
             it('should create new contact with tag, note and customField and return contact id', function (done) {
                 var contact = api.Contacts.newContact(api);
@@ -362,9 +363,9 @@ describe('OpenAPI-Node', function() {
                         done();
                     },
                     function (error) {
-                        throw error;
+                        done(error);
                     }
-                );
+                ).done(null, done);
             });
         });
 
@@ -389,9 +390,9 @@ describe('OpenAPI-Node', function() {
                         );
                     },
                     function (error) {
-                        throw error;
+                        done(error);
                     }
-                );
+                ).done(null, done);
             });
         });
 
@@ -412,9 +413,9 @@ describe('OpenAPI-Node', function() {
                         done();
                     },
                     function(error){
-                        throw error;
+                        done(error);
                     }
-                );
+                ).done(null, done);
             });
 
             it('should return Contact Id when given a phone shared with another Contacts', function(done) {
@@ -426,9 +427,9 @@ describe('OpenAPI-Node', function() {
                         done();
                     },
                     function(error){
-                        throw error;
+                        done(error);
                     }
-                );
+                ).done(null, done);
             });
         });
 
@@ -443,9 +444,9 @@ describe('OpenAPI-Node', function() {
                         done();
                     },
                     function(error) {
-                        throw error;
+                        done(error);
                     }
-                );
+                ).done(null, done);
             });
             it('should return a non-empty list of contacts when called with no parameters', function (done) {
 
@@ -459,9 +460,9 @@ describe('OpenAPI-Node', function() {
                         done();
                     },
                     function(error) {
-                        throw error;
+                        done(error);
                     }
-                );
+                ).done(null, done);
             });
             it('should return a non-empty list of contacts when called with pageSize parameter', function (done) {
 
@@ -481,9 +482,9 @@ describe('OpenAPI-Node', function() {
                         done();
                     },
                     function(error) {
-                        throw error;
+                        done(error);
                     }
-                );
+                ).done(null, done);
             });
         });
 
@@ -498,15 +499,15 @@ describe('OpenAPI-Node', function() {
                         done();
                     },
                     function(error) {
-                        throw error;
+                        done(error);
                     }
-                );
+                ).done(null, done);
             });
             it('should return a non-empty list of contacts when called with pageSize parameter', function (done) {
 
                 api.Contacts.getContactsSubscribers(null,
                     {
-                        status: notSet,
+                        status: 'notSet',
                         pageSize: 50
                     }
                 ).then(
@@ -518,9 +519,9 @@ describe('OpenAPI-Node', function() {
                         done();
                     },
                     function(error) {
-                        throw error;
+                        done(error);
                     }
-                );
+                ).done(null, done);
             });
         });
     });
@@ -691,14 +692,14 @@ describe('Objects', function() {
                                     done();
                                 },
                                 function(error){
-                                    throw error;
+                                    done(error);
                                 }
-                            );
+                            ).done(null, done);
                         },
                         function (error) {
-                            throw error;
+                            done(error);
                         }
-                    );
+                    ).done(null, done);
                 });
 
                 it('should edit existing list information Contact', function (done) {
@@ -737,14 +738,14 @@ describe('Objects', function() {
                                         done();
                                     },
                                     function (error) {
-                                        throw error;
+                                        done(error);
                                     }
                                 );
                             },
                             function (error) {
-                                throw error;
+                                done(error);
                             }
-                        );
+                        ).done(null, done);
                     });
                 });
 
@@ -769,14 +770,14 @@ describe('Objects', function() {
                                         done();
                                     },
                                     function (error) {
-                                        throw error;
+                                        done(error);
                                     }
                                 );
                             },
                             function (error) {
-                                throw error;
+                                done(error);
                             }
-                        );
+                        ).done(null, done);
                     });
                 });
 
@@ -802,14 +803,14 @@ describe('Objects', function() {
                                         done();
                                     },
                                     function (error) {
-                                        throw error;
+                                        done(error);
                                     }
                                 );
                             },
                             function (error) {
-                                throw error;
+                                done(error);
                             }
-                        );
+                        ).done(null, done);
                     });
                 });
 
@@ -838,9 +839,9 @@ describe('Objects', function() {
                                 done();
                             },
                             function (error) {
-                                throw error;
+                                done(error);
                             }
-                        );
+                        ).done(null, done);
                     });
 
                     it('should edit email for Contact', function (done) {
@@ -862,19 +863,19 @@ describe('Objects', function() {
                                                 done();
                                             },
                                             function (error) {
-                                                throw error;
+                                                done(error);
                                             }
-                                        );
+                                        ).done(null, done);
                                     },
                                     function (error) {
-                                        throw error;
+                                        done(error);
                                     }
-                                );
+                                ).done(null, done);
                             },
                             function (error) {
-                                throw error;
+                                done(error);
                             }
-                        );
+                        ).done(null, done);
                     });
                 });
 
@@ -920,12 +921,12 @@ describe('Objects', function() {
                                 done();
                             },
                             function (error) {
-                                throw error;
+                                done(error);
                             }
-                        );
+                        ).done(null, done);
                     });
 
-                    it('should edit email for Contact', function (done) {
+                    it('should edit address for Contact', function (done) {
                         var contact = api.Contacts.newContact();
                         contact.addAddress(
                             {
@@ -952,7 +953,9 @@ describe('Objects', function() {
                                         contact.updateAddress(address).then(
                                             function (contact) {
                                                 var address = contact.addresses()[0];
+                                                should.exist(address.id());
                                                 address.id().should.be.a.Number;
+                                                should.exist(address.address());
                                                 address.address().should.be.eql('235 W 23rd St');
                                                 address.city().should.be.eql('NYC');
                                                 address.region().should.be.eql('NY');
@@ -961,19 +964,19 @@ describe('Objects', function() {
                                                 done();
                                             },
                                             function (error) {
-                                                throw error;
+                                                done(error);
                                             }
-                                        );
+                                        ).done(null, done);
                                     },
                                     function (error) {
-                                        throw error;
+                                        done(error);
                                     }
-                                );
+                                ).done(null, done);
                             },
                             function (error) {
-                                throw error;
+                                done(error);
                             }
-                        );
+                        ).done(null, done);
                     });
                 });
 
@@ -1003,9 +1006,9 @@ describe('Objects', function() {
                                 done();
                             },
                             function (error) {
-                                throw error;
+                                done(error);
                             }
-                        );
+                        ).done(null, done);
                     });
 
                     it('should edit phone for Contact', function (done) {
@@ -1030,19 +1033,19 @@ describe('Objects', function() {
                                                 done();
                                             },
                                             function (error) {
-                                                throw error;
+                                                done(error);
                                             }
                                         );
                                     },
                                     function (error) {
-                                        throw error;
+                                        done(error);
                                     }
                                 );
                             },
                             function (error) {
-                                throw error;
+                                done(error);
                             }
-                        );
+                        ).done(null, done);
                     });
                 });
 
@@ -1072,9 +1075,9 @@ describe('Objects', function() {
                                 done();
                             },
                             function (error) {
-                                throw error;
+                                done(error);
                             }
-                        );
+                        ).done(null, done);
                     });
 
                     it('should edit url for Contact', function (done) {
@@ -1099,19 +1102,19 @@ describe('Objects', function() {
                                                 done();
                                             },
                                             function (error) {
-                                                throw error;
+                                                done(error);
                                             }
                                         );
                                     },
                                     function (error) {
-                                        throw error;
+                                        done(error);
                                     }
                                 );
                             },
                             function (error) {
-                                throw error;
+                                done(error);
                             }
-                        );
+                        ).done(null, done);
                     });
                 });
 
@@ -1141,9 +1144,9 @@ describe('Objects', function() {
                                 done();
                             },
                             function (error) {
-                                throw error;
+                                done(error);
                             }
-                        );
+                        ).done(null, done);
                     });
 
                     it('should edit date for Contact', function (done) {
@@ -1170,19 +1173,19 @@ describe('Objects', function() {
                                                 done();
                                             },
                                             function (error) {
-                                                throw error;
+                                                done(error);
                                             }
                                         );
                                     },
                                     function (error) {
-                                        throw error;
+                                        done(error);
                                     }
                                 );
                             },
                             function (error) {
-                                throw error;
+                                done(error);
                             }
-                        );
+                        ).done(null, done);
                     });
                 });
 
@@ -1212,9 +1215,9 @@ describe('Objects', function() {
                                 done();
                             },
                             function (error) {
-                                throw error;
+                                done(error);
                             }
-                        );
+                        ).done(null, done);
                     });
 
                     it('should edit note for Contact', function (done) {
@@ -1225,9 +1228,10 @@ describe('Objects', function() {
                                 api.Contacts.getContactById(contact.id().id()).then(
                                     function (contact) {
 
+                                        var note = contact.notes()[0];
+                                        should.exist(note);
                                         note.id().should.be.a.Number;
                                         contact.addNote({ content: 'I like big Wix and I cannot lie'});
-                                        var note = contact.notes()[0];
                                         contact.postNote(note).then(
                                             function(contact){
                                                 var note = contact.notes()[0];
@@ -1240,25 +1244,25 @@ describe('Objects', function() {
                                                         done();
                                                     },
                                                     function (error) {
-                                                        throw error;
+                                                        done(error);
                                                     }
-                                                );
+                                                ).done(null, done);
 
                                             },
                                             function(error){
-                                                throw error;
+                                                done(error);
                                             }
-                                        );
+                                        ).done(null, done);
                                     },
                                     function (error) {
-                                        throw error;
+                                        done(error);
                                     }
-                                );
+                                ).done(null, done);
                             },
                             function (error) {
-                                throw error;
+                                done(error);
                             }
-                        );
+                        ).done(null, done);
                     });
                 });
 
@@ -1288,9 +1292,9 @@ describe('Objects', function() {
                                 done();
                             },
                             function (error) {
-                                throw error;
+                                done(error);
                             }
-                        );
+                        ).done(null, done);
                     });
 
                     it('should edit customField for Contact', function (done) {
@@ -1318,7 +1322,7 @@ describe('Objects', function() {
                                                         done();
                                                     },
                                                     function (error) {
-                                                        throw error;
+                                                        done(error);
                                                     }
                                                 );
                                             },
@@ -1328,14 +1332,14 @@ describe('Objects', function() {
                                         );
                                     },
                                     function (error) {
-                                        throw error;
+                                        done(error);
                                     }
                                 );
                             },
                             function (error) {
-                                throw error;
+                                done(error);
                             }
-                        );
+                        ).done(null, done);
                     });
                 });
 
@@ -1369,14 +1373,14 @@ describe('Objects', function() {
                                         done();
                                     },
                                     function (error) {
-                                        throw error;
+                                        done(error);
                                     }
-                                )
+                                ).done(null, done);
                             },
                             function (error) {
-                                throw error;
+                                done(error);
                             }
-                        );
+                        ).done(null, done);
                     });
                 });
 
@@ -1417,8 +1421,10 @@ describe('Objects', function() {
                                     function (contact) {
                                         var address = contact.addresses()[0];
                                         address.id().should.be.a.Number;
+                                        should.exist(address.id());
                                         address.id().should.not.be.eql(undefined);
                                         address.tag().should.be.eql('work');
+                                        should.exist(address.address());
                                         address.address().should.be.eql('500 Terry A Francois');
                                         address.neighborhood().should.be.eql('Awesomeville');
                                         address.city().should.be.eql('San Francisco');
@@ -1428,14 +1434,14 @@ describe('Objects', function() {
                                         done();
                                     },
                                     function (error) {
-                                        throw error;
+                                        done(error);
                                     }
-                                )
+                                ).done(null, done);
                             },
                             function (error) {
-                                throw error;
+                                done(error);
                             }
-                        );
+                        ).done(null, done);
                     });
                 });
 
@@ -1465,14 +1471,14 @@ describe('Objects', function() {
                                         done();
                                     },
                                     function (error) {
-                                        throw error;
+                                        done(error);
                                     }
                                 )
                             },
                             function (error) {
-                                throw error;
+                                done(error);
                             }
-                        );
+                        ).done(null, done);
                     });
                 });
 
@@ -1502,14 +1508,14 @@ describe('Objects', function() {
                                         done();
                                     },
                                     function (error) {
-                                        throw error;
+                                        done(error);
                                     }
                                 )
                             },
                             function (error) {
-                                throw error;
+                                done(error);
                             }
-                        );
+                        ).done(null, done);
                     });
                 });
 
@@ -1541,14 +1547,14 @@ describe('Objects', function() {
                                         done();
                                     },
                                     function (error) {
-                                        throw error;
+                                        done(error);
                                     }
                                 )
                             },
                             function (error) {
-                                throw error;
+                                done(error);
                             }
-                        );
+                        ).done(null, done);
                     });
                 });
 
@@ -1571,21 +1577,23 @@ describe('Objects', function() {
                                 contact.postNote(note).then(
                                     function (contact) {
                                         var note = contact.notes()[0];
+                                        should.exist(note.id());
                                         note.id().should.be.a.Number;
                                         note.id().should.not.be.eql(undefined);
+                                        should.exist(note.modifiedAt());
                                         note.modifiedAt().should.not.be.eql(undefined);
                                         note.content().should.be.eql('Your rent is due');
                                         done();
                                     },
                                     function (error) {
-                                        throw error;
+                                        done(error);
                                     }
-                                )
+                                ).done(null, done);
                             },
                             function (error) {
-                                throw error;
+                                done(error);
                             }
-                        );
+                        ).done(null, done);
                     });
                 });
 
@@ -1615,14 +1623,14 @@ describe('Objects', function() {
                                         done();
                                     },
                                     function (error) {
-                                        throw error;
+                                        done(error);
                                     }
                                 )
                             },
                             function (error) {
-                                throw error;
+                                done(error);
                             }
-                        );
+                        ).done(null, done);
                     });
                 });
 
@@ -1645,18 +1653,19 @@ describe('Objects', function() {
                                 contact.postTags(tag).then(
                                     function (contact) {
                                         var tag = contact.tags()[0];
+                                        should.exist(tag.tag());
                                         tag.tag().should.be.eql('VIP');
                                         done();
                                     },
                                     function (error) {
-                                        throw error;
+                                        done(error);
                                     }
-                                )
+                                ).done(null, done);
                             },
                             function (error) {
-                                throw error;
+                                done(error);
                             }
-                        );
+                        ).done(null, done);
                     });
                 });
             });
@@ -1694,14 +1703,14 @@ describe('Objects', function() {
                                     done();
                                 },
                                 function(error){
-                                    throw error;
+                                    done(error);
                                 }
                             );
                         },
                         function(error){
-                            throw error;
+                            done(error);
                         }
-                    );
+                    ).done(null, done);
                 });
             });
 
@@ -1728,26 +1737,26 @@ describe('Objects', function() {
                                         function(pagingActivitiesResult){
                                             var activities = pagingActivitiesResult.results;
                                             activities.should.have.length(1);
-                                            pagingActivitiesResult.total.should.be.eql(1);
+                                            should.exist(pagingActivitiesResult.pageSize);
                                             pagingActivitiesResult.pageSize.should.be.eql(1);
                                             pagingActivitiesResult.previousCursor.should.be.eql(0);
                                             pagingActivitiesResult.nextCursor.should.be.eql(0);
                                             done();
                                         },
                                         function(error){
-                                            throw error;
+                                            done(error);
                                         }
-                                    );
+                                    ).done(null, done);
                                 },
                                 function(error){
-                                    throw error;
+                                    done(error);
                                 }
-                            );
+                            ).done(null, done);
                         },
                         function(error){
-                            throw error;
+                            done(error);
                         }
-                    );
+                    ).done(null, done);
                 });
 
                 it('should not throw errors when options are given', function(done) {
@@ -1775,26 +1784,26 @@ describe('Objects', function() {
                                         function(pagingActivitiesResult){
                                             var activities = pagingActivitiesResult.results;
                                             activities.should.have.length(1);
-                                            pagingActivitiesResult.total.should.be.eql(1);
+                                            should.exist(pagingActivitiesResult.pageSize);
                                             pagingActivitiesResult.pageSize.should.be.eql(1);
                                             pagingActivitiesResult.previousCursor.should.be.eql(0);
                                             pagingActivitiesResult.nextCursor.should.be.eql(0);
                                             done();
                                         },
                                         function(error){
-                                            throw error;
+                                            done(error);
                                         }
-                                    );
+                                    ).done(null, done);
                                 },
                                 function(error){
-                                    throw error;
+                                    done(error);
                                 }
-                            );
+                            ).done(null, done);
                         },
                         function(error){
-                            throw error;
+                            done(error);
                         }
-                    );
+                    ).done(null, done);
                 });
             });
         });
