@@ -235,10 +235,8 @@ describe('OpenAPI-Node', function() {
                         pagingActivitiesResult.should.not.be.empty;
                         pagingActivitiesResult.currentData.results.should.be.a.Array;
                         pagingActivitiesResult.currentData.results.should.not.have.length(0);
-                        should.exist(pagingActivitiesResult.pageSize);
-                        pagingActivitiesResult.pageSize.should.be.eql(1);
-                        pagingActivitiesResult.previousCursor.should.be.eql(0);
-                        pagingActivitiesResult.nextCursor.should.be.eql(0);
+                        should.exist(pagingActivitiesResult.currentData.pageSize);
+                        assert(pagingActivitiesResult.currentData.pageSize <= 50);
                         done();
                 }, function(error) {
                     done(error);
@@ -441,6 +439,7 @@ describe('OpenAPI-Node', function() {
                         pagingContactsResult.should.not.equal(undefined);
                         pagingContactsResult.should.be.a.Object;
                         pagingContactsResult.should.not.be.empty;
+                        should.exist(pagingContactsResult.currentData.pageSize);
                         done();
                     },
                     function(error) {
@@ -457,6 +456,7 @@ describe('OpenAPI-Node', function() {
                         pagingContactsResult.should.not.be.empty;
                         pagingContactsResult.currentData.results.should.be.a.Array;
                         pagingContactsResult.currentData.results.should.not.have.length(0);
+                        should.exist(pagingContactsResult.currentData.pageSize);
                         done();
                     },
                     function(error) {
@@ -478,7 +478,8 @@ describe('OpenAPI-Node', function() {
                         pagingContactsResult.currentData.results.should.be.a.Array;
                         pagingContactsResult.currentData.results.should.not.have.length(0);
                         pagingContactsResult.currentData.total.should.not.be.eql(0);
-                        pagingContactsResult.currentData.pageSize.should.be.eql(50);
+                        should.exist(pagingContactsResult.currentData.pageSize);
+                        assert(pagingContactsResult.currentData.pageSize <= 50);
                         done();
                     },
                     function(error) {
@@ -496,6 +497,7 @@ describe('OpenAPI-Node', function() {
                         pagingContactsResult.should.not.equal(undefined);
                         pagingContactsResult.should.be.a.Object;
                         pagingContactsResult.should.not.be.empty;
+                        should.exist(pagingContactsResult.currentData.pageSize);
                         done();
                     },
                     function(error) {
@@ -515,7 +517,8 @@ describe('OpenAPI-Node', function() {
                         pagingContactsResult.should.not.equal(undefined);
                         pagingContactsResult.should.be.a.Object;
                         pagingContactsResult.should.not.be.empty;
-                        pagingContactsResult.currentData.pageSize.should.be.eql(50);
+                        should.exist(pagingContactsResult.currentData.pageSize);
+                        assert(pagingContactsResult.currentData.pageSize <= 50);
                         done();
                     },
                     function(error) {
@@ -1738,9 +1741,6 @@ describe('Objects', function() {
                                             var activities = pagingActivitiesResult.results;
                                             activities.should.have.length(1);
                                             should.exist(pagingActivitiesResult.pageSize);
-                                            pagingActivitiesResult.pageSize.should.be.eql(1);
-                                            pagingActivitiesResult.previousCursor.should.be.eql(0);
-                                            pagingActivitiesResult.nextCursor.should.be.eql(0);
                                             done();
                                         },
                                         function(error){
@@ -1785,9 +1785,8 @@ describe('Objects', function() {
                                             var activities = pagingActivitiesResult.results;
                                             activities.should.have.length(1);
                                             should.exist(pagingActivitiesResult.pageSize);
-                                            pagingActivitiesResult.pageSize.should.be.eql(1);
-                                            pagingActivitiesResult.previousCursor.should.be.eql(0);
-                                            pagingActivitiesResult.nextCursor.should.be.eql(0);
+                                            should.exist(pagingActivitiesResult.pageSize);
+                                            assert(pagingActivitiesResult.pageSize <= 50);
                                             done();
                                         },
                                         function(error){
