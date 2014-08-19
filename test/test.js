@@ -313,6 +313,7 @@ describe('OpenAPI-Node', function() {
                         tag: 'work',
                         address: '500 Terry A Francois',
                         city: 'San Francisco',
+                        neighborhood: 'Wixville',
                         region: 'CA',
                         country: 'USA',
                         postalCode: 94158
@@ -343,6 +344,7 @@ describe('OpenAPI-Node', function() {
                         tag: 'work',
                         address: '500 Terry A Francois',
                         city: 'San Francisco',
+                        neighborhood: 'Wixville',
                         region: 'CA',
                         country: 'USA',
                         postalCode: 94158
@@ -642,6 +644,7 @@ describe('Objects', function() {
                                     tag: 'work',
                                     address: '500 Terry A Francois',
                                     city: 'San Francisco',
+                                    neighborhood: 'Wixville',
                                     region: 'CA',
                                     country: 'USA',
                                     postalCode: 94158
@@ -670,7 +673,7 @@ describe('Objects', function() {
                                     address.id().should.not.be.eql(undefined);
                                     address.tag().should.be.eql('work');
                                     address.address().should.be.eql('500 Terry A Francois');
-                                    address.neighborhood().should.be.eql('Awesomeville');
+                                    address.neighborhood().should.be.eql('Wixville');
                                     address.city().should.be.eql('San Francisco');
                                     address.region().should.be.eql('CA');
                                     address.country().should.be.eql('USA');
@@ -891,6 +894,7 @@ describe('Objects', function() {
                                 tag: 'work',
                                 address: '500 Terry A Francois',
                                 city: 'San Francisco',
+                                neighborhood: 'Wixville',
                                 region: 'CA',
                                 country: 'USA',
                                 postalCode: 94158
@@ -915,6 +919,7 @@ describe('Objects', function() {
                                         tag: 'work',
                                         address: '500 Terry A Francois',
                                         city: 'San Francisco',
+                                        neighborhood: 'Wixville',
                                         region: 'CA',
                                         country: 'USA',
                                         postalCode: 94158
@@ -936,6 +941,7 @@ describe('Objects', function() {
                                 tag: 'work',
                                 address: '500 Terry A Francois',
                                 city: 'San Francisco',
+                                neighborhood: 'Awesomeville',
                                 region: 'CA',
                                 country: 'USA',
                                 postalCode: 94158
@@ -950,6 +956,7 @@ describe('Objects', function() {
                                         address.id().should.be.a.Number;
                                         address.address('235 W 23rd St');
                                         address.city('NYC');
+                                        address.neighborhood('Wixville');
                                         address.region('NY');
                                         address.postalCode(10011);
                                         address.tag('Wix NYC Lounge');
@@ -961,6 +968,7 @@ describe('Objects', function() {
                                                 should.exist(address.address());
                                                 address.address().should.be.eql('235 W 23rd St');
                                                 address.city().should.be.eql('NYC');
+                                                address.neighborhood().should.be.eql('Wixville');
                                                 address.region().should.be.eql('NY');
                                                 address.postalCode().should.be.eql(10011);
                                                 address.tag().should.be.eql('Wix NYC Lounge');
@@ -1396,6 +1404,7 @@ describe('Objects', function() {
                                 tag: 'work',
                                 address: '500 Terry A Francois',
                                 city: 'San Francisco',
+                                neighborhood: 'Wixville',
                                 region: 'CA',
                                 country: 'USA',
                                 postalCode: 94158
