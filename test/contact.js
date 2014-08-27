@@ -6,8 +6,8 @@ var should = require('should');
 var assert = require('assert');
 var expect = require('expect.js');
 var config = require("./config.js");
-var APP_SECRET = config.appSecret; // <---------- REPLACE THIS WITH YOUR OWN APP SECRET KEY
-var APP_KEY = config.appKey; // <---------- REPLACE THIS WITH YOUR OWN APP KEY
+var APP_SECRET = config.appSecret;
+var APP_KEY = config.appKey;
 var INSTANCE_ID = config.instanceId;
 
 describe('Contact', function() {
@@ -122,7 +122,7 @@ describe('Contact', function() {
                                 neighborhood: 'Wixville',
                                 region: 'CA',
                                 country: 'USA',
-                                postalCode: 94158
+                                postalCode: '94158'
                             });
                         contact.addDate({ tag: 'work', date: '1994-11-05T13:15:30Z'});
                         contact.addUrl({ tag: 'work', url: 'http://www.wix.com/'});
@@ -152,7 +152,7 @@ describe('Contact', function() {
                                 address.city().should.be.eql('San Francisco');
                                 address.region().should.be.eql('CA');
                                 address.country().should.be.eql('USA');
-                                address.postalCode().should.be.eql(94158);
+                                address.postalCode().should.be.eql('94158');
                                 var phone = contact.phones()[0];
                                 phone.id().should.be.a.Number;
                                 phone.id().should.not.be.eql(undefined);
@@ -372,7 +372,7 @@ describe('Contact', function() {
                             neighborhood: 'Wixville',
                             region: 'CA',
                             country: 'USA',
-                            postalCode: 94158
+                            postalCode: '94158'
                         });
                     var address = contact.addresses()[0];
                     expect(contact.updateAddress).withArgs(address).to.throwException();
@@ -397,7 +397,7 @@ describe('Contact', function() {
                                     neighborhood: 'Wixville',
                                     region: 'CA',
                                     country: 'USA',
-                                    postalCode: 94158
+                                    postalCode: '94158'
                                 });
                             var address = contact.addresses()[0];
                             expect(contact.updateAddress).withArgs(address).to.throwException();
@@ -419,7 +419,7 @@ describe('Contact', function() {
                             neighborhood: 'Awesomeville',
                             region: 'CA',
                             country: 'USA',
-                            postalCode: 94158
+                            postalCode: '94158'
                         });
                     api.Contacts.create(contact).then(
                         function (contact) {
@@ -433,7 +433,7 @@ describe('Contact', function() {
                                     address.city('NYC');
                                     address.neighborhood('Wixville');
                                     address.region('NY');
-                                    address.postalCode(10011);
+                                    address.postalCode('10011');
                                     address.tag('Wix NYC Lounge');
                                     contact.updateAddress(address).then(
                                         function (contact) {
@@ -446,7 +446,7 @@ describe('Contact', function() {
                                             address.city().should.be.eql('NYC');
                                             address.neighborhood().should.be.eql('Wixville');
                                             address.region().should.be.eql('NY');
-                                            address.postalCode().should.be.eql(10011);
+                                            address.postalCode().should.be.eql('10011');
                                             address.tag().should.be.eql('Wix NYC Lounge');
                                             done();
                                         },
@@ -883,7 +883,7 @@ describe('Contact', function() {
                             neighborhood: 'Wixville',
                             region: 'CA',
                             country: 'USA',
-                            postalCode: 94158
+                            postalCode: '94158'
                         });
                     var address = contact.addresses()[0];
                     expect(contact.postAddress).withArgs(address).to.throwException();
@@ -902,7 +902,7 @@ describe('Contact', function() {
                                     neighborhood: 'Awesomeville',
                                     region: 'CA',
                                     country: 'USA',
-                                    postalCode: 94158
+                                    postalCode: '94158'
                                 });
                             var address = contact.addresses()[0];
                             contact.postAddress(address).then(
@@ -919,7 +919,7 @@ describe('Contact', function() {
                                     address.city().should.be.eql('San Francisco');
                                     address.region().should.be.eql('CA');
                                     address.country().should.be.eql('USA');
-                                    address.postalCode().should.be.eql(94158);
+                                    address.postalCode().should.be.eql('94158');
                                     done();
                                 },
                                 function (error) {
