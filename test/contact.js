@@ -712,36 +712,26 @@ describe('Contact', function() {
                     api.Contacts.create(contact).then(
                         function (contact) {
 
-                            api.Contacts.getContactById(contact.id().id()).then(
-                                function (contact) {
-
+                            contact.addNote({ content: 'I like big Wix and I cannot lie'});
+                            var note = contact.notes()[0];
+                            contact.postNote(note).then(
+                                function(contact){
                                     var note = contact.notes()[0];
-                                    should.exist(note);
-                                    note.id().should.be.a.Number;
-                                    contact.addNote({ content: 'I like big Wix and I cannot lie'});
-                                    contact.postNote(note).then(
-                                        function(contact){
+                                    note.content('I like big butts and I cannot lie');
+                                    contact.updateNote(note).then(
+                                        function (contact) {
                                             var note = contact.notes()[0];
-                                            note.content('I like big butts and I cannot lie');
-                                            contact.updateNote(note).then(
-                                                function (contact) {
-                                                    var note = contact.notes()[0];
-                                                    note.id().should.be.a.Number;
-                                                    note.content().should.be.eql('I like big butts and I cannot lie');
-                                                    done();
-                                                },
-                                                function (error) {
-                                                    done(error);
-                                                }
-                                            ).done(null, done);
-
+                                            note.id().should.be.a.Number;
+                                            note.content().should.be.eql('I like big butts and I cannot lie');
+                                            done();
                                         },
-                                        function(error){
+                                        function (error) {
                                             done(error);
                                         }
                                     ).done(null, done);
+
                                 },
-                                function (error) {
+                                function(error){
                                     done(error);
                                 }
                             ).done(null, done);
@@ -1142,8 +1132,7 @@ describe('Contact', function() {
                             contact.postTags(tag).then(
                                 function (contact) {
                                     var tag = contact.tags()[0];
-                                    should.exist(tag.tag());
-                                    tag.tag().should.be.eql('VIP');
+                                    tag.should.be.eql('VIP');
                                     done();
                                 },
                                 function (error) {
