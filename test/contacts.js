@@ -93,6 +93,7 @@ describe('Contacts', function() {
     });
 
     describe('getContactById', function() {
+        this.timeout(10000);
         it('should return existing contact with information', function (done) {
             var contact = api.Contacts.newContact(api);
             contact.name({first: 'Karen', last: 'Meep'});
