@@ -20,7 +20,7 @@ Read about [developing a third party app for the Wix platform](http://dev.wix.co
 ```js
 var express = require('express');
 var app = express();
-var openapi = require('openapi-node');
+var wix = require('openapi-node');
 
 var APP_SECRET = 'YOUR_APP_SECRET';
 var APP_ID = 'YOUR_APP_ID';
