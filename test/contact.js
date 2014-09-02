@@ -339,8 +339,9 @@ describe('Contact', function() {
                                     email.tag('home');
                                     contact.updateEmail(email).then(
                                         function (contact) {
-                                            contact.email().email().should.be.eql('karen@home.com');
-                                            contact.email().tag().should.be.eql('home');
+                                            var email = contact.emails()[0];
+                                            email.email().should.be.eql('karen@home.com');
+                                            email.tag().should.be.eql('home');
                                             done();
                                         },
                                         function (error) {
