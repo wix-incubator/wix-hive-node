@@ -5,7 +5,7 @@
   "main": "lib/WixClient.js",
   "homepage": "http://dev.wix.com",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -30,6 +30,7 @@
     "grunt-contrib-clean": "0.5.0",
     "grunt-jsdoc": "0.5.4",
     "ink-docstrap": "latest",
+    "mocha": "^1.20.1",
     "grunt-gh-pages": "latest"
   },
   "engines": {
