@@ -1,7 +1,107 @@
 module.exports = function(grunt) {
-
     // Project configuration.
     grunt.initConfig({
+        schemas : {
+            factory : "lib/SchemaFactory.js",
+            schemas : [
+                {
+                    type : "contact/contact-form",
+                    name: 'ContactFormSchema',
+                    path: 'schemas/sources/contacts/contactFormSchema.json',
+                    out : "lib/schemas/contacts/"
+                },
+                {
+                    type : "contacts/create",
+                    name : 'ContactCreateSchema',
+                    path: 'schemas/sources/contacts/contactUpdateSchema.json',
+                    out : "lib/schemas/contacts/"
+                },
+                {
+                    type : "conversion/complete",
+                    name : "ConversionCompleteSchema",
+                    path: 'schemas/sources/conversion/completeSchema.json',
+                    out : "lib/schemas/conversion/"
+                },
+                {
+                    type : "e_commerce/purchase",
+                    name : "PurchaseSchema",
+                    path: 'schemas/sources/e_commerce/purchaseSchema.json',
+                    out : "lib/schemas/e_commerce/"
+                },
+                {
+                    type : "messaging/send",
+                    name : "SendSchema",
+                    path: 'schemas/sources/messaging/sendSchema.json',
+                    out : "lib/schemas/messaging/"
+                },
+                {
+                    type : "music/album-fan",
+                    name : "AlbumFanSchema",
+                    path: 'schemas/sources/music/album-fanSchema.json',
+                    out : "lib/schemas/music/"
+                },
+                {
+                    type : "music/album-share",
+                    name : "AlbumShareSchema",
+                    path: 'schemas/sources/music/album-shareSchema.json',
+                    out : "lib/schemas/music/"
+                },
+                {
+                    type : "music/track-lyrics",
+                    name : "AlbumLyricsSchema",
+                    path: 'schemas/sources/music/album-fanSchema.json',
+                    out : "lib/schemas/music/"
+                },
+                {
+                    type : "music/track-play",
+                    name : "TrackPlaySchema",
+                    path: 'schemas/sources/music/playSchema.json',
+                    out : "lib/schemas/music/"
+                },
+                {
+                    type : "music/track-played",
+                    name : "TrackPlayedSchema",
+                    path: 'schemas/sources/music/playedSchema.json',
+                    out : "lib/schemas/music/"
+                },
+                {
+                    type : "music/track-share",
+                    name : "TrackSkippedSchema",
+                    path: 'schemas/sources/music/skippedSchema.json',
+                    out : "lib/schemas/music/"
+                },
+                {
+                    type : "music/track-skip",
+                    name : "TrackShareSchema",
+                    path: 'schemas/sources/music/track-shareSchema.json',
+                    out : "lib/schemas/music/"
+                }
+
+            ]
+        },
+        "jsbeautifier" : {
+            files : ["./lib/schemas/**/*.js", "./lib/SchemaFactory.js"],
+            options : {
+                braceStyle: "collapse",
+                breakChainedMethods: false,
+                e4x: false,
+                evalCode: false,
+                indentChar: " ",
+                indentLevel: 0,
+                indentSize: 4,
+                indentWithTabs: false,
+                jslintHappy: false,
+                keepArrayIndentation: false,
+                keepFunctionIndentation: false,
+                maxPreserveNewlines: 10,
+                preserveNewlines: true,
+                spaceBeforeConditional: true,
+                spaceInParen: false,
+                unescapeStrings: false,
+                wrapLineLength: 0
+            }
+        },
+
         jsdox: {
             generate: {
                 options: {
@@ -33,7 +133,8 @@ module.exports = function(grunt) {
             src: ['**']
         },
         clean: {
-            all: ['doc', 'docs']
+            all: ['doc', 'docs'],
+            schemas : ['lib/schemas']
         }
     });
 
@@ -41,10 +142,39 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-jsdoc');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-gh-pages');
+    grunt.loadNpmTasks('grunt-jsbeautifier');
 
     // Default task(s).
     grunt.registerTask('default', ['clean', 'jsdoc']);
 
     grunt.registerTask('publish', ['clean', 'jsdoc', 'gh-pages']);
+
+    grunt.registerTask('schemas', 'Generates schemas', function (target) {
+        var schemaParser = require('./schemas/WixSchemaParser.js');
+        var generator = require("./schemas/visitors/ToClassVisitor.js");
+        var fs = require('fs');
+        var pathp = require('mkdirp');
+        var HandleBars = require("Handlebars");
+
+        var factories = [];
+        var requires = [];
+        var schemaList = grunt.config('schemas').schemas;
+        for(var i = 0; i < schemaList.length; i++) {
+            var sc = schemaList[i];
+            var out = schemaParser.parse(JSON.parse(fs.readFileSync(sc.path, { encoding: "utf8"})), sc.name, new generator());
+            if (!fs.existsSync(sc.out)) {
+                pathp.sync(sc.out);
+            }
+            fs.writeFileSync(sc.out + sc.name + ".js", out);
+            factories.push({type : sc.type, schema : sc.name});
+            requires.push({schema : sc.name, path: sc.out + sc.name + ".js"});
+        }
+        var template = HandleBars.compile(fs.readFileSync("schemas/visitors/templates/schemaFactory.hbs", { encoding: "utf8"}));
+        fs.writeFileSync(grunt.config('schemas').factory, template({requires : requires, typeList : factories}));
+
+
+    });
+
+    grunt.registerTask('schemas-prod', ['clean:schemas', 'schemas', 'jsbeautifier']);
 
 };
