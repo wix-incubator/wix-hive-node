@@ -8,73 +8,73 @@ module.exports = function(grunt) {
                     type : "contact/contact-form",
                     name: 'ContactFormSchema',
                     path: 'schemas/sources/contacts/contactFormSchema.json',
-                    out : "lib/schemas/contacts/"
+                    out : "schemas/contacts/"
                 },
                 {
                     type : "contacts/create",
                     name : 'ContactCreateSchema',
                     path: 'schemas/sources/contacts/contactUpdateSchema.json',
-                    out : "lib/schemas/contacts/"
+                    out : "schemas/contacts/"
                 },
                 {
                     type : "conversion/complete",
                     name : "ConversionCompleteSchema",
                     path: 'schemas/sources/conversion/completeSchema.json',
-                    out : "lib/schemas/conversion/"
+                    out : "schemas/conversion/"
                 },
                 {
                     type : "e_commerce/purchase",
                     name : "PurchaseSchema",
                     path: 'schemas/sources/e_commerce/purchaseSchema.json',
-                    out : "lib/schemas/e_commerce/"
+                    out : "schemas/e_commerce/"
                 },
                 {
                     type : "messaging/send",
                     name : "SendSchema",
                     path: 'schemas/sources/messaging/sendSchema.json',
-                    out : "lib/schemas/messaging/"
+                    out : "schemas/messaging/"
                 },
                 {
                     type : "music/album-fan",
                     name : "AlbumFanSchema",
                     path: 'schemas/sources/music/album-fanSchema.json',
-                    out : "lib/schemas/music/"
+                    out : "schemas/music/"
                 },
                 {
                     type : "music/album-share",
                     name : "AlbumShareSchema",
                     path: 'schemas/sources/music/album-shareSchema.json',
-                    out : "lib/schemas/music/"
+                    out : "schemas/music/"
                 },
                 {
                     type : "music/track-lyrics",
                     name : "AlbumLyricsSchema",
                     path: 'schemas/sources/music/album-fanSchema.json',
-                    out : "lib/schemas/music/"
+                    out : "schemas/music/"
                 },
                 {
                     type : "music/track-play",
                     name : "TrackPlaySchema",
                     path: 'schemas/sources/music/playSchema.json',
-                    out : "lib/schemas/music/"
+                    out : "schemas/music/"
                 },
                 {
                     type : "music/track-played",
                     name : "TrackPlayedSchema",
                     path: 'schemas/sources/music/playedSchema.json',
-                    out : "lib/schemas/music/"
+                    out : "schemas/music/"
                 },
                 {
                     type : "music/track-share",
                     name : "TrackSkippedSchema",
                     path: 'schemas/sources/music/skippedSchema.json',
-                    out : "lib/schemas/music/"
+                    out : "schemas/music/"
                 },
                 {
                     type : "music/track-skip",
                     name : "TrackShareSchema",
                     path: 'schemas/sources/music/track-shareSchema.json',
-                    out : "lib/schemas/music/"
+                    out : "schemas/music/"
                 }
 
             ]
@@ -158,16 +158,17 @@ module.exports = function(grunt) {
 
         var factories = [];
         var requires = [];
+        var pathPrefix = "lib/";
         var schemaList = grunt.config('schemas').schemas;
         for(var i = 0; i < schemaList.length; i++) {
             var sc = schemaList[i];
             var out = schemaParser.parse(JSON.parse(fs.readFileSync(sc.path, { encoding: "utf8"})), sc.name, new generator());
-            if (!fs.existsSync(sc.out)) {
-                pathp.sync(sc.out);
+            if (!fs.existsSync(pathPrefix + sc.out)) {
+                pathp.sync(pathPrefix + sc.out);
             }
-            fs.writeFileSync(sc.out + sc.name + ".js", out);
+            fs.writeFileSync(pathPrefix + sc.out + sc.name + ".js", out);
             factories.push({type : sc.type, schema : sc.name});
-            requires.push({schema : sc.name, path: sc.out + sc.name + ".js"});
+            requires.push({schema : sc.name, path: "./" + sc.out + sc.name + ".js"});
         }
         var template = HandleBars.compile(fs.readFileSync("schemas/visitors/templates/schemaFactory.hbs", { encoding: "utf8"}));
         fs.writeFileSync(grunt.config('schemas').factory, template({requires : requires, typeList : factories}));
