@@ -29,6 +29,30 @@ module.exports = function(grunt) {
                     out : "schemas/e_commerce/"
                 },
                 {
+                    type : "hotels/purchase",
+                    name : "HotelPurchaseSchema",
+                    path: 'schemas/sources/hotels/purchaseSchema.json',
+                    out : "schemas/hotels/"
+                },
+                {
+                    type : "hotels/purchase-failed",
+                    name : "HotelPurchaseFailedSchema",
+                    path: 'schemas/sources/hotels/purchaseFailedSchema.json',
+                    out : "schemas/hotels/"
+                },
+                {
+                    type : "hotels/cancel",
+                    name : "HotelCancelSchema",
+                    path: 'schemas/sources/hotels/purchaseFailedSchema.json',
+                    out : "schemas/hotels/"
+                },
+                {
+                    type : "hotels/confirmation",
+                    name : "HotelConfirmationSchema",
+                    path: 'schemas/sources/hotels/confirmationSchema.json',
+                    out : "schemas/hotels/"
+                },
+                {
                     type : "messaging/send",
                     name : "SendSchema",
                     path: 'schemas/sources/messaging/sendSchema.json',
