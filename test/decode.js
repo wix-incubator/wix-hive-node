@@ -4,8 +4,8 @@
 
 var should = require('should');
 var config = require("./config.js");
-var APP_SECRET = config.appSecret; // <---------- REPLACE THIS WITH YOUR OWN APP SECRET KEY
-var APP_KEY = config.appKey; // <---------- REPLACE THIS WITH YOUR OWN APP KEY
+var APP_SECRET = config.appSecret;
+var APP_KEY = config.appKey;
 var INSTANCE = config.instance; // <---------- REPLACE THIS WITH A FRESH INSTANCE
 
 describe('OpenAPI-Node', function() {
@@ -17,6 +17,7 @@ describe('OpenAPI-Node', function() {
             // Parse the instance parameter
             var wixInstance = wix.getConnect().parseInstance(INSTANCE, APP_SECRET);
             var instanceId = wixInstance.instanceId;
+            console.log(instanceId);
             wix.getAPI(APP_SECRET, APP_KEY, instanceId);
             done();
         });
