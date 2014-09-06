@@ -1,0 +1,186 @@
+{
+    "type": "object",
+    "properties": {
+        "reservationId" : {
+            "type": "string",
+            "required": "false"
+        },
+        "guests" : {
+            "type": "object",
+            "required": "true",
+            "properties": {
+                "total" : {
+                    "type" : "number",
+                    "required" : "true"
+                },
+                "adults" : {
+                    "type" : "number",
+                    "required" : "true"
+                },
+                "children" : {
+                    "type" : "number",
+                    "required" : "true"
+                }
+            }
+        },
+        "stay" : {
+            "type": "object",
+            "required": "true",
+            "properties": {
+                "checkin" : {
+                    "type" : "datetime",
+                    "required" : "true"
+                },
+                "checkout" : {
+                    "type" : "datetime",
+                    "required" : "true"
+                }
+            }
+        },
+        "rates" : {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": "true",
+                "properties": {
+                    "date" : {
+                        "type" : "datetime",
+                        "required": "true"
+                    },
+                    "subtotal" : {
+                        "type" : "number",
+                        "required": "true"
+                    },
+                    "taxes" : {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "required": "true",
+                            "properties": {
+                                "name" : {
+                                    "type" : "string",
+                                    "required": "true"
+                                },
+                                "total" : {
+                                    "type" : "number",
+                                    "required": "true"
+                                },
+                                "currency" : {
+                                    "type" : "string",
+                                    "required": "true"
+                                }
+                            }
+                        }
+                    },
+                    "total" : {
+                        "type" : "number",
+                        "required": "true"
+                    },
+                    "currency" : {
+                        "type" : "string",
+                        "required": "true"
+                    }
+                }
+            }
+        },
+        "payment" : {
+            "type": "object",
+            "required": "true",
+            "properties": {
+                "subtotal" : {
+                    "type" : "number",
+                    "required": "true"
+                },
+                "total" : {
+                    "type" : "number",
+                    "required": "true"
+                },
+                "currency" : {
+                    "type" : "string",
+                    "required": "true"
+                },
+                "source" : {
+                    "type" : "string",
+                    "required": "true"
+                }
+            }
+        },
+        "customer" : {
+            "type": "object",
+            "properties": {
+                "contactId" : {
+                    "type": "string"
+                },
+                "isGuest" : {
+                    "type": "boolean"
+                },
+                "name" : {
+                    "type": "object",
+                    "properties": {
+                        "prefix": {
+                            "type": "string"
+                        },
+                        "first": {
+                            "type": "string"
+                        },
+                        "middle": {
+                            "type": "string"
+                        },
+                        "last": {
+                            "type": "string"
+                        },
+                        "suffix": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "phone" : {
+                    "type": "string"
+                },
+                "email" : {
+                    "type": "string"
+                }
+            }
+        },
+        "rooms": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": "true",
+                "properties": {
+                    "id" : {
+                        "type": "string",
+                        "required": "false"
+                    },
+                    "beds": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "required": "true",
+                            "properties": {
+                                "kind": {
+                                    "type": "string",
+                                    "required": "true"
+                                },
+                                "sleeps": {
+                                    "type": "number"
+                                }
+                            }
+                        }
+                    },
+                    "maxOccupancy": {
+                        "required": "true",
+                        "type": "number"
+                    },
+                    "amenities": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "required": "true"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
