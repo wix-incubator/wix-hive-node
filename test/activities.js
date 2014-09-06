@@ -226,22 +226,16 @@ describe('Api', function() {
         conversionComplete.activityLocationUrl = "http://www.wix.com";
         conversionComplete.activityDetails.summary = "test";
         conversionComplete.activityDetails.additionalInfoUrl = "http://www.wix.com";
-        conversionComplete.activityInfo.album.name = "Wix";
-        conversionComplete.activityInfo.album.id = "1234";
 
         var purchase = api.Activities.newActivity(api.Activities.TYPES.ECOMM_PURCHASE);
         purchase.activityLocationUrl = "http://www.wix.com";
         purchase.activityDetails.summary = "test";
         purchase.activityDetails.additionalInfoUrl = "http://www.wix.com";
-        purchase.activityInfo.album.name = "Wix";
-        purchase.activityInfo.album.id = "1234";
 
         var sendMessage = api.Activities.newActivity(api.Activities.TYPES.SEND_MESSAGE);
         sendMessage.activityLocationUrl = "http://www.wix.com";
         sendMessage.activityDetails.summary = "test";
         sendMessage.activityDetails.additionalInfoUrl = "http://www.wix.com";
-        sendMessage.activityInfo.album.name = "Wix";
-        sendMessage.activityInfo.album.id = "1234";
 
         var trackLyrics = api.Activities.newActivity(api.Activities.TYPES.TRACK_LYRICS);
         trackLyrics.activityLocationUrl = "http://www.wix.com";
@@ -528,19 +522,19 @@ describe('Api', function() {
         });
 
         describe('getActivityById', function () {
+
+            it('should throw exception when not given activity Id', function (done) {
+                expect(api.Activities.getActivityById).to.throwException();
+                done();
+            });
+
+            it('should throw exception when given empty string', function (done) {
+                expect(api.Activities.getActivityById).withArgs("").to.throwException();
+                done();
+            });
+
             it('should return posted activity', function (done) {
-                var activity = api.Activities.newActivity(api.Activities.TYPES.CONTACT_FORM);
-
-                var cu = activity.contactUpdate;
-                cu.addEmail(cu.newEmail().withTag("main").withEmail("name@wexample.com"));
-
-                cu.name.withFirst("Your").withLast("Customer");
-
-                activity.withLocationUrl("http://www.test.com/").withActivityDetails("This is a test activity post", "http://www.test1.com/");
-                var ai = activity.activityInfo;
-                ai.addField(ai.newField().withName("email").withValue("john@mail.com"));
-                ai.addField(ai.newField().withName("first").withValue("John"));
-
+                var activity = contactForm;
                 api.Activities.postActivity(activity, SESSION_ID)
                     .then(function (data) {
                         api.Activities.getActivityById(data).then(
