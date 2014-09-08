@@ -1157,8 +1157,7 @@ describe('Contact', function() {
             activity.activityLocationUrl = "http://www.wix.com";
             activity.activityDetails.summary = "test";
             activity.activityDetails.additionalInfoUrl = "http://www.wix.com";
-            activity.activityInfo.album.name = "Wix";
-            activity.activityInfo.album.id = "1234";
+            activity.activityInfo = { album: { name: 'Wix', id: '1234' } };
 
             it('should throw error when trying to post against a Contact which has not been saved', function(done) {
                 var contact = api.Contacts.newContact();
@@ -1201,8 +1200,7 @@ describe('Contact', function() {
             activity.activityLocationUrl = "http://www.wix.com";
             activity.activityDetails.summary = "test";
             activity.activityDetails.additionalInfoUrl = "http://www.wix.com";
-            activity.activityInfo.album.name = "Wix";
-            activity.activityInfo.album.id = "1234";
+            activity.activityInfo = { album: { name: 'Wix', id: '1234' } };
 
             it('should not throw errors when no options are given', function(done) {
                 var contact = api.Contacts.newContact();
