@@ -6,8 +6,8 @@ var should = require('should');
 var assert = require('assert');
 var expect = require('expect.js');
 var config = require("./config.js");
-var APP_SECRET = config.appSecret; // <---------- REPLACE THIS WITH YOUR OWN APP SECRET KEY
-var APP_KEY = config.appKey; // <---------- REPLACE THIS WITH YOUR OWN APP KEY
+var APP_SECRET = config.appSecret;
+var APP_KEY = config.appKey;
 var INSTANCE_ID = config.instanceId;
 var SESSION_ID = config.sessionId;
 
@@ -25,8 +25,7 @@ describe('Contact', function() {
             activity.activityLocationUrl = "http://www.wix.com";
             activity.activityDetails.summary = "test";
             activity.activityDetails.additionalInfoUrl = "http://www.wix.com";
-            activity.activityInfo.album.name = "Wix";
-            activity.activityInfo.album.id = "1234";
+            activity.activityInfo = { album: { name: 'Wix', id: '1234' } };
 
             it('should throw error when trying to post against a Contact which has not been saved', function(done) {
                 var contact = api.Contacts.newContact();
@@ -69,8 +68,7 @@ describe('Contact', function() {
             activity.activityLocationUrl = "http://www.wix.com";
             activity.activityDetails.summary = "test";
             activity.activityDetails.additionalInfoUrl = "http://www.wix.com";
-            activity.activityInfo.album.name = "Wix";
-            activity.activityInfo.album.id = "1234";
+            activity.activityInfo = { album: { name: 'Wix', id: '1234' } };
 
             it('should not throw errors when no options are given', function(done) {
                 var contact = api.Contacts.newContact();
@@ -208,69 +206,117 @@ describe('Api', function() {
         });
 
 
-        var albumFan = api.Activities.newActivity(api.Activities.TYPES.ALBUM_FAN);
-        albumFan.activityLocationUrl = "http://www.wix.com";
-        albumFan.activityDetails.summary = "test";
-        albumFan.activityDetails.additionalInfoUrl = "http://www.wix.com";
-        albumFan.activityInfo.album.name = "Wix";
-        albumFan.activityInfo.album.id = "1234";
-
-        var albumShare = api.Activities.newActivity(api.Activities.TYPES.ALBUM_SHARE);
-        albumShare.activityLocationUrl = "http://www.wix.com";
-        albumShare.activityDetails.summary = "test";
-        albumShare.activityDetails.additionalInfoUrl = "http://www.wix.com";
-        albumShare.activityInfo.album.name = "Wix";
-        albumShare.activityInfo.album.id = "1234";
-
-        var conversionComplete = api.Activities.newActivity(api.Activities.TYPES.CONVERSION_COMPLETE);
-        conversionComplete.activityLocationUrl = "http://www.wix.com";
-        conversionComplete.activityDetails.summary = "test";
-        conversionComplete.activityDetails.additionalInfoUrl = "http://www.wix.com";
-
-        var purchase = api.Activities.newActivity(api.Activities.TYPES.ECOMM_PURCHASE);
-        purchase.activityLocationUrl = "http://www.wix.com";
-        purchase.activityDetails.summary = "test";
-        purchase.activityDetails.additionalInfoUrl = "http://www.wix.com";
-
-        var sendMessage = api.Activities.newActivity(api.Activities.TYPES.SEND_MESSAGE);
-        sendMessage.activityLocationUrl = "http://www.wix.com";
-        sendMessage.activityDetails.summary = "test";
-        sendMessage.activityDetails.additionalInfoUrl = "http://www.wix.com";
-
         var trackLyrics = api.Activities.newActivity(api.Activities.TYPES.TRACK_LYRICS);
-        trackLyrics.activityLocationUrl = "http://www.wix.com";
-        trackLyrics.activityDetails.summary = "test";
-        trackLyrics.activityDetails.additionalInfoUrl = "http://www.wix.com";
-        trackLyrics.activityInfo.album.name = "Wix";
-        trackLyrics.activityInfo.album.id = "1234";
-
-        var trackPlay = api.Activities.newActivity(api.Activities.TYPES.TRACK_PLAY);
-        trackPlay.activityLocationUrl = "http://www.wix.com";
-        trackPlay.activityDetails.summary = "test";
-        trackPlay.activityDetails.additionalInfoUrl = "http://www.wix.com";
-        trackPlay.activityInfo.album.name = "Wix";
-        trackPlay.activityInfo.album.id = "1234";
-
-        var trackPlayed = api.Activities.newActivity(api.Activities.TYPES.TRACK_PLAYED);
-        trackPlayed.activityLocationUrl = "http://www.wix.com";
-        trackPlayed.activityDetails.summary = "test";
-        trackPlayed.activityDetails.additionalInfoUrl = "http://www.wix.com";
-        trackPlayed.activityInfo.album.name = "Wix";
-        trackPlayed.activityInfo.album.id = "1234";
+        trackLyrics.withLocationUrl('http://www.wix.com');
+        trackLyrics.withActivityDetails('test', 'http://www.wix.com');
+        trackLyrics.activityInfo = { album: { name: 'Wix', id: '1234' }, track: { name: 'Wix', id: '1234' } };
 
         var trackShare = api.Activities.newActivity(api.Activities.TYPES.TRACK_SHARE);
-        trackShare.activityLocationUrl = "http://www.wix.com";
-        trackShare.activityDetails.summary = "test";
-        trackShare.activityDetails.additionalInfoUrl = "http://www.wix.com";
-        trackShare.activityInfo.album.name = "Wix";
-        trackShare.activityInfo.album.id = "1234";
+        trackShare.withLocationUrl('http://www.wix.com');
+        trackShare.withActivityDetails('test', 'http://www.wix.com');
+        trackShare.activityInfo = { album: { name: 'Wix', id: '1234' }, track: { name: 'Wix', id: '1234' }, sharedTo: 'FACEBOOK' };
+
+        var trackPlay = api.Activities.newActivity(api.Activities.TYPES.TRACK_PLAY);
+        trackPlay.withLocationUrl('http://www.wix.com');
+        trackPlay.withActivityDetails('test', 'http://www.wix.com');
+        trackPlay.activityInfo = { album: { name: 'Wix', id: '1234' }, track: { name: 'Wix', id: '1234' } };
 
         var trackSkip = api.Activities.newActivity(api.Activities.TYPES.TRACK_SKIP);
-        trackSkip.activityLocationUrl = "http://www.wix.com";
-        trackSkip.activityDetails.summary = "test";
-        trackSkip.activityDetails.additionalInfoUrl = "http://www.wix.com";
-        trackSkip.activityInfo.album.name = "Wix";
-        trackSkip.activityInfo.album.id = "1234";
+        trackSkip.withLocationUrl('http://www.wix.com');
+        trackSkip.withActivityDetails('test', 'http://www.wix.com');
+        trackSkip.activityInfo = { album: { name: 'Wix', id: '1234' }, track: { name: 'Wix', id: '1234' } };
+
+        var trackPlayed = api.Activities.newActivity(api.Activities.TYPES.TRACK_PLAYED);
+        trackPlayed.withLocationUrl('http://www.wix.com');
+        trackPlayed.withActivityDetails('test', 'http://www.wix.com');
+        trackPlayed.activityInfo = { album: { name: 'Wix', id: '1234' }, track: { name: 'Wix', id: '1234' } };
+
+        var albumFan = api.Activities.newActivity(api.Activities.TYPES.ALBUM_FAN);
+        albumFan.withLocationUrl('http://www.wix.com');
+        albumFan.withActivityDetails('test', 'http://www.wix.com');
+        albumFan.activityInfo = { album: { name: 'Wix', id: '1234' } };
+
+        var albumShare = api.Activities.newActivity(api.Activities.TYPES.ALBUM_SHARE);
+        albumShare.withLocationUrl('http://www.wix.com');
+        albumShare.withActivityDetails('test', 'http://www.wix.com');
+        albumShare.activityInfo = { album: { name: 'Wix', id: '1234' }, sharedTo: 'FACEBOOK' };
+
+        var sendMessage = api.Activities.newActivity(api.Activities.TYPES.SEND_MESSAGE);
+        sendMessage.withLocationUrl('http://www.wix.com');
+        sendMessage.withActivityDetails('test', 'http://www.wix.com');
+        var recipient = {method: 'EMAIL', destination: {name: {first: 'Karen'}, target: 'localhost'}};
+        sendMessage.activityInfo = {recipient: recipient};
+
+        var conversion = api.Activities.newActivity(api.Activities.TYPES.CONVERSION_COMPLETE);
+        conversion.withLocationUrl('http://www.wix.com');
+        conversion.withActivityDetails('test', 'http://www.wix.com');
+        conversion.activityInfo = {"metadata":[], conversionType: 'PAGEVIEW'};
+
+        var hotelConfirmation = api.Activities.newActivity(api.Activities.TYPES.HOTELS_CONFIRMATION);
+        hotelConfirmation.withLocationUrl('http://www.wix.com');
+        hotelConfirmation.withActivityDetails('test', 'http://www.wix.com');
+        var guest = { total: 1, adults: 1, children: 0 };
+        var ONE_DAY = 60 * 60 * 24;
+        var oneDayAgo = new Date(new Date().getTime() - ONE_DAY);
+        var stay = { checkin: oneDayAgo, checkout: new Date().toISOString() };
+        var invoice = {total: '1', subtotal: '1'};
+        hotelConfirmation.activityInfo = { rates:[], rooms:[], source: 'GUEST', guests: guest, stay: stay, invoice: invoice };
+
+        var hotelCancel = api.Activities.newActivity(api.Activities.TYPES.HOTELS_CANCEL);
+        hotelCancel.withLocationUrl('http://www.wix.com');
+        hotelCancel.withActivityDetails('test', 'http://www.wix.com');
+        var refund = {kind: 'FULL', total: 1, currency: 'EUR', destination: 'NYC'};
+        var guest = { total: 1, adults: 1, children: 0 };
+        var ONE_DAY = 60 * 60 * 24;
+        var oneDayAgo = new Date(new Date().getTime() - ONE_DAY);
+        var stay = { checkin: oneDayAgo, checkout: new Date().toISOString() };
+        var invoice = {total: '1', subtotal: '1'};
+        hotelCancel.activityInfo = { rates:[], rooms:[], cancelDate: oneDayAgo, refund: refund, guests: guest,
+            stay: stay, invoice: invoice };
+
+        var hotelPurchase = api.Activities.newActivity(api.Activities.TYPES.HOTELS_PURCHASE);
+        hotelPurchase.withLocationUrl('http://www.wix.com');
+        hotelPurchase.withActivityDetails('test', 'http://www.wix.com');
+        var guest = { total: 1, adults: 1, children: 0 };
+        var ONE_DAY = 60 * 60 * 24;
+        var oneDayAgo = new Date(new Date().getTime() - ONE_DAY);
+        var stay = { checkin: oneDayAgo, checkout: new Date().toISOString() };
+        var payment = {total: '1', subtotal: '1', currency: 'EUR', source: 'Cash'};
+        hotelPurchase.activityInfo = { rates:[], rooms:[], guests: guest, stay: stay, payment: payment };
+
+        var hotelPurchaseFailed = api.Activities.newActivity(api.Activities.TYPES.HOTELS_PURCHASE_FAILED);
+        hotelPurchaseFailed.withLocationUrl('http://www.wix.com');
+        hotelPurchaseFailed.withActivityDetails('test', 'http://www.wix.com');
+        var guest = { total: 1, adults: 1, children: 0 };
+        var ONE_DAY = 60 * 60 * 24;
+        var oneDayAgo = new Date(new Date().getTime() - ONE_DAY);
+        var stay = { checkin: oneDayAgo, checkout: new Date().toISOString() };
+        hotelPurchaseFailed.activityInfo = { rates:[], rooms:[], guests: guest, stay: stay, payment: payment };
+
+        var ecommPurchase = api.Activities.newActivity(api.Activities.TYPES.ECOMMERCE_PURCHASE);
+        var coupon = {total: '1', title: 'Dis'};
+        var payment = {total: '1', subtotal: '1', currency: 'EUR', coupon: coupon};
+        var purchase = { items:[], cartId: '11111', storeId: '11111', payment: payment };
+        ecommPurchase.withLocationUrl('http://www.wix.com');
+        ecommPurchase.withActivityDetails('test', 'http://www.wix.com');
+        ecommPurchase.activityInfo = purchase;
+
+        var schedulerAppointment = api.Activities.newActivity(api.Activities.TYPES.SCHEDULER_APPOINTMENT);
+        var coupon = {total: '1', title: 'Dis'};
+        var payment = {total: '1', subtotal: '1', currency: 'EUR', coupon: coupon};
+        var purchase = { items:[], cartId: '11111', storeId: '11111', payment: payment };
+        schedulerAppointment.withLocationUrl('http://www.wix.com');
+        schedulerAppointment.withActivityDetails('test', 'http://www.wix.com');
+        schedulerAppointment.activityInfo = purchase;
+
+        var contactForm = api.Activities.newActivity(api.Activities.TYPES.CONTACT_FORM);
+        var cu = contactForm.contactUpdate;
+        cu.addEmail(cu.newEmail().withTag("main").withEmail("name@wexample.com"));
+        cu.name.withFirst("Your").withLast("Customer");
+        contactForm.withLocationUrl("http://www.test.com/").withActivityDetails("This is a test activity post", "http://www.test1.com/");
+        var ai = contactForm.activityInfo;
+        ai.addField(ai.newField().withName("email").withValue("john@mail.com"));
+        ai.addField(ai.newField().withName("first").withValue("John"));
 
         var contactForm = api.Activities.newActivity(api.Activities.TYPES.CONTACT_FORM);
         var cu = contactForm.contactUpdate;
@@ -328,7 +374,6 @@ describe('Api', function() {
                             data.should.not.be.length(0);
                             done();
                         }, function (error) {
-                            console.log(error);
                             done(error);
                         }).done(null, done);
                 });
@@ -336,7 +381,7 @@ describe('Api', function() {
 
             describe('Conversion Complete Activity', function () {
                 it('should post conversion complete activity without throwing error', function (done) {
-                    var activity = conversionComplete;
+                    var activity = conversion;
                     api.Activities.postActivity(activity, SESSION_ID)
                         .then(function (data) {
                             data.should.not.equal(undefined);
@@ -345,7 +390,6 @@ describe('Api', function() {
                             data.should.not.be.length(0);
                             done();
                         }, function (error) {
-                            console.log(error);
                             done(error);
                         }).done(null, done);
                 });
@@ -362,20 +406,81 @@ describe('Api', function() {
                             data.should.not.be.length(0);
                             done();
                         }, function (error) {
-                            console.log(error);
                             done(error);
                         }).done(null, done);
                 });
             });
 
             describe('Hotel Activities', function () {
+                describe('Hotels Purchase Activity', function () {
+                    it('should post hotel purchase activity without throwing error', function (done) {
+                        var activity = hotelPurchase;
+                        api.Activities.postActivity(activity, SESSION_ID)
+                            .then(function (data) {
+                                data.should.not.equal(undefined);
+                                data.should.be.a.String;
+                                data.should.not.be.empty;
+                                data.should.not.be.length(0);
+                                done();
+                            }, function (error) {
+                                done(error);
+                            }).done(null, done);
+                    });
+                });
 
+                describe('Hotels Purchase Failed Activity', function () {
+                    it('should post hotel purchase failed activity without throwing error', function (done) {
+                        var activity = hotelPurchaseFailed;
+                        api.Activities.postActivity(activity, SESSION_ID)
+                            .then(function (data) {
+                                data.should.not.equal(undefined);
+                                data.should.be.a.String;
+                                data.should.not.be.empty;
+                                data.should.not.be.length(0);
+                                done();
+                            }, function (error) {
+                                done(error);
+                            }).done(null, done);
+                    });
+                });
+
+                describe('Hotels Cancel Activity', function () {
+                    it('should post hotel cancel activity without throwing error', function (done) {
+                        var activity = hotelCancel;
+                        api.Activities.postActivity(activity, SESSION_ID)
+                            .then(function (data) {
+                                data.should.not.equal(undefined);
+                                data.should.be.a.String;
+                                data.should.not.be.empty;
+                                data.should.not.be.length(0);
+                                done();
+                            }, function (error) {
+                                done(error);
+                            }).done(null, done);
+                    });
+                });
+
+                describe('Hotels Confirmation Activity', function () {
+                    it('should post hotel confirmation activity without throwing error', function (done) {
+                        var activity = hotelConfirmation;
+                        api.Activities.postActivity(activity, SESSION_ID)
+                            .then(function (data) {
+                                data.should.not.equal(undefined);
+                                data.should.be.a.String;
+                                data.should.not.be.empty;
+                                data.should.not.be.length(0);
+                                done();
+                            }, function (error) {
+                                done(error);
+                            }).done(null, done);
+                    });
+                });
             });
 
             describe('Ecomm Activities', function () {
                 describe('Ecomm Purchase Activity', function () {
                     it('should post ecomm purchase activity without throwing error', function (done) {
-                        var activity = purchase;
+                        var activity = ecommPurchase;
                         api.Activities.postActivity(activity, SESSION_ID)
                             .then(function (data) {
                                 data.should.not.equal(undefined);
@@ -420,7 +525,6 @@ describe('Api', function() {
                                     data.should.not.be.length(0);
                                     done();
                                 }, function (error) {
-                                    console.log(error);
                                     done(error);
                                 }).done(null, done);
                         });
@@ -440,7 +544,6 @@ describe('Api', function() {
                                     data.should.not.be.length(0);
                                     done();
                                 }, function (error) {
-                                    console.log(error);
                                     done(error);
                                 }).done(null, done);
                         });
@@ -458,7 +561,6 @@ describe('Api', function() {
                                     data.should.not.be.length(0);
                                     done();
                                 }, function (error) {
-                                    console.log(error);
                                     done(error);
                                 }).done(null, done);
                         });
@@ -476,7 +578,6 @@ describe('Api', function() {
                                     data.should.not.be.length(0);
                                     done();
                                 }, function (error) {
-                                    console.log(error);
                                     done(error);
                                 }).done(null, done);
                         });
@@ -494,7 +595,6 @@ describe('Api', function() {
                                     data.should.not.be.length(0);
                                     done();
                                 }, function (error) {
-                                    console.log(error);
                                     done(error);
                                 }).done(null, done);
                         });
@@ -511,12 +611,10 @@ describe('Api', function() {
                                     data.should.not.be.length(0);
                                     done();
                                 }, function (error) {
-                                    console.log(error);
                                     done(error);
                                 }).done(null, done);
                         });
                     });
-
                 });
             });
         });
