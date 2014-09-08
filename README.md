@@ -88,6 +88,7 @@ var contact = api.Contacts.newContact(api); // Created a new Contact object. Thi
 contact.name({first: 'Karen', last: 'Meep'});
 contact.company({role: 'MyRole', name: 'MyName'});
 contact.picture('http://elcaminodeamanda.files.wordpress.com/2011/03/mc_hammer.png');
+contact.addEmail({tag: 'work', email: 'karenc@wix.com', emailStatus: api.Contacts.EMAIL_STATUS_TYPES.RECURRING});
 contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
 contact.addAddress(
     {
@@ -128,7 +129,7 @@ api.Contacts.create(contact).then(
         contact.company({role: 'MyRole', name: 'MyName'});
         contact.picture('http://assets.objectiface.com/hashed_silo_content/silo_content/6506/resized/mchammer.jpg');
         contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
-        contact.addEmail({tag: 'work', email: 'karenc@wix.com'});
+        contact.addEmail({tag: 'work', email: 'karenc@wix.com', emailStatus: api.Contacts.EMAIL_STATUS_TYPES.RECURRING});
         contact.addAddress(
             {
                 tag: 'work',
@@ -200,8 +201,7 @@ var activity = api.Activities.newActivity(api.Activities.TYPES.ALBUM_FAN);
 activity.activityLocationUrl = "http://www.wix.com";
 activity.activityDetails.summary = "test";
 activity.activityDetails.additionalInfoUrl = "http://www.wix.com";
-activity.activityInfo.album.name = "Wix";
-activity.activityInfo.album.id = "1234";
+activity.activityInfo = { album: { name: 'Wix', id: '1234' } };
 var contact = api.Contacts.newContact();
 contact.name({first: 'Karen', last: 'Meep'});
 api.Contacts.create(contact).then(
