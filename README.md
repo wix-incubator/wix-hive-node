@@ -333,7 +333,9 @@ api.Activities.getActivities(
 ```
 
 
-### Post an activity
+### Post An Activity
+
+#### Obtain a User Session Token
 
 This is where the [Javascript SDK](http://dev.wix.com/docs/display/DRAF/JavaScript+SDK) comes in to play. Use it to obtain a user session token, then use the token to create an activity on behalf of the user.
 
@@ -351,8 +353,11 @@ $("#createActivityButton").click(function() {
 });
 ```
 
-Use the session token on your Node server to create an activity an post it to the Wix Hive.
-Note: This code posts an Activity without any connection to a Contact. To post an Activity against a Contact use the Contact.addActivity method.
+#### Create an Activity Object
+
+To create an Activity either use our builder (as shown in the Contact Form Activity example below) or use a JSON, following our Activity schemas (as shown in the Ecommerce Purchase Activity example below)
+
+##### Create an Activity Using The Object Builder
 
 ```js
 var activity = api.Activities.newActivity(api.Activities.TYPES.CONTACT_FORM);
@@ -371,7 +376,26 @@ ai.addField(ai.newField().withName("email").withValue("name@wexample.com"));
 ai.addField(ai.newField().withName("first").withValue("Your"));
 ai.addField(ai.newField().withName("first").withValue("Your"));
 ai.addField(ai.newField().withName("last").withValue("Customer"));
+```
 
+##### Create an Activity Using JSON
+
+```js
+var activity = api.Activities.newActivity(api.Activities.TYPES.ECOMMERCE_PURCHASE);
+var coupon = {total: '1', title: 'Dis'};
+var payment = {total: '1', subtotal: '1', currency: 'EUR', coupon: coupon};
+var purchase = { items:[], cartId: '11111', storeId: '11111', payment: payment };
+activity.withLocationUrl('http://www.wix.com');
+activity.withActivityDetails('test', 'http://www.wix.com');
+activity.activityInfo = purchase;
+```
+
+##### Post an Activity From Your Server
+
+Use the session token on your Node server to create an activity an post it to the Wix Hive.
+Note: This code posts an Activity without any connection to a Contact. To post an Activity against a Contact use the Contact.addActivity method.
+
+```js
 api.Activities.postActivity(activity, SESSION_ID)
     .then(function(data) {
         data.should.not.equal(undefined);
