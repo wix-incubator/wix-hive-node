@@ -302,21 +302,9 @@ describe('Api', function() {
         ecommPurchase.activityInfo = purchase;
 
         var schedulerAppointment = api.Activities.newActivity(api.Activities.TYPES.SCHEDULER_APPOINTMENT);
-        var coupon = {total: '1', title: 'Dis'};
-        var payment = {total: '1', subtotal: '1', currency: 'EUR', coupon: coupon};
-        var purchase = { items:[], cartId: '11111', storeId: '11111', payment: payment };
         schedulerAppointment.withLocationUrl('http://www.wix.com');
         schedulerAppointment.withActivityDetails('test', 'http://www.wix.com');
-        schedulerAppointment.activityInfo = purchase;
-
-        var contactForm = api.Activities.newActivity(api.Activities.TYPES.CONTACT_FORM);
-        var cu = contactForm.contactUpdate;
-        cu.addEmail(cu.newEmail().withTag("main").withEmail("name@wexample.com"));
-        cu.name.withFirst("Your").withLast("Customer");
-        contactForm.withLocationUrl("http://www.test.com/").withActivityDetails("This is a test activity post", "http://www.test1.com/");
-        var ai = contactForm.activityInfo;
-        ai.addField(ai.newField().withName("email").withValue("john@mail.com"));
-        ai.addField(ai.newField().withName("first").withValue("John"));
+        schedulerAppointment.activityInfo = { title: 'test', description: 'test' };
 
         var contactForm = api.Activities.newActivity(api.Activities.TYPES.CONTACT_FORM);
         var cu = contactForm.contactUpdate;
@@ -328,6 +316,8 @@ describe('Api', function() {
         ai.addField(ai.newField().withName("first").withValue("John"));
 
         describe('Post Activity', function() {
+
+            this.timeout(10000);
 
             it('should throw error when posting activity missing required fields', function (done) {
                 expect(api.Activities.postActivity).to.throwException();
