@@ -29,7 +29,7 @@ describe('Contacts', function() {
             contact.name({first: 'Karen', last: 'Meep'});
             contact.company({role: 'MyRole', name: 'MyName'});
             contact.picture('http://elcaminodeamanda.files.wordpress.com/2011/03/mc_hammer.png');
-            contact.addEmail({tag: 'home', email: 'karen@home.com'});
+            contact.addEmail({tag: 'home', email: 'karen@home.com', emailStatus: api.Contacts.EMAIL_STATUS_TYPES.TRANSACTIONAL});
             contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
             contact.addAddress(
                 {
@@ -61,6 +61,7 @@ describe('Contacts', function() {
             contact.name({first: 'Karen', last: 'Meep'});
             contact.company({role: 'MyRole', name: 'MyName'});
             contact.picture('http://elcaminodeamanda.files.wordpress.com/2011/03/mc_hammer.png');
+            contact.addEmail({tag: 'home', email: 'karen@home.com', emailStatus: api.Contacts.EMAIL_STATUS_TYPES.TRANSACTIONAL});
             contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
             contact.addAddress(
                 {
@@ -218,6 +219,7 @@ describe('Contacts', function() {
     describe('getContactsSubscribers', function() {
         it('should not throw error when called with no parameters', function (done) {
 
+            throw 'not implemented';
             api.Contacts.getContactsSubscribers().then(
                 function(pagingContactsResult) {
                     pagingContactsResult.should.not.equal(undefined);
@@ -233,6 +235,7 @@ describe('Contacts', function() {
         });
         it('should return a non-empty list of contacts when called with pageSize parameter', function (done) {
 
+            throw 'not implemented';
             api.Contacts.getContactsSubscribers(null,
                 {
                     status: 'notSet',

@@ -48,8 +48,8 @@ describe('Contact', function() {
             it('should allow edit', function(done) {
 
                 var contact = api.Contacts.newContact();
-                contact.addEmail({tag: 'work', email: 'karenc@wix.com'});
-                contact.addEmail({tag: 'work', email: 'karen@home.com'});
+                contact.addEmail({tag: 'work', email: 'karenc@wix.com', emailStatus: api.Contacts.EMAIL_STATUS_TYPES.RECURRING});
+                contact.addEmail({tag: 'work', email: 'karen@home.com', emailStatus: api.Contacts.EMAIL_STATUS_TYPES.RECURRING});
                 var emails = contact.emails();
                 emails[1].tag('home');
                 contact.emails()[1].tag().should.be.eql('home');
@@ -58,19 +58,25 @@ describe('Contact', function() {
             it('should throw exception with creating email without email property', function(done) {
 
                 var contact = api.Contacts.newContact();
-                expect(contact.addEmail).withArgs({tag: 'wix'}).to.throwException();
+                expect(contact.addEmail).withArgs({tag: 'wix', emailStatus: api.Contacts.EMAIL_STATUS_TYPES.RECURRING}).to.throwException();
                 done();
             });
             it('should throw exception with creating email without tag property', function(done) {
 
                 var contact = api.Contacts.newContact();
-                expect(contact.addEmail).withArgs({email: 'karenc@wix.com'}).to.throwException();
+                expect(contact.addEmail).withArgs({email: 'karenc@wix.com', emailStatus: api.Contacts.EMAIL_STATUS_TYPES.RECURRING}).to.throwException();
+                done();
+            });
+            it('should throw exception with creating email without email status property', function(done) {
+
+                var contact = api.Contacts.newContact();
+                expect(contact.addEmail).withArgs({email: 'karenc@wix.com', tag:'home'}).to.throwException();
                 done();
             });
             it('should ignore when setting tag property as null', function(done) {
 
                 var contact = api.Contacts.newContact();
-                contact.addEmail({tag: 'work', email: 'karenc@wix.com'});
+                contact.addEmail({tag: 'work', email: 'karenc@wix.com', emailStatus: api.Contacts.EMAIL_STATUS_TYPES.RECURRING});
                 var email = contact.emails()[0];
                 email.tag(null);
                 email.tag().should.be.eql('work');
@@ -79,7 +85,7 @@ describe('Contact', function() {
             it('should ignore when setting email property as null', function(done) {
 
                 var contact = api.Contacts.newContact();
-                contact.addEmail({tag: 'work', email: 'karenc@wix.com'});
+                contact.addEmail({tag: 'work', email: 'karenc@wix.com', emailStatus: api.Contacts.EMAIL_STATUS_TYPES.RECURRING});
                 var email = contact.emails()[0];
                 email.email(null);
                 email.email().should.be.eql('karenc@wix.com');
@@ -95,7 +101,7 @@ describe('Contact', function() {
             it('should throw error when given an unsaved Contact', function (done) {
                 var contact = api.Contacts.newContact();
                 contact.name({first: 'Karen', last: 'Meep'});
-                contact.addEmail({tag: 'work', email: 'karenc@wix.com'});
+                contact.addEmail({tag: 'work', email: 'karenc@wix.com', emailStatus: api.Contacts.EMAIL_STATUS_TYPES.RECURRING});
                 expect(contact.update).to.throwException();
                 done();
             });
@@ -113,7 +119,7 @@ describe('Contact', function() {
                         contact.company({role: 'MyRole', name: 'MyName'});
                         contact.picture('http://assets.objectiface.com/hashed_silo_content/silo_content/6506/resized/mchammer.jpg');
                         contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
-                        contact.addEmail({tag: 'work', email: 'karenc@wix.com'});
+                        contact.addEmail({tag: 'work', email: 'karenc@wix.com', emailStatus: api.Contacts.EMAIL_STATUS_TYPES.RECURRING});
                         contact.addAddress(
                             {
                                 tag: 'work',
@@ -142,6 +148,7 @@ describe('Contact', function() {
                                 email.id().should.be.a.Number;
                                 email.id().should.not.be.eql(undefined);
                                 email.email().should.be.eql('karenc@wix.com');
+                                email.emailStatus().should.be.eql(api.Contacts.EMAIL_STATUS_TYPES.RECURRING);
                                 email.tag().should.be.eql('work');
                                 var address = contact.addresses()[0];
                                 address.id().should.be.a.Number;
@@ -194,7 +201,7 @@ describe('Contact', function() {
                 it('should throw error when given an unsaved Contact', function (done) {
                     var contact = api.Contacts.newContact();
                     contact.name({first: 'Karen', last: 'Meep'});
-                    contact.addEmail({tag: 'work', email: 'karenc@wix.com'});
+                    contact.addEmail({tag: 'work', email: 'karenc@wix.com', emailStatus: api.Contacts.EMAIL_STATUS_TYPES.RECURRING });
                     expect(contact.updateName).to.throwException();
                     done();
                 });
@@ -299,7 +306,7 @@ describe('Contact', function() {
 
                 it('should throw error when given an unsaved Contact', function (done) {
                     var contact = api.Contacts.newContact();
-                    contact.addEmail({tag: 'work', email: 'karenc@wix.com'});
+                    contact.addEmail({tag: 'work', email: 'karenc@wix.com', emailStatus: api.Contacts.EMAIL_STATUS_TYPES.RECURRING});
                     var email = contact.emails()[0];
                     expect(contact.updateEmail).withArgs(email).to.throwException();
                     done();
@@ -315,7 +322,7 @@ describe('Contact', function() {
                     var contact = api.Contacts.newContact();
                     api.Contacts.create(contact).then(
                         function (contact) {
-                            contact.addEmail({tag: 'work', email: 'karenc@wix.com'});
+                            contact.addEmail({tag: 'work', email: 'karenc@wix.com', emailStatus: api.Contacts.EMAIL_STATUS_TYPES.RECURRING});
                             expect(contact.updateEmail).withArgs(contact.emails()[0]).to.throwException();
                             done();
                         },
@@ -327,7 +334,7 @@ describe('Contact', function() {
 
                 it('should edit email for Contact', function (done) {
                     var contact = api.Contacts.newContact();
-                    contact.addEmail({tag: 'work', email: 'karenc@wix.com'});
+                    contact.addEmail({tag: 'work', email: 'karenc@wix.com', emailStatus: api.Contacts.EMAIL_STATUS_TYPES.RECURRING});
                     api.Contacts.create(contact).then(
                         function (contact) {
 
@@ -337,11 +344,13 @@ describe('Contact', function() {
                                     var email = contact.emails()[0];
                                     email.email('karen@home.com');
                                     email.tag('home');
+                                    email.emailStatus(api.Contacts.EMAIL_STATUS_TYPES.OPT_OUT);
                                     contact.updateEmail(email).then(
                                         function (contact) {
                                             var email = contact.emails()[0];
                                             email.email().should.be.eql('karen@home.com');
                                             email.tag().should.be.eql('home');
+                                            email.emailStatus().should.be.eql(api.Contacts.EMAIL_STATUS_TYPES.OPT_OUT);
                                             done();
                                         },
                                         function (error) {
@@ -829,7 +838,7 @@ describe('Contact', function() {
 
                 it('should throw error when given an unsaved Contact', function (done) {
                     var contact = api.Contacts.newContact();
-                    contact.addEmail({tag: 'work', email: 'karenc@wix.com'});
+                    contact.addEmail({tag: 'work', email: 'karenc@wix.com', emailStatus: api.Contacts.EMAIL_STATUS_TYPES.RECURRING});
                     var email = contact.emails()[0];
                     expect(contact.postEmail).withArgs(email).to.throwException();
                     done();
@@ -839,7 +848,7 @@ describe('Contact', function() {
                     var contact = api.Contacts.newContact();
                     api.Contacts.create(contact).then(
                         function (contact) {
-                            contact.addEmail({tag: 'work', email: 'karenc@wix.com'});
+                            contact.addEmail({tag: 'work', email: 'karenc@wix.com', emailStatus: api.Contacts.EMAIL_STATUS_TYPES.RECURRING});
                             var email = contact.emails()[0];
                             contact.postEmail(email).then(
                                 function (contact) {
@@ -848,6 +857,7 @@ describe('Contact', function() {
                                     email.id().should.not.be.eql(undefined);
                                     email.email().should.be.eql('karenc@wix.com');
                                     email.tag().should.be.eql('work');
+                                    email.emailStatus().should.be.eql(api.Contacts.EMAIL_STATUS_TYPES.RECURRING);
                                     done();
                                 },
                                 function (error) {
