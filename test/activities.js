@@ -209,48 +209,50 @@ describe('Api', function() {
         var trackLyrics = api.Activities.newActivity(api.Activities.TYPES.TRACK_LYRICS);
         trackLyrics.withLocationUrl('http://www.wix.com');
         trackLyrics.withActivityDetails('test', 'http://www.wix.com');
-        trackLyrics.activityInfo = { album: { name: 'Wix', id: '1234' }, track: { name: 'Wix', id: '1234' } };
+        trackLyrics.activityInfo = { artist: { name: 'Wix', id: '1234' }, album: { name: 'Wix', id: '1234' }, track: { name: 'Wix', id: '1234' } };
 
         var trackShare = api.Activities.newActivity(api.Activities.TYPES.TRACK_SHARE);
         trackShare.withLocationUrl('http://www.wix.com');
         trackShare.withActivityDetails('test', 'http://www.wix.com');
-        trackShare.activityInfo = { album: { name: 'Wix', id: '1234' }, track: { name: 'Wix', id: '1234' }, sharedTo: 'FACEBOOK' };
+        trackShare.activityInfo = { artist: { name: 'Wix', id: '1234' }, album: { name: 'Wix', id: '1234' }, track: { name: 'Wix', id: '1234' }, sharedTo: 'FACEBOOK' };
 
         var trackPlay = api.Activities.newActivity(api.Activities.TYPES.TRACK_PLAY);
         trackPlay.withLocationUrl('http://www.wix.com');
         trackPlay.withActivityDetails('test', 'http://www.wix.com');
-        trackPlay.activityInfo = { album: { name: 'Wix', id: '1234' }, track: { name: 'Wix', id: '1234' } };
+        trackPlay.activityInfo = { artist: { name: 'Wix', id: '1234' }, album: { name: 'Wix', id: '1234' }, track: { name: 'Wix', id: '1234' } };
 
         var trackSkip = api.Activities.newActivity(api.Activities.TYPES.TRACK_SKIP);
         trackSkip.withLocationUrl('http://www.wix.com');
         trackSkip.withActivityDetails('test', 'http://www.wix.com');
-        trackSkip.activityInfo = { album: { name: 'Wix', id: '1234' }, track: { name: 'Wix', id: '1234' } };
+        trackSkip.activityInfo = { artist: { name: 'Wix', id: '1234' }, album: { name: 'Wix', id: '1234' }, track: { name: 'Wix', id: '1234' } };
 
         var trackPlayed = api.Activities.newActivity(api.Activities.TYPES.TRACK_PLAYED);
         trackPlayed.withLocationUrl('http://www.wix.com');
         trackPlayed.withActivityDetails('test', 'http://www.wix.com');
-        trackPlayed.activityInfo = { album: { name: 'Wix', id: '1234' }, track: { name: 'Wix', id: '1234' } };
+        trackPlayed.activityInfo = { artist: { name: 'Wix', id: '1234' }, album: { name: 'Wix', id: '1234' }, track: { name: 'Wix', id: '1234' } };
 
         var albumFan = api.Activities.newActivity(api.Activities.TYPES.ALBUM_FAN);
         albumFan.withLocationUrl('http://www.wix.com');
         albumFan.withActivityDetails('test', 'http://www.wix.com');
-        albumFan.activityInfo = { album: { name: 'Wix', id: '1234' } };
+        albumFan.activityInfo = { artist: { name: 'Wix', id: '1234' }, album: { name: 'Wix', id: '1234' } };
 
         var albumShare = api.Activities.newActivity(api.Activities.TYPES.ALBUM_SHARE);
         albumShare.withLocationUrl('http://www.wix.com');
         albumShare.withActivityDetails('test', 'http://www.wix.com');
-        albumShare.activityInfo = { album: { name: 'Wix', id: '1234' }, sharedTo: 'FACEBOOK' };
+        albumShare.activityInfo = { artist: { name: 'Wix', id: '1234' }, album: { name: 'Wix', id: '1234' }, sharedTo: 'FACEBOOK' };
 
         var sendMessage = api.Activities.newActivity(api.Activities.TYPES.SEND_MESSAGE);
         sendMessage.withLocationUrl('http://www.wix.com');
         sendMessage.withActivityDetails('test', 'http://www.wix.com');
-        var recipient = {method: 'EMAIL', destination: {name: {first: 'Karen'}, target: 'localhost'}};
+        var conversionTarget = { conversionType: 'FAN', metadata: [ {property: 'wix', value: '124'} ] };
+        var recipient = { method: 'SMS', destination: {name: {prefix:'sir', first: 'mix', middle:'a', last:'lot', suffix:'Sr.'},
+            contactId: '1234', conversionTarget: conversionTarget, target: 'localhost'}};
         sendMessage.activityInfo = {recipient: recipient};
 
         var conversion = api.Activities.newActivity(api.Activities.TYPES.CONVERSION_COMPLETE);
         conversion.withLocationUrl('http://www.wix.com');
         conversion.withActivityDetails('test', 'http://www.wix.com');
-        conversion.activityInfo = {"metadata":[], conversionType: 'PAGEVIEW'};
+        conversion.activityInfo = {metadata:[{property:"Wix", value:"1234"}], conversionType: 'PURCHASE', messageId: "1111"};
 
         var hotelConfirmation = api.Activities.newActivity(api.Activities.TYPES.HOTELS_CONFIRMATION);
         hotelConfirmation.withLocationUrl('http://www.wix.com');
@@ -259,7 +261,7 @@ describe('Api', function() {
         var ONE_DAY = 60 * 60 * 24;
         var oneDayAgo = new Date(new Date().getTime() - ONE_DAY);
         var stay = { checkin: oneDayAgo, checkout: new Date().toISOString() };
-        var invoice = {total: '1', subtotal: '1'};
+        var invoice = {total: '1', subtotal: '1', currency:'EUR'};
         hotelConfirmation.activityInfo = { rates:[], rooms:[], source: 'GUEST', guests: guest, stay: stay, invoice: invoice };
 
         var hotelCancel = api.Activities.newActivity(api.Activities.TYPES.HOTELS_CANCEL);
@@ -295,8 +297,22 @@ describe('Api', function() {
 
         var ecommPurchase = api.Activities.newActivity(api.Activities.TYPES.ECOMMERCE_PURCHASE);
         var coupon = {total: '1', title: 'Dis'};
-        var payment = {total: '1', subtotal: '1', currency: 'EUR', coupon: coupon};
-        var purchase = { items:[], cartId: '11111', storeId: '11111', payment: payment };
+        var tax = {total: 1, formattedTotal: 1};
+        var shipping = {total: 1, formattedTotal: 1};
+        var payment = {total: '1', subtotal: '1', formattedTotal: '1.0', formattedSubtotal: '1.0', currency: 'EUR', coupon: coupon, tax: tax, shipping: shipping};
+        var media = {thumbnail: 'PIC'};
+        var item = {id: 1, sku: 'sky', title: 'title', quantity: 1, price: '1', formattedPrice: '1.1', currency: 'EUR', productLink: 'link', weight: '1', formattedWeight: '1.0KG', media: media, variants: [{title: 'title', value: '1'}]};
+        var shipping_address = {firstName: 'Wix' , lastName: 'Cool', email: 'wix@example.com', phone: '12345566', country: 'Macedonia', countryCode: 'MK', region: 'Bitola', regionCode: '7000', city: 'Bitola', address1: 'Marshal Tito', address2: 'Marshal Tito', zip: '7000', company: 'Wix.com'};
+        var purchase = { cartId: '11111',
+            storeId: '11111',
+            orderId: '11111',
+            items: [item],
+            payment: payment,
+            shippingAddress: shipping_address,
+            billingAddress: shipping_address,
+            paymentGateway: 'PAYPAL',
+            note: 'Note',
+            buyerAcceptsMarketing: true };
         ecommPurchase.withLocationUrl('http://www.wix.com');
         ecommPurchase.withActivityDetails('test', 'http://www.wix.com');
         ecommPurchase.activityInfo = purchase;
@@ -304,7 +320,13 @@ describe('Api', function() {
         var schedulerAppointment = api.Activities.newActivity(api.Activities.TYPES.SCHEDULER_APPOINTMENT);
         schedulerAppointment.withLocationUrl('http://www.wix.com');
         schedulerAppointment.withActivityDetails('test', 'http://www.wix.com');
-        schedulerAppointment.activityInfo = { title: 'test', description: 'test' };
+        var location = { address: '123 meep st.', city: 'meepsville', region: 'meep', postalCode: '124JKE', country: 'USSMEEP', url: 'http://www.wix.com' };
+        var oneDay = new Date(new Date().getTime() + ONE_DAY);
+        var time = { start: new Date().toISOString(), end: oneDay.toISOString(), timezone: 'ET'};
+        var contact1 = { contactId: '1234', name: {prefix:'sir', first: 'mix', middle:'a', last:'lot', suffix:'Sr.'}, phone:'555-2234', email: 'a@a.com', notes:'things and stuff', self: true };
+        var contact2 = { contactId: '1246', name: {prefix:'sir', first: 'mix', middle:'a', last:'lot', suffix:'Jr.'}, phone:'554-2234', email: 'b@a.com', notes:'things and stuff' };
+        var attendees = [ contact1, contact2 ];
+        schedulerAppointment.activityInfo = { title: 'my appointment', description: 'write these tests', location: location, time: time, attendees: attendees};
 
         var contactForm = api.Activities.newActivity(api.Activities.TYPES.CONTACT_FORM);
         var cu = contactForm.contactUpdate;
@@ -369,8 +391,63 @@ describe('Api', function() {
                 });
             });
 
+            describe('Scheduler Appointment Activity', function () {
+                it('should post full activity without throwing error', function (done) {
+                    var activity = schedulerAppointment;
+                    api.Activities.postActivity(activity, SESSION_ID)
+                        .then(function (data) {
+                            data.should.not.equal(undefined);
+                            data.should.be.a.String;
+                            data.should.not.be.empty;
+                            data.should.not.be.length(0);
+                            done();
+                        }, function (error) {
+                            done(error);
+                        }).done(null, done);
+                });
+
+                it('should post activity without optional fields without throwing error', function (done) {
+                    var activity = schedulerAppointment;
+                    activity.activityInfo = { title: 'my appointment', description: 'write these tests', time: time};
+                    api.Activities.postActivity(activity, SESSION_ID)
+                        .then(function (data) {
+                            data.should.not.equal(undefined);
+                            data.should.be.a.String;
+                            data.should.not.be.empty;
+                            data.should.not.be.length(0);
+                            done();
+                        }, function (error) {
+                            done(error);
+                        }).done(null, done);
+                });
+
+                describe('should throw error when posting activity without mandatory fields', function () {
+
+                    it('time', function (done) {
+                        var activity = schedulerAppointment;
+                        activity.activityInfo = { title: 'my appointment', description: 'write these tests'};
+                        expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                        done();
+                    });
+
+                    it('title', function (done) {
+                        var activity = schedulerAppointment;
+                        activity.activityInfo = { description: 'write these tests', time: time};
+                        expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                        done();
+                    });
+
+                    it('description', function (done) {
+                        var activity = schedulerAppointment;
+                        activity.activityInfo = { title: 'my appointment', time: time};
+                        expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                        done();
+                    });
+                });
+            });
+
             describe('Conversion Complete Activity', function () {
-                it('should post conversion complete activity without throwing error', function (done) {
+                it('should post full activity without throwing error', function (done) {
                     var activity = conversion;
                     api.Activities.postActivity(activity, SESSION_ID)
                         .then(function (data) {
@@ -383,10 +460,32 @@ describe('Api', function() {
                             done(error);
                         }).done(null, done);
                 });
+
+                it('should post activity without optional fields without throwing error', function (done) {
+                    var activity = conversion;
+                    activity.activityInfo = { conversionType: 'PURCHASE' };
+                    api.Activities.postActivity(activity, SESSION_ID)
+                        .then(function (data) {
+                            data.should.not.equal(undefined);
+                            data.should.be.a.String;
+                            data.should.not.be.empty;
+                            data.should.not.be.length(0);
+                            done();
+                        }, function (error) {
+                            done(error);
+                        }).done(null, done);
+                });
+
+                it('should throw error when posting activity without mandatory fields', function (done) {
+                    var activity = conversion;
+                    activity.activityInfo = { };
+                    expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                    done();
+                });
             });
 
             describe('Send Message Activity', function () {
-                it('should post send message activity without throwing error', function (done) {
+                it('should post full activity without throwing error', function (done) {
                     var activity = sendMessage;
                     api.Activities.postActivity(activity, SESSION_ID)
                         .then(function (data) {
@@ -398,6 +497,38 @@ describe('Api', function() {
                         }, function (error) {
                             done(error);
                         }).done(null, done);
+                });
+
+                it('should post activity without optional fields without throwing error', function (done) {
+                    var activity = sendMessage;
+                    activity.activityInfo = { method: 'SOCIAL', destination: { target: 'localhost'}};
+                    api.Activities.postActivity(activity, SESSION_ID)
+                        .then(function (data) {
+                            data.should.not.equal(undefined);
+                            data.should.be.a.String;
+                            data.should.not.be.empty;
+                            data.should.not.be.length(0);
+                            done();
+                        }, function (error) {
+                            done(error);
+                        }).done(null, done);
+                });
+
+                describe('should throw error when posting activity without mandatory fields', function () {
+
+                    it('method', function (done) {
+                        var activity = sendMessage;
+                        activity.activityInfo = { destination: { target: 'localhost'}};
+                        expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                        done();
+                    });
+
+                    it('destination', function (done) {
+                        var activity = sendMessage;
+                        activity.activityInfo = { method: 'SOCIAL'};
+                        expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                        done();
+                    });
                 });
             });
 
@@ -469,7 +600,8 @@ describe('Api', function() {
 
             describe('Ecomm Activities', function () {
                 describe('Ecomm Purchase Activity', function () {
-                    it('should post ecomm purchase activity without throwing error', function (done) {
+
+                    it('should post full activity without throwing error', function (done) {
                         var activity = ecommPurchase;
                         api.Activities.postActivity(activity, SESSION_ID)
                             .then(function (data) {
@@ -482,6 +614,114 @@ describe('Api', function() {
                                 done(error);
                             }).done(null, done);
                     });
+
+                    it('should post activity without optional fields without throwing error', function (done) {
+                        var activity = ecommPurchase;
+                        var coupon = {total: '1', title: 'Dis'};
+                        var tax = {total: 1};
+                        var shipping = {total: 1, formattedTotal: 1};
+                        var payment = {total: '1', subtotal: '1', currency: 'EUR', coupon: coupon, tax: tax, shipping: shipping};
+                        var item = {id: 1, title: 'title', quantity: 1, currency: 'EUR', variants: [{title: 'title', value: '1'}]};
+                        var purchase = {
+                            cartId: '11111',
+                            storeId: '11111',
+                            items: [item],
+                            payment: payment };
+                        activity.activityInfo = purchase;
+                        api.Activities.postActivity(activity, SESSION_ID)
+                            .then(function (data) {
+                                data.should.not.equal(undefined);
+                                data.should.be.a.String;
+                                data.should.not.be.empty;
+                                data.should.not.be.length(0);
+                                done();
+                            }, function (error) {
+                                done(error);
+                            }).done(null, done);
+                    });
+
+
+                    describe('should throw error when posting activity without mandatory fields', function () {
+
+                        it('coupon', function (done) {
+                            var activity = ecommPurchase;
+                            var tax = {total: 1};
+                            var shipping = {total: 1, formattedTotal: 1};
+                            var payment = {total: '1', subtotal: '1', currency: 'EUR', tax: tax, shipping: shipping};
+                            var item = {id: 1, title: 'title', quantity: 1, currency: 'EUR', variants: [{title: 'title', value: '1'}]};
+                            var purchase = {
+                                cartId: '11111',
+                                storeId: '11111',
+                                items: [item],
+                                payment: payment };
+                            activity.activityInfo = purchase;
+                            activity.activityInfo = { destination: { target: 'localhost'}};
+                            expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                            done();
+                        });
+                        it('cartId', function (done) {
+                            var activity = ecommPurchase;
+                            var coupon = {total: '1', title: 'Dis'};
+                            var tax = {total: 1};
+                            var shipping = {total: 1, formattedTotal: 1};
+                            var payment = {total: '1', subtotal: '1', currency: 'EUR', coupon: coupon, tax: tax, shipping: shipping};
+                            var item = {id: 1, title: 'title', quantity: 1, currency: 'EUR', variants: [{title: 'title', value: '1'}]};
+                            var purchase = {
+                                storeId: '11111',
+                                items: [item],
+                                payment: payment };
+                            activity.activityInfo = purchase;
+                            activity.activityInfo = { destination: { target: 'localhost'}};
+                            expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                            done();
+                        });
+                        it('storeId', function (done) {
+                            var activity = ecommPurchase;
+                            var coupon = {total: '1', title: 'Dis'};
+                            var tax = {total: 1};
+                            var shipping = {total: 1, formattedTotal: 1};
+                            var payment = {total: '1', subtotal: '1', currency: 'EUR', coupon: coupon, tax: tax, shipping: shipping};
+                            var item = {id: 1, title: 'title', quantity: 1, currency: 'EUR', variants: [{title: 'title', value: '1'}]};
+                            var purchase = {
+                                cartId: '11111',
+                                items: [item],
+                                payment: payment };
+                            activity.activityInfo = purchase;
+                            activity.activityInfo = { destination: { target: 'localhost'}};
+                            expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                            done();
+                        });
+                        it('items', function (done) {
+                            var activity = ecommPurchase;
+                            var coupon = {total: '1', title: 'Dis'};
+                            var tax = {total: 1};
+                            var shipping = {total: 1, formattedTotal: 1};
+                            var payment = {total: '1', subtotal: '1', currency: 'EUR', coupon: coupon, tax: tax, shipping: shipping};
+                            var purchase = {
+                                cartId: '11111',
+                                storeId: '11111',
+                                payment: payment };
+                            activity.activityInfo = purchase;
+                            activity.activityInfo = { destination: { target: 'localhost'}};
+                            expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                            done();
+                        });
+                        it('payment', function (done) {
+                            var activity = ecommPurchase;
+                            var coupon = {total: '1', title: 'Dis'};
+                            var tax = {total: 1};
+                            var shipping = {total: 1, formattedTotal: 1};
+                            var item = {id: 1, title: 'title', quantity: 1, currency: 'EUR', variants: [{title: 'title', value: '1'}]};
+                            var purchase = {
+                                cartId: '11111',
+                                storeId: '11111',
+                                items: [item] };
+                            activity.activityInfo = purchase;
+                            activity.activityInfo = { destination: { target: 'localhost'}};
+                            expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                            done();
+                        });
+                    });
                 });
             });
 
@@ -489,7 +729,7 @@ describe('Api', function() {
 
                 describe('Album Activities', function () {
                     describe('Album Fan Activity', function () {
-                        it('should post album fan activity without throwing error', function (done) {
+                        it('should post full activity without throwing error', function (done) {
                             var activity = albumFan;
                             api.Activities.postActivity(activity, SESSION_ID)
                                 .then(function (data) {
@@ -502,10 +742,43 @@ describe('Api', function() {
                                     done(error);
                                 }).done(null, done);
                         });
+
+                        it('should post activity without optional fields without throwing error', function (done) {
+                            var activity = albumFan;
+                            activity.activityInfo = { artist: { name: 'Wix' }, album: { name: 'Wix' } };
+                            api.Activities.postActivity(activity, SESSION_ID)
+                                .then(function (data) {
+                                    data.should.not.equal(undefined);
+                                    data.should.be.a.String;
+                                    data.should.not.be.empty;
+                                    data.should.not.be.length(0);
+                                    done();
+                                }, function (error) {
+                                    done(error);
+                                }).done(null, done);
+                        });
+
+
+                        describe('should throw error when posting activity without mandatory fields', function () {
+
+                            it('artist.name', function (done) {
+                                var activity = albumFan;
+                                activity.activityInfo = { album: { name: 'Wix' } };
+                                expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                                done();
+                            });
+
+                            it('album.name', function (done) {
+                                var activity = albumFan;
+                                activity.activityInfo = { artist: { name: 'Wix' }};
+                                expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                                done();
+                            });
+                        });
                     });
 
                     describe('Album Share Activity', function () {
-                        it('should post album share activity without throwing error', function (done) {
+                        it('should post full activity without throwing error', function (done) {
                             var activity = albumShare;
                             api.Activities.postActivity(activity, SESSION_ID)
                                 .then(function (data) {
@@ -518,13 +791,52 @@ describe('Api', function() {
                                     done(error);
                                 }).done(null, done);
                         });
+
+                        it('should post activity without optional fields without throwing error', function (done) {
+                            var activity = albumShare;
+                            activity.activityInfo = { artist: { name: 'Wix' }, album: { name: 'Wix' }, sharedTo: 'FACEBOOK' };
+                            api.Activities.postActivity(activity, SESSION_ID)
+                                .then(function (data) {
+                                    data.should.not.equal(undefined);
+                                    data.should.be.a.String;
+                                    data.should.not.be.empty;
+                                    data.should.not.be.length(0);
+                                    done();
+                                }, function (error) {
+                                    done(error);
+                                }).done(null, done);
+                        });
+
+                        describe('should throw error when posting activity without mandatory fields', function () {
+
+                            it('artist.name', function (done) {
+                                var activity = albumShare;
+                                activity.activityInfo = { album: { name: 'Wix' }, sharedTo: 'FACEBOOK' };
+                                expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                                done();
+                            });
+
+                            it('album.name', function (done) {
+                                var activity = albumShare;
+                                activity.activityInfo = { artist: { name: 'Wix' }, sharedTo: 'FACEBOOK' };
+                                expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                                done();
+                            });
+
+                            it('sharedTo', function (done) {
+                                var activity = albumShare;
+                                activity.activityInfo = { artist: { name: 'Wix' }, album: { name: 'Wix' }};
+                                expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                                done();
+                            });
+                        });
                     });
                 });
 
                 describe('Track Activities', function () {
 
                     describe('Track Lyrics Activity', function () {
-                        it('should post track lyrics activity without throwing error', function (done) {
+                        it('should post full track lyrics activity without throwing error', function (done) {
                             var activity = trackLyrics;
                             api.Activities.postActivity(activity, SESSION_ID)
                                 .then(function (data) {
@@ -537,11 +849,42 @@ describe('Api', function() {
                                     done(error);
                                 }).done(null, done);
                         });
+                        it('should post activity without optional fields without throwing error', function (done) {
+                            var activity = trackLyrics;
+                            activity.activityInfo = { artist: { name: 'Wix' }, track: { name: 'Wix' } };
+                            api.Activities.postActivity(activity, SESSION_ID)
+                                .then(function (data) {
+                                    data.should.not.equal(undefined);
+                                    data.should.be.a.String;
+                                    data.should.not.be.empty;
+                                    data.should.not.be.length(0);
+                                    done();
+                                }, function (error) {
+                                    done(error);
+                                }).done(null, done);
+                        });
+
+                        describe('should throw error when posting activity without mandatory fields', function () {
+
+                            it('artist.name', function (done) {
+                                var activity = trackLyrics;
+                                activity.activityInfo = { track: { name: 'Wix' } };
+                                expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                                done();
+                            });
+
+                            it('track.name', function (done) {
+                                var activity = trackLyrics;
+                                activity.activityInfo = { track: { name: 'Wix' } };
+                                expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                                done();
+                            });
+                        });
                     });
 
                     describe('Track Play Activity', function () {
 
-                        it('should post track play activity without throwing error', function (done) {
+                        it('should post full activity without throwing error', function (done) {
                             var activity = trackPlay;
                             api.Activities.postActivity(activity, SESSION_ID)
                                 .then(function (data) {
@@ -554,11 +897,43 @@ describe('Api', function() {
                                     done(error);
                                 }).done(null, done);
                         });
+                        it('should post activity without optional fields throwing error', function (done) {
+                            var activity = trackPlay;
+                            activity.activityInfo = { artist: { name: 'Wix' }, track: { name: 'Wix' } };
+                            api.Activities.postActivity(activity, SESSION_ID)
+                                .then(function (data) {
+                                    data.should.not.equal(undefined);
+                                    data.should.be.a.String;
+                                    data.should.not.be.empty;
+                                    data.should.not.be.length(0);
+                                    done();
+                                }, function (error) {
+                                    done(error);
+                                }).done(null, done);
+                        });
+
+
+                        describe('should throw error when posting activity without mandatory fields', function () {
+
+                            it('artist.name', function (done) {
+                                var activity = trackPlay;
+                                activity.activityInfo = { track: { name: 'Wix' } };
+                                expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                                done();
+                            });
+
+                            it('track.name', function (done) {
+                                var activity = trackPlay;
+                                activity.activityInfo = { track: { name: 'Wix' } };
+                                expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                                done();
+                            });
+                        });
                     });
 
                     describe('Track Played Activity', function () {
 
-                        it('should post track played activity without throwing error', function (done) {
+                        it('should post full activity without throwing error', function (done) {
                             var activity = trackPlayed;
                             api.Activities.postActivity(activity, SESSION_ID)
                                 .then(function (data) {
@@ -571,11 +946,44 @@ describe('Api', function() {
                                     done(error);
                                 }).done(null, done);
                         });
+
+                        it('should post activity without optional fields throwing error', function (done) {
+                            var activity = trackPlayed;
+                            activity.activityInfo = { artist: { name: 'Wix' }, track: { name: 'Wix' } };
+                            api.Activities.postActivity(activity, SESSION_ID)
+                                .then(function (data) {
+                                    data.should.not.equal(undefined);
+                                    data.should.be.a.String;
+                                    data.should.not.be.empty;
+                                    data.should.not.be.length(0);
+                                    done();
+                                }, function (error) {
+                                    done(error);
+                                }).done(null, done);
+                        });
+
+
+                        describe('should throw error when posting activity without mandatory fields', function () {
+
+                            it('artist.name', function (done) {
+                                var activity = trackPlayed;
+                                activity.activityInfo = { track: { name: 'Wix' } };
+                                expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                                done();
+                            });
+
+                            it('track.name', function (done) {
+                                var activity = trackPlayed;
+                                activity.activityInfo = { track: { name: 'Wix' } };
+                                expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                                done();
+                            });
+                        });
                     });
 
                     describe('Track Skip Activity', function () {
 
-                        it('should post track skip activity without throwing error', function (done) {
+                        it('should post full activity without throwing error', function (done) {
                             var activity = trackSkip;
                             api.Activities.postActivity(activity, SESSION_ID)
                                 .then(function (data) {
@@ -588,10 +996,43 @@ describe('Api', function() {
                                     done(error);
                                 }).done(null, done);
                         });
+
+                        it('should post activity without optional fields throwing error', function (done) {
+                            var activity = trackSkip;
+                            activity.activityInfo = { artist: { name: 'Wix' }, track: { name: 'Wix' } };
+                            api.Activities.postActivity(activity, SESSION_ID)
+                                .then(function (data) {
+                                    data.should.not.equal(undefined);
+                                    data.should.be.a.String;
+                                    data.should.not.be.empty;
+                                    data.should.not.be.length(0);
+                                    done();
+                                }, function (error) {
+                                    done(error);
+                                }).done(null, done);
+                        });
+
+
+                        describe('should throw error when posting activity without mandatory fields', function () {
+
+                            it('artist.name', function (done) {
+                                var activity = trackSkip;
+                                activity.activityInfo = { track: { name: 'Wix' } };
+                                expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                                done();
+                            });
+
+                            it('track.name', function (done) {
+                                var activity = trackSkip;
+                                activity.activityInfo = { track: { name: 'Wix' } };
+                                expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                                done();
+                            });
+                        });
                     });
                     describe('Track Share Activity', function () {
 
-                        it('should post track share activity without throwing error', function (done) {
+                        it('should post full activity without throwing error', function (done) {
                             var activity = trackShare;
                             api.Activities.postActivity(activity, SESSION_ID)
                                 .then(function (data) {
@@ -603,6 +1044,46 @@ describe('Api', function() {
                                 }, function (error) {
                                     done(error);
                                 }).done(null, done);
+                        });
+
+                        it('should post activity without optional fields without throwing error', function (done) {
+                            var activity = trackShare;
+                            activity.activityInfo = { artist: { name: 'Wix' }, track: { name: 'Wix' }, sharedTo: 'FACEBOOK' };
+                            api.Activities.postActivity(activity, SESSION_ID)
+                                .then(function (data) {
+                                    data.should.not.equal(undefined);
+                                    data.should.be.a.String;
+                                    data.should.not.be.empty;
+                                    data.should.not.be.length(0);
+                                    done();
+                                }, function (error) {
+                                    done(error);
+                                }).done(null, done);
+                        });
+
+
+                        describe('should throw error when posting activity without mandatory fields', function () {
+
+                            it('artist.name', function (done) {
+                                var activity = trackShare;
+                                activity.activityInfo = { track: { name: 'Wix' }, sharedTo: 'FACEBOOK' };
+                                expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                                done();
+                            });
+
+                            it('track.name', function (done) {
+                                var activity = trackShare;
+                                activity.activityInfo = { artist: { name: 'Wix' }, sharedTo: 'FACEBOOK' };
+                                expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                                done();
+                            });
+
+                            it('shareTo', function (done) {
+                                var activity = trackShare;
+                                activity.activityInfo = { artist: { name: 'Wix' }, track: { name: 'Wix' } };
+                                expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                                done();
+                            });
                         });
                     });
                 });
