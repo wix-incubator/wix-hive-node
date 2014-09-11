@@ -96,7 +96,7 @@ describe('Contact', function() {
 
     describe('Methods', function() {
 
-        describe('Update', function() {
+        describe('Update Contact', function() {
 
             it('should throw error when given an unsaved Contact', function (done) {
                 var contact = api.Contacts.newContact();
@@ -106,32 +106,33 @@ describe('Contact', function() {
                 done();
             });
 
-            it('should edit existing contact information', function (done) {
+            it('should edit contact information', function (done) {
+                throw 'pending HAPI-3';
                 var contact = api.Contacts.newContact(api);
+                contact.name().prefix('Sir');
+                contact.name().first('Mix');
+                contact.name().middle('A');
+                contact.name().last('Lot');
+                contact.name().suffix('The III');
+                contact.company({role: 'MyRole', name: 'MyName'});
+                contact.picture('http://assets.objectiface.com/hashed_silo_content/silo_content/6506/resized/mchammer.jpg');
+                contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
+                contact.addEmail({tag: 'work', email: 'karenc@wix.com', emailStatus: api.Contacts.EMAIL_STATUS_TYPES.RECURRING});
+                contact.addAddress(
+                    {
+                        tag: 'work',
+                        address: '500 Terry A Francois',
+                        city: 'San Francisco',
+                        neighborhood: 'Wixville',
+                        region: 'CA',
+                        country: 'USA',
+                        postalCode: '94158'
+                    });
+                contact.addDate({ tag: 'work', date: '1994-11-05T13:15:30Z'});
+                contact.addUrl({ tag: 'work', url: 'http://www.wix.com/'});
+
                 api.Contacts.create(contact).then(
                     function (contact) {
-
-                        contact.name().prefix('Sir');
-                        contact.name().first('Mix');
-                        contact.name().middle('A');
-                        contact.name().last('Lot');
-                        contact.name().suffix('The III');
-                        contact.company({role: 'MyRole', name: 'MyName'});
-                        contact.picture('http://assets.objectiface.com/hashed_silo_content/silo_content/6506/resized/mchammer.jpg');
-                        contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
-                        contact.addEmail({tag: 'work', email: 'karenc@wix.com', emailStatus: api.Contacts.EMAIL_STATUS_TYPES.RECURRING});
-                        contact.addAddress(
-                            {
-                                tag: 'work',
-                                address: '500 Terry A Francois',
-                                city: 'San Francisco',
-                                neighborhood: 'Wixville',
-                                region: 'CA',
-                                country: 'USA',
-                                postalCode: '94158'
-                            });
-                        contact.addDate({ tag: 'work', date: '1994-11-05T13:15:30Z'});
-                        contact.addUrl({ tag: 'work', url: 'http://www.wix.com/'});
 
                         contact.update().then(
                             function(contact){
@@ -190,9 +191,94 @@ describe('Contact', function() {
                 ).done(null, done);
             });
 
-            it('should edit existing list information Contact', function (done) {
-                throw 'not implemented'
+            it('should ignore delete of information', function (done) {
+                throw 'pending HAPI-3';
+                var contact = api.Contacts.newContact(api);
+                contact.name().prefix('Sir');
+                contact.name().first('Mix');
+                contact.name().middle('A');
+                contact.name().last('Lot');
+                contact.name().suffix('The III');
+                contact.company({role: 'MyRole', name: 'MyName'});
+                contact.picture('http://assets.objectiface.com/hashed_silo_content/silo_content/6506/resized/mchammer.jpg');
+                contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
+                contact.addEmail({tag: 'work', email: 'karenc@wix.com', emailStatus: api.Contacts.EMAIL_STATUS_TYPES.RECURRING});
+                contact.addAddress(
+                    {
+                        tag: 'work',
+                        address: '500 Terry A Francois',
+                        city: 'San Francisco',
+                        neighborhood: 'Wixville',
+                        region: 'CA',
+                        country: 'USA',
+                        postalCode: '94158'
+                    });
+                contact.addDate({ tag: 'work', date: '1994-11-05T13:15:30Z'});
+                contact.addUrl({ tag: 'work', url: 'http://www.wix.com/'});
+                api.Contacts.create(contact).then(
+                    function (contact) {
+
+                        delete contact.phones()[0];
+                        delete contact.emails()[0];
+                        delete contact.addresses()[0];
+
+                        contact.update().then(
+                            function(contact){
+
+                                contact.name().prefix().should.be.eql('Sir');
+                                contact.name().first().should.be.eql('Mix');
+                                contact.name().middle().should.be.eql('A');
+                                contact.name().last().should.be.eql('Lot');
+                                contact.name().suffix().should.be.eql('The III');
+                                contact.picture().should.be.eql('http://assets.objectiface.com/hashed_silo_content/silo_content/6506/resized/mchammer.jpg');
+                                contact.company().role().should.be.eql('MyRole');
+                                contact.company().name().should.be.eql('MyName');
+                                var email = contact.emails()[0];
+                                email.id().should.be.a.Number;
+                                email.id().should.not.be.eql(undefined);
+                                email.email().should.be.eql('karenc@wix.com');
+                                email.emailStatus().should.be.eql(api.Contacts.EMAIL_STATUS_TYPES.RECURRING);
+                                email.tag().should.be.eql('work');
+                                var address = contact.addresses()[0];
+                                address.id().should.be.a.Number;
+                                address.id().should.not.be.eql(undefined);
+                                address.tag().should.be.eql('work');
+                                address.address().should.be.eql('500 Terry A Francois');
+                                address.neighborhood().should.be.eql('Wixville');
+                                address.city().should.be.eql('San Francisco');
+                                address.region().should.be.eql('CA');
+                                address.country().should.be.eql('USA');
+                                address.postalCode().should.be.eql('94158');
+                                var phone = contact.phones()[0];
+                                phone.id().should.be.a.Number;
+                                phone.id().should.not.be.eql(undefined);
+                                phone.tag().should.be.eql('work');
+                                phone.phone().should.be.eql('+1-415-639-5555');
+                                var url = contact.urls()[0];
+                                url.id().should.be.a.Number;
+                                url.id().should.not.be.eql(undefined);
+                                url.tag().should.be.eql('work');
+                                url.url().should.be.eql('http://www.wix.com/');
+                                var date = contact.dates()[0];
+                                date.id().should.be.a.Number;
+                                date.id().should.not.be.eql(undefined);
+                                date.tag().should.be.eql('work');
+                                var dExpected = new Date('1994-11-05T13:15:30Z').toString();
+                                var dActual = new Date(date.date().toString()).toString();
+                                dExpected.should.be.eql(dActual);
+                                done();
+                            },
+                            function(error){
+                                done(error);
+                            }
+                        ).done(null, done);
+                    },
+                    function (error) {
+                        done(error);
+                    }
+                ).done(null, done);
             });
+
         });
 
         describe('UpdateFields', function() {
@@ -201,7 +287,6 @@ describe('Contact', function() {
                 it('should throw error when given an unsaved Contact', function (done) {
                     var contact = api.Contacts.newContact();
                     contact.name({first: 'Karen', last: 'Meep'});
-                    contact.addEmail({tag: 'work', email: 'karenc@wix.com', emailStatus: api.Contacts.EMAIL_STATUS_TYPES.RECURRING });
                     expect(contact.updateName).to.throwException();
                     done();
                 });
@@ -209,6 +294,7 @@ describe('Contact', function() {
                 it('should edit name', function (done) {
                     var contact = api.Contacts.newContact();
                     contact.name({first: 'Karen', last: 'Meep'});
+                    contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     api.Contacts.create(contact).then(
                         function (contact) {
                             contact.name().prefix('Sir');
@@ -248,6 +334,7 @@ describe('Contact', function() {
 
                 it('should edit picture', function (done) {
                     var contact = api.Contacts.newContact();
+                    contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     contact.picture('http://elcaminodeamanda.files.wordpress.com/2011/03/mc_hammer.png');
                     api.Contacts.create(contact).then(
                         function (contact) {
@@ -281,6 +368,7 @@ describe('Contact', function() {
                 it('should edit company', function (done) {
                     var contact = api.Contacts.newContact();
                     contact.company({role: 'MyRole', name: 'MyName'});
+                    contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     api.Contacts.create(contact).then(
                         function (contact) {
                             contact.company({role: 'MyRole1', name: 'MyName1'});
@@ -495,6 +583,7 @@ describe('Contact', function() {
 
                 it('should throw error when given an unsaved Phone', function (done) {
                     var contact = api.Contacts.newContact();
+                    contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     api.Contacts.create(contact).then(
                         function (contact) {
                             contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
@@ -564,6 +653,7 @@ describe('Contact', function() {
 
                 it('should throw error when given an unsaved Url', function (done) {
                     var contact = api.Contacts.newContact();
+                    contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     api.Contacts.create(contact).then(
                         function (contact) {
                             contact.addUrl({ tag: 'work', url: 'http://www.wix.com/'});
@@ -579,6 +669,7 @@ describe('Contact', function() {
 
                 it('should edit url for Contact', function (done) {
                     var contact = api.Contacts.newContact();
+                    contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     contact.addUrl({ tag: 'work', url: 'http://www.wix.com/'});
                     api.Contacts.create(contact).then(
                         function (contact) {
@@ -619,6 +710,7 @@ describe('Contact', function() {
 
                 it('should throw error when given an unsaved Contact', function (done) {
                     var contact = api.Contacts.newContact();
+                    contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     contact.addDate({ tag: 'work', date: '1994-11-05T13:15:30Z'});
                     var date = contact.dates()[0];
                     expect(contact.updateDate).withArgs(date).to.throwException();
@@ -627,12 +719,14 @@ describe('Contact', function() {
 
                 it('should throw error when not given an date', function (done) {
                     var contact = api.Contacts.newContact();
+                    contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     expect(contact.updateDate).to.throwException();
                     done();
                 });
 
                 it('should throw error when given an unsaved Date', function (done) {
                     var contact = api.Contacts.newContact();
+                    contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     api.Contacts.create(contact).then(
                         function (contact) {
                             contact.addDate({ tag: 'work', date: '1994-11-05T13:15:30Z'});
@@ -648,6 +742,7 @@ describe('Contact', function() {
 
                 it('should edit date for Contact', function (done) {
                     var contact = api.Contacts.newContact();
+                    contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     contact.addDate({ tag: 'work', date: '1994-11-05T13:15:30Z'});
                     api.Contacts.create(contact).then(
                         function (contact) {
@@ -690,6 +785,7 @@ describe('Contact', function() {
 
                 it('should throw error when given an unsaved Contact', function (done) {
                     var contact = api.Contacts.newContact();
+                    contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     contact.addNote({ content: 'I like big Wix and I cannot lie'});
                     var note = contact.notes()[0];
                     expect(contact.updateNote).withArgs(note).to.throwException();
@@ -698,12 +794,14 @@ describe('Contact', function() {
 
                 it('should throw error when not given an note', function (done) {
                     var contact = api.Contacts.newContact();
+                    contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     expect(contact.updateNote).to.throwException();
                     done();
                 });
 
                 it('should throw error when given an unsaved Note', function (done) {
                     var contact = api.Contacts.newContact();
+                    contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     api.Contacts.create(contact).then(
                         function (contact) {
                             contact.addNote({ content: 'I like big Wix and I cannot lie'});
@@ -719,6 +817,7 @@ describe('Contact', function() {
 
                 it('should edit note for Contact', function (done) {
                     var contact = api.Contacts.newContact();
+                    contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     api.Contacts.create(contact).then(
                         function (contact) {
 
@@ -757,6 +856,7 @@ describe('Contact', function() {
 
                 it('should throw error when given an unsaved Contact', function (done) {
                     var contact = api.Contacts.newContact();
+                    contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     contact.addCustomField({ field: 'Host', value: 'Wayne Campbell'});
                     var customField = contact.customFields()[0];
                     expect(contact.updateCustomField).withArgs(customField).to.throwException();
@@ -771,6 +871,7 @@ describe('Contact', function() {
 
                 it('should throw error when given an unsaved customField', function (done) {
                     var contact = api.Contacts.newContact();
+                    contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     api.Contacts.create(contact).then(
                         function (contact) {
                             contact.addCustomField({ field: 'Host', value: 'Wayne Campbell'});
@@ -788,7 +889,7 @@ describe('Contact', function() {
                     var contact = api.Contacts.newContact();
                     api.Contacts.create(contact).then(
                         function (contact) {
-
+                            contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                             api.Contacts.getContactById(contact.id().id()).then(
                                 function (contact) {
 
@@ -893,6 +994,7 @@ describe('Contact', function() {
 
                 it('should add new address to Contact', function (done) {
                     var contact = api.Contacts.newContact();
+                    contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     api.Contacts.create(contact).then(
                         function (contact) {
                             contact.addAddress(
@@ -984,6 +1086,7 @@ describe('Contact', function() {
 
                 it('should add new url to Contact', function (done) {
                     var contact = api.Contacts.newContact();
+                    contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     api.Contacts.create(contact).then(
                         function (contact) {
                             contact.addUrl({ tag: 'work', url: 'http://www.wix.com/'});
@@ -1021,6 +1124,7 @@ describe('Contact', function() {
 
                 it('should add new date to Contact', function (done) {
                     var contact = api.Contacts.newContact();
+                    contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     api.Contacts.create(contact).then(
                         function (contact) {
                             contact.addDate({ tag: 'work', date: '1994-11-05T13:15:30Z'});
@@ -1059,7 +1163,9 @@ describe('Contact', function() {
                 });
 
                 it('should add new note to Contact', function (done) {
+                    throw 'pending HAPI-9';
                     var contact = api.Contacts.newContact();
+                    contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     api.Contacts.create(contact).then(
                         function (contact) {
                             contact.addNote({ content: 'Your rent is due'});
@@ -1099,6 +1205,7 @@ describe('Contact', function() {
 
                 it('should add new customField to Contact', function (done) {
                     var contact = api.Contacts.newContact();
+                    contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     api.Contacts.create(contact).then(
                         function (contact) {
                             contact.addCustomField({ field: 'whats the time?', value: 'Hammer time!'});
@@ -1135,7 +1242,9 @@ describe('Contact', function() {
                 });
 
                 it('should add new tag to Contact', function (done) {
+                    throw 'pending HAPI-14';
                     var contact = api.Contacts.newContact();
+                    contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     api.Contacts.create(contact).then(
                         function (contact) {
                             contact.addTag('VIP');
@@ -1184,6 +1293,7 @@ describe('Contact', function() {
             it('should add Activity for Contact without throwing error', function(done) {
                 var contact = api.Contacts.newContact();
                 contact.name({first: 'Karen', last: 'Meep'});
+                contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                 api.Contacts.create(contact).then(
                     function(contact){
                         contact.addActivity(activity, api).then(
@@ -1215,6 +1325,7 @@ describe('Contact', function() {
             it('should not throw errors when no options are given', function(done) {
                 var contact = api.Contacts.newContact();
                 contact.name({first: 'Karen', last: 'Meep'});
+                contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                 api.Contacts.create(contact).then(
                     function(contact){
                         contact.addActivity(activity, api).then(
@@ -1249,6 +1360,7 @@ describe('Contact', function() {
             it('should not throw errors when options are given', function(done) {
                 var contact = api.Contacts.newContact();
                 contact.name({first: 'Karen', last: 'Meep'});
+                contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                 api.Contacts.create(contact).then(
                     function(contact){
                         contact.addActivity(activity, api).then(

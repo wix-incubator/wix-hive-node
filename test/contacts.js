@@ -24,6 +24,79 @@ describe('Contacts', function() {
     });
 
     describe('create', function() {
+
+        it('should throw error when not created with at least one email/phone/address', function (done) {
+            var contact = api.Contacts.newContact(api);
+            contact.name({first: 'Karen', last: 'Meep'});
+            expect(api.Contacts.create).withArgs(contact).to.throwException();
+            done();
+        });
+
+        describe('should create contact successfully when given one mandatory field', function() {
+            it('email', function (done) {
+                var contact = api.Contacts.newContact(api);
+                contact.name({first: 'Karen', last: 'Meep'});
+                contact.addEmail({tag: 'home', email: 'karen@home.com', emailStatus: api.Contacts.EMAIL_STATUS_TYPES.TRANSACTIONAL});
+                api.Contacts.create(contact).then(
+                    function (contact) {
+                        contact.id().exists().should.be.eql(true);
+                        contact.id().should.not.equal(undefined);
+                        contact.id().id().should.be.a.String;
+                        contact.id().id().should.not.be.length(0);
+                        done();
+                    },
+                    function (error) {
+                        done(error);
+                    }
+                ).done(null, done);
+            });
+
+            it('phone', function (done) {
+                var contact = api.Contacts.newContact(api);
+                contact.name({first: 'Karen', last: 'Meep'});
+                contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
+                api.Contacts.create(contact).then(
+                    function (contact) {
+                        contact.id().exists().should.be.eql(true);
+                        contact.id().should.not.equal(undefined);
+                        contact.id().id().should.be.a.String;
+                        contact.id().id().should.not.be.length(0);
+                        done();
+                    },
+                    function (error) {
+                        done(error);
+                    }
+                ).done(null, done);
+            });
+
+            it('address', function (done) {
+                var contact = api.Contacts.newContact(api);
+                contact.name({first: 'Karen', last: 'Meep'});
+                contact.addAddress(
+                    {
+                        tag: 'work',
+                        address: '500 Terry A Francois',
+                        city: 'San Francisco',
+                        neighborhood: 'Wixville',
+                        region: 'CA',
+                        country: 'USA',
+                        postalCode: 94158
+                    });
+                api.Contacts.create(contact).then(
+                    function (contact) {
+                        contact.id().exists().should.be.eql(true);
+                        contact.id().should.not.equal(undefined);
+                        contact.id().id().should.be.a.String;
+                        contact.id().id().should.not.be.length(0);
+                        done();
+                    },
+                    function (error) {
+                        done(error);
+                    }
+                ).done(null, done);
+            });
+        });
+
         it('should create new contact with information and return contact id', function (done) {
             var contact = api.Contacts.newContact(api);
             contact.name({first: 'Karen', last: 'Meep'});
@@ -56,6 +129,7 @@ describe('Contacts', function() {
                 }
             ).done(null, done);
         });
+
         it('should create new contact with tag, note and customField and return contact id', function (done) {
             var contact = api.Contacts.newContact(api);
             contact.name({first: 'Karen', last: 'Meep'});
@@ -98,6 +172,7 @@ describe('Contacts', function() {
         it('should return existing contact with information', function (done) {
             var contact = api.Contacts.newContact(api);
             contact.name({first: 'Karen', last: 'Meep'});
+            contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
             api.Contacts.create(contact).then(
                 function (savedContact) {
 
@@ -106,7 +181,6 @@ describe('Contacts', function() {
                             var contact = data;
                             contact.name().first().should.eql("Karen");
                             contact.name().last().should.eql("Meep");
-                            contact.addresses().should.have.length(0);
                             done();
                         },
                         function(error){
@@ -159,6 +233,7 @@ describe('Contacts', function() {
     });
 
     describe('getContacts', function() {
+        this.timeout(10000);
         it('should not throw error when called with no parameters', function (done) {
 
             api.Contacts.getContacts().then(
@@ -217,9 +292,10 @@ describe('Contacts', function() {
     });
 
     describe('getContactsSubscribers', function() {
+        this.timeout(10000);
         it('should not throw error when called with no parameters', function (done) {
 
-            throw 'not implemented';
+            throw 'Pending - HAPI-18';
             api.Contacts.getContactsSubscribers().then(
                 function(pagingContactsResult) {
                     pagingContactsResult.should.not.equal(undefined);
@@ -235,7 +311,7 @@ describe('Contacts', function() {
         });
         it('should return a non-empty list of contacts when called with pageSize parameter', function (done) {
 
-            throw 'not implemented';
+            throw 'Pending - HAPI-18';
             api.Contacts.getContactsSubscribers(null,
                 {
                     status: 'notSet',

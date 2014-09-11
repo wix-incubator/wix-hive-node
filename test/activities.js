@@ -366,13 +366,8 @@ describe('Api', function() {
                 activity.activityLocationUrl = "http://www.wix.com";
                 activity.activityDetails.summary = "test";
                 activity.activityDetails.additionalInfoUrl = "http://www.wix.com";
-                api.Activities.postActivity(activity, "THINGS")
-                    .then(function (data) {
-                        throw new Error("This should not have worked!");
-                    }, function (error) {
-                        error.errorCode.should.eql(400);
-                        done();
-                    }).done(null, done);
+                expect(api.Activities.postActivity).withArgs(activity, "THINGS").to.throwException();
+                done();
             });
 
             describe('Contact Form Activity', function () {
@@ -1106,6 +1101,8 @@ describe('Api', function() {
                 var activity = contactForm;
                 api.Activities.postActivity(activity, SESSION_ID)
                     .then(function (data) {
+
+                        process.nextTick();
                         api.Activities.getActivityById(data).then(
                             function (data) {
                                 var activity = data;
