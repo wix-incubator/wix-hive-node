@@ -32,7 +32,7 @@ describe('Insights', function() {
         });
         it('should return activities summary for Site', function(done) {
 
-            api.Insights.getActivitiesSummary(api.Insights.Scope.Site)
+            api.Insights.getActivitiesSummary(api.Insights.Scope.SITE)
                 .then(function(data) {
                     data.should.not.equal(undefined);
                     data.activityTypes.should.be.a.Array;
