@@ -291,26 +291,6 @@ api.Contacts.getContactById('SOME_CONTACT_ID').then(
 );
 ```
 
-### Get a list of site Contact Subscribers
-Subscribers are Contacts (for the given site) that have opted in to receiving communications from applications.
-
-```js
-api.Contacts.getContactsSubscribers(
-    {
-        status: notSet, // or optIn
-        pageSize: 50 // or 25, 100. Default is 25
-    }
-).then(
-    function(pagingContactsResult) {
-
-        // Contact the site's subscribers
-    },
-    function(error) {
-        throw error;
-    }
-);
-```
-
 ### Get a list of site Activities
 ```js
 
@@ -398,13 +378,11 @@ Note: This code posts an Activity without any connection to a Contact. To post a
 ```js
 api.Activities.postActivity(activity, SESSION_ID)
     .then(function(data) {
-        data.should.not.equal(undefined);
-        data.should.be.a.String;
-        data.should.not.be.empty;
-        data.should.not.be.length(0)
-        done();
+
+        // Great success!
+
     }, function(error) {
-        throw error;
+        console.log ('oh no!');
     });
 ```
 
