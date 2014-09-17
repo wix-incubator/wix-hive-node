@@ -408,6 +408,7 @@ describe('Contact', function() {
 
                 it('should throw error when given an unsaved Email', function (done) {
                     var contact = api.Contacts.newContact();
+                    contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     api.Contacts.create(contact).then(
                         function (contact) {
                             contact.addEmail({tag: 'work', email: 'karenc@wix.com', emailStatus: api.Contacts.EMAIL_STATUS_TYPES.RECURRING});
@@ -485,6 +486,7 @@ describe('Contact', function() {
 
                 it('should throw error when given an unsaved Address', function (done) {
                     var contact = api.Contacts.newContact();
+                    contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     api.Contacts.create(contact).then(
                         function (contact) {
                             contact.addAddress(
@@ -887,9 +889,9 @@ describe('Contact', function() {
 
                 it('should edit customField for Contact', function (done) {
                     var contact = api.Contacts.newContact();
+                    contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     api.Contacts.create(contact).then(
                         function (contact) {
-                            contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                             api.Contacts.getContactById(contact.id().id()).then(
                                 function (contact) {
 
@@ -947,6 +949,7 @@ describe('Contact', function() {
 
                 it('should add new email to Contact', function (done) {
                     var contact = api.Contacts.newContact();
+                    contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     api.Contacts.create(contact).then(
                         function (contact) {
                             contact.addEmail({tag: 'work', email: 'karenc@wix.com', emailStatus: api.Contacts.EMAIL_STATUS_TYPES.RECURRING});
@@ -1049,6 +1052,7 @@ describe('Contact', function() {
 
                 it('should add new phone to Contact', function (done) {
                     var contact = api.Contacts.newContact();
+                    contact.addEmail({tag: 'work', email: 'karenc@wix.com', emailStatus: api.Contacts.EMAIL_STATUS_TYPES.RECURRING});
                     api.Contacts.create(contact).then(
                         function (contact) {
                             contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
@@ -1223,42 +1227,6 @@ describe('Contact', function() {
                                     done(error);
                                 }
                             )
-                        },
-                        function (error) {
-                            done(error);
-                        }
-                    ).done(null, done);
-                });
-            });
-
-            describe('postTags', function () {
-
-                it('should throw error when given an unsaved Contact', function (done) {
-                    var contact = api.Contacts.newContact();
-                    contact.addTag('VIP');
-                    var tag = contact.tags()[0];
-                    expect(contact.postTags).withArgs(tag).to.throwException();
-                    done();
-                });
-
-                it('should add new tag to Contact', function (done) {
-                    throw 'pending HAPI-14';
-                    var contact = api.Contacts.newContact();
-                    contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
-                    api.Contacts.create(contact).then(
-                        function (contact) {
-                            contact.addTag('VIP');
-                            var tag = contact.tags()[0];
-                            contact.postTags(tag).then(
-                                function (contact) {
-                                    var tag = contact.tags()[0];
-                                    tag.should.be.eql('VIP');
-                                    done();
-                                },
-                                function (error) {
-                                    done(error);
-                                }
-                            ).done(null, done);
                         },
                         function (error) {
                             done(error);
