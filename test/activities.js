@@ -1086,6 +1086,7 @@ describe('Api', function() {
         });
 
         describe('getActivityById', function () {
+            this.timeout(10000);
 
             it('should throw exception when not given activity Id', function (done) {
                 expect(api.Activities.getActivityById).to.throwException();
@@ -1102,11 +1103,10 @@ describe('Api', function() {
                 api.Activities.postActivity(activity, SESSION_ID)
                     .then(function (data) {
 
-                        process.nextTick();
                         api.Activities.getActivityById(data).then(
                             function (data) {
                                 var activity = data;
-                                activity.activityType.should.eql(api.Activities.TYPES.CONTACT_FORM.name);
+                                activity.activityType.name.should.eql(api.Activities.TYPES.CONTACT_FORM.name);
                                 activity.activityDetails.additionalInfoUrl.should.eql("http://www.test1.com/");
                                 activity.activityDetails.summary.should.eql("This is a test activity post");
                                 activity.activityLocationUrl.should.eql("http://www.test.com/");
