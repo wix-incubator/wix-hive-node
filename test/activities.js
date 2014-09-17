@@ -30,18 +30,21 @@ describe('Contact', function() {
             it('should throw error when trying to post against a Contact which has not been saved', function(done) {
                 var contact = api.Contacts.newContact();
                 contact.name({first: 'Karen', last: 'Meep'});
+                contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                 expect(contact.addActivity).withArgs(activity, api).to.throwException();
                 done();
             });
             it('should throw error when not providing a Wix API', function(done) {
                 var contact = api.Contacts.newContact();
                 contact.name({first: 'Karen', last: 'Meep'});
+                contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                 expect(contact.addActivity).withArgs(activity).to.throwException();
                 done();
             });
             it('should add Activity for Contact without throwing error', function(done) {
                 var contact = api.Contacts.newContact();
                 contact.name({first: 'Karen', last: 'Meep'});
+                contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                 api.Contacts.create(contact).then(
                     function(contact){
                         contact.addActivity(activity, api).then(
@@ -73,6 +76,7 @@ describe('Contact', function() {
             it('should not throw errors when no options are given', function(done) {
                 var contact = api.Contacts.newContact();
                 contact.name({first: 'Karen', last: 'Meep'});
+                contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                 api.Contacts.create(contact).then(
                     function(contact){
                         contact.addActivity(activity, api).then(
@@ -107,6 +111,7 @@ describe('Contact', function() {
             it('should not throw errors when options are given', function(done) {
                 var contact = api.Contacts.newContact();
                 contact.name({first: 'Karen', last: 'Meep'});
+                contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                 api.Contacts.create(contact).then(
                     function(contact){
                         contact.addActivity(activity, api).then(
