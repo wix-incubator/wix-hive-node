@@ -130,7 +130,7 @@ describe('Contacts', function() {
             ).done(null, done);
         });
 
-        it('should create new contact with tag, note and customField and return contact id', function (done) {
+        it('should create new contact with note and customField and return contact id', function (done) {
             var contact = api.Contacts.newContact(api);
             contact.name({first: 'Karen', last: 'Meep'});
             contact.company({role: 'MyRole', name: 'MyName'});
@@ -149,7 +149,6 @@ describe('Contacts', function() {
                 });
             contact.addDate({ tag: 'work', date: '1994-11-05T13:15:30Z'});
             contact.addUrl({ tag: 'work', url: 'http://www.wix.com/'});
-            contact.addTag('VIP');
             contact.addNote({ content: 'blah blah blah'});
             contact.addCustomField({ field: 'Host', value: 'Wayne Campbell'});
             api.Contacts.create(contact).then(
