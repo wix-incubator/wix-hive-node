@@ -22,8 +22,8 @@ var express = require('express');
 var app = express();
 var wix = require('openapi-node');
 
-var APP_SECRET = 'YOUR_APP_SECRET';
-var APP_ID = 'YOUR_APP_ID';
+var APP_ID = 'YOUR_APP_KEY';
+var APP_SECRET = 'YOUR_APP_SECRET_KEY';
 
 // The route should match the app endpoint set during registration
 app.get('/', function (req, res) {
