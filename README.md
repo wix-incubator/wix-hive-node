@@ -55,7 +55,8 @@ app.get('/', function (req, res) {
 
 app.listen(3000);
 ```
-**Note** Remember to add `Wix.js` to you html files to avoid dismissal. See [javascript sdk](http://dev.wix.com/docs/display/DRAF/JavaScript+SDK)
+
+**Note** Remember to add `Wix.js` to you HTML files to avoid dismissal. See [JavaScript SDK](http://dev.wix.com/docs/display/DRAF/JavaScript+SDK)
 
 ## Examples
 
