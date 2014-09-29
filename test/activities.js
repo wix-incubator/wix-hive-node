@@ -249,15 +249,15 @@ describe('Api', function() {
         var sendMessage = api.Activities.newActivity(api.Activities.TYPES.SEND_MESSAGE);
         sendMessage.withLocationUrl('http://www.wix.com');
         sendMessage.withActivityDetails('test', 'http://www.wix.com');
-        var conversionTarget = { conversionType: 'FAN', metadata: [ {property: 'wix', value: '124'} ] };
-        var recipient = { method: 'SMS', destination: {name: {prefix:'sir', first: 'mix', middle:'a', last:'lot', suffix:'Sr.'},
-            contactId: '1234', conversionTarget: conversionTarget, target: 'localhost'}};
-        sendMessage.activityInfo = {recipient: recipient};
+        var conversionTarget = { conversionType: 'FAN', metadata: [ {name: 'wix', value: '124'} ] };
+        var recipient = { method: 'SMS', contactId: '1234', destination: {name: {prefix:'sir', first: 'mix', middle:'a', last:'lot', suffix:'Sr.'},
+            target: 'localhost'}};
+        sendMessage.activityInfo = {conversionTarget: conversionTarget, recipient: recipient, messageId: '1234'};
 
         var conversion = api.Activities.newActivity(api.Activities.TYPES.CONVERSION_COMPLETE);
         conversion.withLocationUrl('http://www.wix.com');
         conversion.withActivityDetails('test', 'http://www.wix.com');
-        conversion.activityInfo = {metadata:[{property:"Wix", value:"1234"}], conversionType: 'PURCHASE', messageId: "1111"};
+        conversion.activityInfo = {metadata:[{name:"Wix", value:"1234"}], conversionType: 'PURCHASE', messageId: "1111"};
 
         var hotelConfirmation = api.Activities.newActivity(api.Activities.TYPES.HOTELS_CONFIRMATION);
         hotelConfirmation.withLocationUrl('http://www.wix.com');
@@ -277,7 +277,7 @@ describe('Api', function() {
         var ONE_DAY = 60 * 60 * 24;
         var oneDayAgo = new Date(new Date().getTime() - ONE_DAY);
         var stay = { checkin: oneDayAgo, checkout: new Date().toISOString() };
-        var invoice = {total: '1', subtotal: '1'};
+        var invoice = {total: '1', subtotal: '1', currency: 'EUR'};
         hotelCancel.activityInfo = { rates:[], rooms:[], cancelDate: oneDayAgo, refund: refund, guests: guest,
             stay: stay, invoice: invoice };
 
@@ -462,6 +462,7 @@ describe('Api', function() {
                 });
 
                 it('should post activity without optional fields without throwing error', function (done) {
+                    throw 'PENDING - HAPI-45';
                     var activity = conversion;
                     activity.activityInfo = { conversionType: 'PURCHASE' };
                     api.Activities.postActivity(activity, SESSION_ID)
@@ -502,6 +503,9 @@ describe('Api', function() {
                 it('should post activity without optional fields without throwing error', function (done) {
                     var activity = sendMessage;
                     activity.activityInfo = { method: 'SOCIAL', destination: { target: 'localhost'}};
+                    var recipient = { method: 'SMS', contactId: '1234', destination: {name: {prefix:'sir', first: 'mix', middle:'a', last:'lot', suffix:'Sr.'},
+                        target: 'localhost'}};
+                    sendMessage.activityInfo = {recipient: recipient};
                     api.Activities.postActivity(activity, SESSION_ID)
                         .then(function (data) {
                             data.should.not.equal(undefined);
@@ -730,6 +734,7 @@ describe('Api', function() {
                 describe('Album Activities', function () {
                     describe('Album Fan Activity', function () {
                         it('should post full activity without throwing error', function (done) {
+                            throw 'PENDING - HAPI-43';
                             var activity = albumFan;
                             api.Activities.postActivity(activity, SESSION_ID)
                                 .then(function (data) {
@@ -744,6 +749,7 @@ describe('Api', function() {
                         });
 
                         it('should post activity without optional fields without throwing error', function (done) {
+                            throw 'PENDING - HAPI-43';
                             var activity = albumFan;
                             activity.activityInfo = { artist: { name: 'Wix' }, album: { name: 'Wix' } };
                             api.Activities.postActivity(activity, SESSION_ID)
@@ -779,6 +785,7 @@ describe('Api', function() {
 
                     describe('Album Share Activity', function () {
                         it('should post full activity without throwing error', function (done) {
+                            throw 'PENDING - HAPI-41';
                             var activity = albumShare;
                             api.Activities.postActivity(activity, SESSION_ID)
                                 .then(function (data) {
@@ -793,6 +800,7 @@ describe('Api', function() {
                         });
 
                         it('should post activity without optional fields without throwing error', function (done) {
+                            throw 'PENDING - HAPI-41';
                             var activity = albumShare;
                             activity.activityInfo = { artist: { name: 'Wix' }, album: { name: 'Wix' }, sharedTo: 'FACEBOOK' };
                             api.Activities.postActivity(activity, SESSION_ID)
@@ -837,6 +845,7 @@ describe('Api', function() {
 
                     describe('Track Lyrics Activity', function () {
                         it('should post full track lyrics activity without throwing error', function (done) {
+                            throw 'PENDING - HAPI-37';
                             var activity = trackLyrics;
                             api.Activities.postActivity(activity, SESSION_ID)
                                 .then(function (data) {
@@ -850,6 +859,7 @@ describe('Api', function() {
                                 }).done(null, done);
                         });
                         it('should post activity without optional fields without throwing error', function (done) {
+                            throw 'PENDING - HAPI-37';
                             var activity = trackLyrics;
                             activity.activityInfo = { artist: { name: 'Wix' }, track: { name: 'Wix' } };
                             api.Activities.postActivity(activity, SESSION_ID)
@@ -885,6 +895,7 @@ describe('Api', function() {
                     describe('Track Play Activity', function () {
 
                         it('should post full activity without throwing error', function (done) {
+                            throw 'PENDING - HAPI-38';
                             var activity = trackPlay;
                             api.Activities.postActivity(activity, SESSION_ID)
                                 .then(function (data) {
@@ -898,6 +909,7 @@ describe('Api', function() {
                                 }).done(null, done);
                         });
                         it('should post activity without optional fields throwing error', function (done) {
+                            throw 'PENDING - HAPI-38';
                             var activity = trackPlay;
                             activity.activityInfo = { artist: { name: 'Wix' }, track: { name: 'Wix' } };
                             api.Activities.postActivity(activity, SESSION_ID)
@@ -934,6 +946,7 @@ describe('Api', function() {
                     describe('Track Played Activity', function () {
 
                         it('should post full activity without throwing error', function (done) {
+                            throw 'PENDING - HAPI-39';
                             var activity = trackPlayed;
                             api.Activities.postActivity(activity, SESSION_ID)
                                 .then(function (data) {
@@ -948,6 +961,7 @@ describe('Api', function() {
                         });
 
                         it('should post activity without optional fields throwing error', function (done) {
+                            throw 'PENDING - HAPI-39';
                             var activity = trackPlayed;
                             activity.activityInfo = { artist: { name: 'Wix' }, track: { name: 'Wix' } };
                             api.Activities.postActivity(activity, SESSION_ID)
@@ -984,6 +998,7 @@ describe('Api', function() {
                     describe('Track Skip Activity', function () {
 
                         it('should post full activity without throwing error', function (done) {
+                            throw 'PENDING - HAPI-40';
                             var activity = trackSkip;
                             api.Activities.postActivity(activity, SESSION_ID)
                                 .then(function (data) {
@@ -998,6 +1013,7 @@ describe('Api', function() {
                         });
 
                         it('should post activity without optional fields throwing error', function (done) {
+                            throw 'PENDING - HAPI-40';
                             var activity = trackSkip;
                             activity.activityInfo = { artist: { name: 'Wix' }, track: { name: 'Wix' } };
                             api.Activities.postActivity(activity, SESSION_ID)
@@ -1033,6 +1049,7 @@ describe('Api', function() {
                     describe('Track Share Activity', function () {
 
                         it('should post full activity without throwing error', function (done) {
+                            throw 'PENDING - HAPI-41';
                             var activity = trackShare;
                             api.Activities.postActivity(activity, SESSION_ID)
                                 .then(function (data) {
@@ -1047,6 +1064,7 @@ describe('Api', function() {
                         });
 
                         it('should post activity without optional fields without throwing error', function (done) {
+                            throw 'PENDING - HAPI-41';
                             var activity = trackShare;
                             activity.activityInfo = { artist: { name: 'Wix' }, track: { name: 'Wix' }, sharedTo: 'FACEBOOK' };
                             api.Activities.postActivity(activity, SESSION_ID)

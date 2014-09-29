@@ -131,6 +131,7 @@ describe('Contacts', function() {
         });
 
         it('should create new contact with note and customField and return contact id', function (done) {
+            throw 'PENDING -  HAPI-6';
             var contact = api.Contacts.newContact(api);
             contact.name({first: 'Karen', last: 'Meep'});
             contact.company({role: 'MyRole', name: 'MyName'});
