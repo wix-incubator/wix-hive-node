@@ -462,7 +462,7 @@ describe('Api', function() {
                 });
 
                 it('should post activity without optional fields without throwing error', function (done) {
-                    throw 'PENDING - HAPI-45';
+
                     var activity = conversion;
                     activity.activityInfo = { conversionType: 'PURCHASE' };
                     api.Activities.postActivity(activity, SESSION_ID)
