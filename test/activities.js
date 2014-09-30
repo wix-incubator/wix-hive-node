@@ -734,7 +734,6 @@ describe('Api', function() {
                 describe('Album Activities', function () {
                     describe('Album Fan Activity', function () {
                         it('should post full activity without throwing error', function (done) {
-                            throw 'PENDING - HAPI-43';
                             var activity = albumFan;
                             api.Activities.postActivity(activity, SESSION_ID)
                                 .then(function (data) {
@@ -749,7 +748,6 @@ describe('Api', function() {
                         });
 
                         it('should post activity without optional fields without throwing error', function (done) {
-                            throw 'PENDING - HAPI-43';
                             var activity = albumFan;
                             activity.activityInfo = { artist: { name: 'Wix' }, album: { name: 'Wix' } };
                             api.Activities.postActivity(activity, SESSION_ID)
@@ -785,7 +783,6 @@ describe('Api', function() {
 
                     describe('Album Share Activity', function () {
                         it('should post full activity without throwing error', function (done) {
-                            throw 'PENDING - HAPI-41';
                             var activity = albumShare;
                             api.Activities.postActivity(activity, SESSION_ID)
                                 .then(function (data) {
@@ -800,7 +797,6 @@ describe('Api', function() {
                         });
 
                         it('should post activity without optional fields without throwing error', function (done) {
-                            throw 'PENDING - HAPI-41';
                             var activity = albumShare;
                             activity.activityInfo = { artist: { name: 'Wix' }, album: { name: 'Wix' }, sharedTo: 'FACEBOOK' };
                             api.Activities.postActivity(activity, SESSION_ID)
@@ -845,7 +841,6 @@ describe('Api', function() {
 
                     describe('Track Lyrics Activity', function () {
                         it('should post full track lyrics activity without throwing error', function (done) {
-                            throw 'PENDING - HAPI-37';
                             var activity = trackLyrics;
                             api.Activities.postActivity(activity, SESSION_ID)
                                 .then(function (data) {
@@ -859,7 +854,6 @@ describe('Api', function() {
                                 }).done(null, done);
                         });
                         it('should post activity without optional fields without throwing error', function (done) {
-                            throw 'PENDING - HAPI-37';
                             var activity = trackLyrics;
                             activity.activityInfo = { artist: { name: 'Wix' }, track: { name: 'Wix' } };
                             api.Activities.postActivity(activity, SESSION_ID)
@@ -895,7 +889,6 @@ describe('Api', function() {
                     describe('Track Play Activity', function () {
 
                         it('should post full activity without throwing error', function (done) {
-                            throw 'PENDING - HAPI-38';
                             var activity = trackPlay;
                             api.Activities.postActivity(activity, SESSION_ID)
                                 .then(function (data) {
@@ -909,7 +902,6 @@ describe('Api', function() {
                                 }).done(null, done);
                         });
                         it('should post activity without optional fields throwing error', function (done) {
-                            throw 'PENDING - HAPI-38';
                             var activity = trackPlay;
                             activity.activityInfo = { artist: { name: 'Wix' }, track: { name: 'Wix' } };
                             api.Activities.postActivity(activity, SESSION_ID)
@@ -946,7 +938,6 @@ describe('Api', function() {
                     describe('Track Played Activity', function () {
 
                         it('should post full activity without throwing error', function (done) {
-                            throw 'PENDING - HAPI-39';
                             var activity = trackPlayed;
                             api.Activities.postActivity(activity, SESSION_ID)
                                 .then(function (data) {
@@ -961,7 +952,6 @@ describe('Api', function() {
                         });
 
                         it('should post activity without optional fields throwing error', function (done) {
-                            throw 'PENDING - HAPI-39';
                             var activity = trackPlayed;
                             activity.activityInfo = { artist: { name: 'Wix' }, track: { name: 'Wix' } };
                             api.Activities.postActivity(activity, SESSION_ID)
@@ -998,7 +988,6 @@ describe('Api', function() {
                     describe('Track Skip Activity', function () {
 
                         it('should post full activity without throwing error', function (done) {
-                            throw 'PENDING - HAPI-40';
                             var activity = trackSkip;
                             api.Activities.postActivity(activity, SESSION_ID)
                                 .then(function (data) {
@@ -1013,7 +1002,6 @@ describe('Api', function() {
                         });
 
                         it('should post activity without optional fields throwing error', function (done) {
-                            throw 'PENDING - HAPI-40';
                             var activity = trackSkip;
                             activity.activityInfo = { artist: { name: 'Wix' }, track: { name: 'Wix' } };
                             api.Activities.postActivity(activity, SESSION_ID)
@@ -1049,7 +1037,6 @@ describe('Api', function() {
                     describe('Track Share Activity', function () {
 
                         it('should post full activity without throwing error', function (done) {
-                            throw 'PENDING - HAPI-41';
                             var activity = trackShare;
                             api.Activities.postActivity(activity, SESSION_ID)
                                 .then(function (data) {
@@ -1064,7 +1051,6 @@ describe('Api', function() {
                         });
 
                         it('should post activity without optional fields without throwing error', function (done) {
-                            throw 'PENDING - HAPI-41';
                             var activity = trackShare;
                             activity.activityInfo = { artist: { name: 'Wix' }, track: { name: 'Wix' }, sharedTo: 'FACEBOOK' };
                             api.Activities.postActivity(activity, SESSION_ID)
