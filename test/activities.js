@@ -241,6 +241,11 @@ describe('Api', function() {
         albumFan.withActivityDetails('test', 'http://www.wix.com');
         albumFan.activityInfo = { artist: { name: 'Wix', id: '1234' }, album: { name: 'Wix', id: '1234' } };
 
+        var albumPlayed = api.Activities.newActivity(api.Activities.TYPES.ALBUM_PLAYED);
+        albumPlayed.withLocationUrl('http://www.wix.com');
+        albumPlayed.withActivityDetails('test', 'http://www.wix.com');
+        albumPlayed.activityInfo = { artist: { name: 'Wix', id: '1234' }, album: { name: 'Wix', id: '1234' } };
+
         var albumShare = api.Activities.newActivity(api.Activities.TYPES.ALBUM_SHARE);
         albumShare.withLocationUrl('http://www.wix.com');
         albumShare.withActivityDetails('test', 'http://www.wix.com');
@@ -712,9 +717,6 @@ describe('Api', function() {
                         });
                         it('payment', function (done) {
                             var activity = ecommPurchase;
-                            var coupon = {total: '1', title: 'Dis'};
-                            var tax = {total: 1};
-                            var shipping = {total: 1, formattedTotal: 1};
                             var item = {id: 1, title: 'title', quantity: 1, currency: 'EUR', variants: [{title: 'title', value: '1'}]};
                             var purchase = {
                                 cartId: '11111',
@@ -830,6 +832,54 @@ describe('Api', function() {
                             it('sharedTo', function (done) {
                                 var activity = albumShare;
                                 activity.activityInfo = { artist: { name: 'Wix' }, album: { name: 'Wix' }};
+                                expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                                done();
+                            });
+                        });
+                    });
+
+                    describe('Album Played Activity', function () {
+                        it('should post full activity without throwing error', function (done) {
+                            var activity = albumPlayed;
+                            api.Activities.postActivity(activity, SESSION_ID)
+                                .then(function (data) {
+                                    data.should.not.equal(undefined);
+                                    data.should.be.a.String;
+                                    data.should.not.be.empty;
+                                    data.should.not.be.length(0);
+                                    done();
+                                }, function (error) {
+                                    done(error);
+                                }).done(null, done);
+                        });
+
+                        it('should post activity without optional fields without throwing error', function (done) {
+                            var activity = albumPlayed;
+                            activity.activityInfo = { artist: { name: 'Wix' }, album: { name: 'Wix' } };
+                            api.Activities.postActivity(activity, SESSION_ID)
+                                .then(function (data) {
+                                    data.should.not.equal(undefined);
+                                    data.should.be.a.String;
+                                    data.should.not.be.empty;
+                                    data.should.not.be.length(0);
+                                    done();
+                                }, function (error) {
+                                    done(error);
+                                }).done(null, done);
+                        });
+
+                        describe('should throw error when posting activity without mandatory fields', function () {
+
+                            it('artist.name', function (done) {
+                                var activity = albumPlayed;
+                                activity.activityInfo = { album: { name: 'Wix' } };
+                                expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                                done();
+                            });
+
+                            it('album.name', function (done) {
+                                var activity = albumPlayed;
+                                activity.activityInfo = { artist: { name: 'Wix' } };
                                 expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
                                 done();
                             });
