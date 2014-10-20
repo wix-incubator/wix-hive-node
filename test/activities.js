@@ -46,18 +46,26 @@ describe('Contact', function() {
                 contact.name({first: 'Karen', last: 'Meep'});
                 contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                 api.Contacts.create(contact).then(
-                    function(contact){
-                        contact.addActivity(activity, api).then(
-                            function(data){
-                                data.activityId.should.be.a.String;
-                                data.contactId.should.be.a.String;
-                                data.contactId.should.be.eql(contact.id().id());
-                                done();
+                    function (contactId) {
+
+                        api.Contacts.getContactById(contactId).then(
+                            function(contact) {
+                                contact.addActivity(activity).then(
+                                    function (data) {
+                                        data.activityId.should.be.a.String;
+                                        data.contactId.should.be.a.String;
+                                        data.contactId.should.be.eql(contact.id().id());
+                                        done();
+                                    },
+                                    function (error) {
+                                        done(error);
+                                    }
+                                );
                             },
                             function(error){
                                 done(error);
                             }
-                        );
+                        ).done(null,done);
                     },
                     function(error){
                         done(error);
@@ -78,19 +86,26 @@ describe('Contact', function() {
                 contact.name({first: 'Karen', last: 'Meep'});
                 contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                 api.Contacts.create(contact).then(
-                    function(contact){
-                        contact.addActivity(activity, api).then(
-                            function(data){
-                                data.activityId.should.be.a.String;
-                                data.contactId.should.be.a.String;
-                                data.contactId.should.be.eql(contact.id().id());
+                    function (contactId) {
+                        api.Contacts.getContactById(contactId).then(
+                            function(contact) {
+                                contact.addActivity(activity, api).then(
+                                    function(data){
+                                        data.activityId.should.be.a.String;
+                                        data.contactId.should.be.a.String;
+                                        data.contactId.should.be.eql(contact.id().id());
 
-                                contact.getActivities().then(
-                                    function(pagingActivitiesResult){
-                                        var activities = pagingActivitiesResult.results;
-                                        activities.should.have.length(1);
-                                        should.exist(pagingActivitiesResult.pageSize);
-                                        done();
+                                        contact.getActivities().then(
+                                            function(pagingActivitiesResult){
+                                                var activities = pagingActivitiesResult.results;
+                                                activities.should.have.length(1);
+                                                should.exist(pagingActivitiesResult.pageSize);
+                                                done();
+                                            },
+                                            function(error){
+                                                done(error);
+                                            }
+                                        ).done(null, done);
                                     },
                                     function(error){
                                         done(error);
@@ -100,7 +115,7 @@ describe('Contact', function() {
                             function(error){
                                 done(error);
                             }
-                        ).done(null, done);
+                        ).done(null,done);
                     },
                     function(error){
                         done(error);
@@ -113,31 +128,40 @@ describe('Contact', function() {
                 contact.name({first: 'Karen', last: 'Meep'});
                 contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                 api.Contacts.create(contact).then(
-                    function(contact){
-                        contact.addActivity(activity, api).then(
-                            function(data){
-                                data.activityId.should.be.a.String;
-                                data.contactId.should.be.a.String;
-                                data.contactId.should.be.eql(contact.id().id());
+                    function (contactId) {
 
-                                var ONE_HOUR = 60 * 60 * 1000;
-                                var oneHourAgo = new Date(new Date().getTime() - ONE_HOUR);
+                        api.Contacts.getContactById(contactId).then(
+                            function(contact) {
+                                contact.addActivity(activity).then(
 
-                                contact.getActivities(null,
-                                    {
-                                        from: oneHourAgo.toISOString(),
-                                        until: new Date().toISOString(),
-                                        activityTypes: [api.Activities.TYPES.ALBUM_FAN.name, api.Activities.TYPES.ALBUM_SHARE.name],
-                                        scope: 'app',
-                                        pageSize: 50
-                                    }).then(
-                                    function(pagingActivitiesResult){
-                                        var activities = pagingActivitiesResult.results;
-                                        activities.should.have.length(1);
-                                        should.exist(pagingActivitiesResult.pageSize);
-                                        should.exist(pagingActivitiesResult.pageSize);
-                                        assert(pagingActivitiesResult.pageSize <= 50);
-                                        done();
+                                    function(data){
+                                        data.activityId.should.be.a.String;
+                                        data.contactId.should.be.a.String;
+                                        data.contactId.should.be.eql(contact.id().id());
+
+                                        var ONE_HOUR = 60 * 60 * 1000;
+                                        var oneHourAgo = new Date(new Date().getTime() - ONE_HOUR);
+
+                                        contact.getActivities(null,
+                                            {
+                                                from: oneHourAgo.toISOString(),
+                                                until: new Date().toISOString(),
+                                                activityTypes: [api.Activities.TYPES.ALBUM_FAN.name, api.Activities.TYPES.ALBUM_SHARE.name],
+                                                scope: 'app',
+                                                pageSize: 50
+                                            }).then(
+                                            function(pagingActivitiesResult){
+                                                var activities = pagingActivitiesResult.results;
+                                                activities.should.have.length(1);
+                                                should.exist(pagingActivitiesResult.pageSize);
+                                                should.exist(pagingActivitiesResult.pageSize);
+                                                assert(pagingActivitiesResult.pageSize <= 50);
+                                                done();
+                                            },
+                                            function(error){
+                                                done(error);
+                                            }
+                                        ).done(null, done);
                                     },
                                     function(error){
                                         done(error);

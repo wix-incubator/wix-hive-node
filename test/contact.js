@@ -131,7 +131,7 @@ describe('Contact', function() {
                 contact.addDate({ tag: 'work', date: '1994-11-05T13:15:30Z'});
                 contact.addUrl({ tag: 'work', url: 'http://www.wix.com/'});
 
-                api.Contacts.create(contact).then(
+                createAndGet(api,contact).then(
                     function (contact) {
 
                         contact.update().then(
@@ -215,7 +215,7 @@ describe('Contact', function() {
                     });
                 contact.addDate({ tag: 'work', date: '1994-11-05T13:15:30Z'});
                 contact.addUrl({ tag: 'work', url: 'http://www.wix.com/'});
-                api.Contacts.create(contact).then(
+                createAndGet(api,contact).then(
                     function (contact) {
 
                         delete contact.phones()[0];
@@ -296,25 +296,32 @@ describe('Contact', function() {
                     contact.name({first: 'Karen', last: 'Meep'});
                     contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     api.Contacts.create(contact).then(
-                        function (contact) {
-                            contact.name().prefix('Sir');
-                            contact.name().first('Mix');
-                            contact.name().middle('A');
-                            contact.name().last('Lot');
-                            contact.name().suffix('The III');
-                            contact.updateName().then(
-                                function (contact) {
-                                    contact.name().prefix().should.be.eql('Sir');
-                                    contact.name().first().should.be.eql('Mix');
-                                    contact.name().middle().should.be.eql('A');
-                                    contact.name().last().should.be.eql('Lot');
-                                    contact.name().suffix().should.be.eql('The III');
-                                    done();
+                        function (contactId) {
+                            api.Contacts.getContactById(contactId).then(
+                                function(contact) {
+                                    contact.name().prefix('Sir');
+                                    contact.name().first('Mix');
+                                    contact.name().middle('A');
+                                    contact.name().last('Lot');
+                                    contact.name().suffix('The III');
+                                    contact.updateName().then(
+                                        function (contact) {
+                                            contact.name().prefix().should.be.eql('Sir');
+                                            contact.name().first().should.be.eql('Mix');
+                                            contact.name().middle().should.be.eql('A');
+                                            contact.name().last().should.be.eql('Lot');
+                                            contact.name().suffix().should.be.eql('The III');
+                                            done();
+                                        },
+                                        function (error) {
+                                            done(error);
+                                        }
+                                    );
                                 },
                                 function (error) {
                                     done(error);
                                 }
-                            );
+                            ).done(null, done);
                         },
                         function (error) {
                             done(error);
@@ -337,17 +344,24 @@ describe('Contact', function() {
                     contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     contact.picture('http://elcaminodeamanda.files.wordpress.com/2011/03/mc_hammer.png');
                     api.Contacts.create(contact).then(
-                        function (contact) {
-                            contact.picture('http://assets.objectiface.com/hashed_silo_content/silo_content/6506/resized/mchammer.jpg');
-                            contact.updatePicture().then(
-                                function (contact) {
-                                    contact.picture().should.be.eql('http://assets.objectiface.com/hashed_silo_content/silo_content/6506/resized/mchammer.jpg');
-                                    done();
+                        function (contactId) {
+                            api.Contacts.getContactById(contactId).then(
+                                function(contact) {
+                                    contact.picture('http://assets.objectiface.com/hashed_silo_content/silo_content/6506/resized/mchammer.jpg');
+                                    contact.updatePicture().then(
+                                        function (contact) {
+                                            contact.picture().should.be.eql('http://assets.objectiface.com/hashed_silo_content/silo_content/6506/resized/mchammer.jpg');
+                                            done();
+                                        },
+                                        function (error) {
+                                            done(error);
+                                        }
+                                    );
                                 },
                                 function (error) {
                                     done(error);
                                 }
-                            );
+                            ).done(null, done);
                         },
                         function (error) {
                             done(error);
@@ -370,18 +384,25 @@ describe('Contact', function() {
                     contact.company({role: 'MyRole', name: 'MyName'});
                     contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     api.Contacts.create(contact).then(
-                        function (contact) {
-                            contact.company({role: 'MyRole1', name: 'MyName1'});
-                            contact.updateCompany().then(
-                                function (contact) {
-                                    contact.company().role().should.be.eql('MyRole1');
-                                    contact.company().name().should.be.eql('MyName1');
-                                    done();
+                        function (contactId) {
+                            api.Contacts.getContactById(contactId).then(
+                                function(contact) {
+                                    contact.company({role: 'MyRole1', name: 'MyName1'});
+                                    contact.updateCompany().then(
+                                        function (contact) {
+                                            contact.company().role().should.be.eql('MyRole1');
+                                            contact.company().name().should.be.eql('MyName1');
+                                            done();
+                                        },
+                                        function (error) {
+                                            done(error);
+                                        }
+                                    );
                                 },
                                 function (error) {
                                     done(error);
                                 }
-                            );
+                            ).done(null, done);
                         },
                         function (error) {
                             done(error);
@@ -410,10 +431,17 @@ describe('Contact', function() {
                     var contact = api.Contacts.newContact();
                     contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     api.Contacts.create(contact).then(
-                        function (contact) {
-                            contact.addEmail({tag: 'work', email: 'karenc@wix.com', emailStatus: api.Contacts.EMAIL_STATUS_TYPES.RECURRING});
-                            expect(contact.updateEmail).withArgs(contact.emails()[0]).to.throwException();
-                            done();
+                        function (contactId) {
+                            api.Contacts.getContactById(contactId).then(
+                                function(contact) {
+                                    contact.addEmail({tag: 'work', email: 'karenc@wix.com', emailStatus: api.Contacts.EMAIL_STATUS_TYPES.RECURRING});
+                                    expect(contact.updateEmail).withArgs(contact.emails()[0]).to.throwException();
+                                    done();
+                                },
+                                function (error) {
+                                    done(error);
+                                }
+                            ).done(null, done);
                         },
                         function (error) {
                             done(error);
@@ -425,10 +453,9 @@ describe('Contact', function() {
                     var contact = api.Contacts.newContact();
                     contact.addEmail({tag: 'work', email: 'karenc@wix.com', emailStatus: api.Contacts.EMAIL_STATUS_TYPES.RECURRING});
                     api.Contacts.create(contact).then(
-                        function (contact) {
-
-                            api.Contacts.getContactById(contact.id().id()).then(
-                                function (contact) {
+                        function (contactId) {
+                            api.Contacts.getContactById(contactId).then(
+                                function(contact) {
 
                                     var email = contact.emails()[0];
                                     email.email('karen@home.com');
@@ -488,20 +515,28 @@ describe('Contact', function() {
                     var contact = api.Contacts.newContact();
                     contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     api.Contacts.create(contact).then(
-                        function (contact) {
-                            contact.addAddress(
-                                {
-                                    tag: 'work',
-                                    address: '500 Terry A Francois',
-                                    city: 'San Francisco',
-                                    neighborhood: 'Wixville',
-                                    region: 'CA',
-                                    country: 'USA',
-                                    postalCode: '94158'
-                                });
-                            var address = contact.addresses()[0];
-                            expect(contact.updateAddress).withArgs(address).to.throwException();
-                            done();
+                        function (contactId) {
+                            api.Contacts.getContactById(contactId).then(
+                                function(contact) {
+
+                                    contact.addAddress(
+                                        {
+                                            tag: 'work',
+                                            address: '500 Terry A Francois',
+                                            city: 'San Francisco',
+                                            neighborhood: 'Wixville',
+                                            region: 'CA',
+                                            country: 'USA',
+                                            postalCode: '94158'
+                                        });
+                                    var address = contact.addresses()[0];
+                                    expect(contact.updateAddress).withArgs(address).to.throwException();
+                                    done();
+                                },
+                                function (error) {
+                                    done(error);
+                                }
+                            ).done(null, done);
                         },
                         function (error) {
                             done(error);
@@ -522,10 +557,9 @@ describe('Contact', function() {
                             postalCode: '94158'
                         });
                     api.Contacts.create(contact).then(
-                        function (contact) {
-
-                            api.Contacts.getContactById(contact.id().id()).then(
-                                function (contact) {
+                        function (contactId) {
+                            api.Contacts.getContactById(contactId).then(
+                                function(contact) {
 
                                     var address = contact.addresses()[0];
                                     address.id().should.be.a.Number;
@@ -587,11 +621,18 @@ describe('Contact', function() {
                     var contact = api.Contacts.newContact();
                     contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     api.Contacts.create(contact).then(
-                        function (contact) {
-                            contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
-                            var phone = contact.phones()[0];
-                            expect(contact.updatePhone).withArgs(phone).to.throwException();
-                            done();
+                        function (contactId) {
+                            api.Contacts.getContactById(contactId).then(
+                                function(contact) {
+                                    contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
+                                    var phone = contact.phones()[0];
+                                    expect(contact.updatePhone).withArgs(phone).to.throwException();
+                                    done();
+                                },
+                                function (error) {
+                                    done(error);
+                                }
+                            ).done(null, done);
                         },
                         function (error) {
                             done(error);
@@ -603,10 +644,9 @@ describe('Contact', function() {
                     var contact = api.Contacts.newContact();
                     contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     api.Contacts.create(contact).then(
-                        function (contact) {
-
-                            api.Contacts.getContactById(contact.id().id()).then(
-                                function (contact) {
+                        function (contactId) {
+                            api.Contacts.getContactById(contactId).then(
+                                function(contact) {
 
                                     var phone = contact.phones()[0];
                                     phone.id().should.be.a.Number;
@@ -657,11 +697,18 @@ describe('Contact', function() {
                     var contact = api.Contacts.newContact();
                     contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     api.Contacts.create(contact).then(
-                        function (contact) {
-                            contact.addUrl({ tag: 'work', url: 'http://www.wix.com/'});
-                            var url = contact.urls()[0];
-                            expect(contact.updateUrl).withArgs(url).to.throwException();
-                            done();
+                        function (contactId) {
+                            api.Contacts.getContactById(contactId).then(
+                                function(contact) {
+                                    contact.addUrl({ tag: 'work', url: 'http://www.wix.com/'});
+                                    var url = contact.urls()[0];
+                                    expect(contact.updateUrl).withArgs(url).to.throwException();
+                                    done();
+                                },
+                                function (error) {
+                                    done(error);
+                                }
+                            ).done(null, done);
                         },
                         function (error) {
                             done(error);
@@ -674,10 +721,9 @@ describe('Contact', function() {
                     contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     contact.addUrl({ tag: 'work', url: 'http://www.wix.com/'});
                     api.Contacts.create(contact).then(
-                        function (contact) {
-
-                            api.Contacts.getContactById(contact.id().id()).then(
-                                function (contact) {
+                        function (contactId) {
+                            api.Contacts.getContactById(contactId).then(
+                                function(contact) {
 
                                     var url = contact.urls()[0];
                                     url.id().should.be.a.Number;
@@ -730,11 +776,18 @@ describe('Contact', function() {
                     var contact = api.Contacts.newContact();
                     contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     api.Contacts.create(contact).then(
-                        function (contact) {
-                            contact.addDate({ tag: 'work', date: '1994-11-05T13:15:30Z'});
-                            var date = contact.dates()[0];
-                            expect(contact.updateDate).withArgs(date).to.throwException();
-                            done();
+                        function (contactId) {
+                            api.Contacts.getContactById(contactId).then(
+                                function(contact) {
+                                    contact.addDate({ tag: 'work', date: '1994-11-05T13:15:30Z'});
+                                    var date = contact.dates()[0];
+                                    expect(contact.updateDate).withArgs(date).to.throwException();
+                                    done();
+                                },
+                                function (error) {
+                                    done(error);
+                                }
+                            ).done(null, done);
                         },
                         function (error) {
                             done(error);
@@ -747,10 +800,9 @@ describe('Contact', function() {
                     contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     contact.addDate({ tag: 'work', date: '1994-11-05T13:15:30Z'});
                     api.Contacts.create(contact).then(
-                        function (contact) {
-
-                            api.Contacts.getContactById(contact.id().id()).then(
-                                function (contact) {
+                        function (contactId) {
+                            api.Contacts.getContactById(contactId).then(
+                                function(contact) {
 
                                     var date = contact.dates()[0];
                                     date.id().should.be.a.Number;
@@ -805,11 +857,18 @@ describe('Contact', function() {
                     var contact = api.Contacts.newContact();
                     contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     api.Contacts.create(contact).then(
-                        function (contact) {
-                            contact.addNote({ content: 'I like big Wix and I cannot lie'});
-                            var note = contact.notes()[0];
-                            expect(contact.updateNote).withArgs(note).to.throwException();
-                            done();
+                        function (contactId) {
+                            api.Contacts.getContactById(contactId).then(
+                                function(contact) {
+                                    contact.addNote({ content: 'I like big Wix and I cannot lie'});
+                                    var note = contact.notes()[0];
+                                    expect(contact.updateNote).withArgs(note).to.throwException();
+                                    done();
+                                },
+                                function (error) {
+                                    done(error);
+                                }
+                            ).done(null, done);
                         },
                         function (error) {
                             done(error);
@@ -821,28 +880,35 @@ describe('Contact', function() {
                     var contact = api.Contacts.newContact();
                     contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     api.Contacts.create(contact).then(
-                        function (contact) {
+                        function (contactId) {
+                            api.Contacts.getContactById(contactId).then(
+                                function(contact) {
 
-                            contact.addNote({ content: 'I like big Wix and I cannot lie'});
-                            var note = contact.notes()[0];
-                            contact.postNote(note).then(
-                                function(contact){
+                                    contact.addNote({ content: 'I like big Wix and I cannot lie'});
                                     var note = contact.notes()[0];
-                                    note.content('I like big butts and I cannot lie');
-                                    contact.updateNote(note).then(
-                                        function (contact) {
+                                    contact.postNote(note).then(
+                                        function(contact){
                                             var note = contact.notes()[0];
-                                            note.id().should.be.a.Number;
-                                            note.content().should.be.eql('I like big butts and I cannot lie');
-                                            done();
+                                            note.content('I like big butts and I cannot lie');
+                                            contact.updateNote(note).then(
+                                                function (contact) {
+                                                    var note = contact.notes()[0];
+                                                    note.id().should.be.a.Number;
+                                                    note.content().should.be.eql('I like big butts and I cannot lie');
+                                                    done();
+                                                },
+                                                function (error) {
+                                                    done(error);
+                                                }
+                                            ).done(null, done);
+
                                         },
-                                        function (error) {
+                                        function(error){
                                             done(error);
                                         }
                                     ).done(null, done);
-
                                 },
-                                function(error){
+                                function (error) {
                                     done(error);
                                 }
                             ).done(null, done);
@@ -875,11 +941,18 @@ describe('Contact', function() {
                     var contact = api.Contacts.newContact();
                     contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     api.Contacts.create(contact).then(
-                        function (contact) {
-                            contact.addCustomField({ field: 'Host', value: 'Wayne Campbell'});
-                            var customField = contact.customFields()[0];
-                            expect(contact.updateCustomField).withArgs(customField).to.throwException();
-                            done();
+                        function (contactId) {
+                            api.Contacts.getContactById(contactId).then(
+                                function(contact) {
+                                    contact.addCustomField({ field: 'Host', value: 'Wayne Campbell'});
+                                    var customField = contact.customFields()[0];
+                                    expect(contact.updateCustomField).withArgs(customField).to.throwException();
+                                    done();
+                                },
+                                function (error) {
+                                    done(error);
+                                }
+                            ).done(null, done);
                         },
                         function (error) {
                             done(error);
@@ -891,9 +964,9 @@ describe('Contact', function() {
                     var contact = api.Contacts.newContact();
                     contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     api.Contacts.create(contact).then(
-                        function (contact) {
-                            api.Contacts.getContactById(contact.id().id()).then(
-                                function (contact) {
+                        function (contactId) {
+                            api.Contacts.getContactById(contactId).then(
+                                function(contact) {
 
                                     contact.addCustomField({ field: 'Host', value: 'Wayne Campbell'});
                                     var cf = contact.customFields()[0];
@@ -951,18 +1024,25 @@ describe('Contact', function() {
                     var contact = api.Contacts.newContact();
                     contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     api.Contacts.create(contact).then(
-                        function (contact) {
-                            contact.addEmail({tag: 'work', email: 'karenc@wix.com', emailStatus: api.Contacts.EMAIL_STATUS_TYPES.RECURRING});
-                            var email = contact.emails()[0];
-                            contact.postEmail(email).then(
-                                function (contact) {
+                        function (contactId) {
+                            api.Contacts.getContactById(contactId).then(
+                                function(contact) {
+                                    contact.addEmail({tag: 'work', email: 'karenc@wix.com', emailStatus: api.Contacts.EMAIL_STATUS_TYPES.RECURRING});
                                     var email = contact.emails()[0];
-                                    email.id().should.be.a.Number;
-                                    email.id().should.not.be.eql(undefined);
-                                    email.email().should.be.eql('karenc@wix.com');
-                                    email.tag().should.be.eql('work');
-                                    email.emailStatus().should.be.eql(api.Contacts.EMAIL_STATUS_TYPES.RECURRING);
-                                    done();
+                                    contact.postEmail(email).then(
+                                        function (contact) {
+                                            var email = contact.emails()[0];
+                                            email.id().should.be.a.Number;
+                                            email.id().should.not.be.eql(undefined);
+                                            email.email().should.be.eql('karenc@wix.com');
+                                            email.tag().should.be.eql('work');
+                                            email.emailStatus().should.be.eql(api.Contacts.EMAIL_STATUS_TYPES.RECURRING);
+                                            done();
+                                        },
+                                        function (error) {
+                                            done(error);
+                                        }
+                                    ).done(null, done);
                                 },
                                 function (error) {
                                     done(error);
@@ -999,34 +1079,41 @@ describe('Contact', function() {
                     var contact = api.Contacts.newContact();
                     contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     api.Contacts.create(contact).then(
-                        function (contact) {
-                            contact.addAddress(
-                                {
-                                    tag: 'work',
-                                    address: '500 Terry A Francois',
-                                    city: 'San Francisco',
-                                    neighborhood: 'Awesomeville',
-                                    region: 'CA',
-                                    country: 'USA',
-                                    postalCode: '94158'
-                                });
-                            var address = contact.addresses()[0];
-                            contact.postAddress(address).then(
-                                function (contact) {
+                        function (contactId) {
+                            api.Contacts.getContactById(contactId).then(
+                                function(contact) {
+                                    contact.addAddress(
+                                        {
+                                            tag: 'work',
+                                            address: '500 Terry A Francois',
+                                            city: 'San Francisco',
+                                            neighborhood: 'Awesomeville',
+                                            region: 'CA',
+                                            country: 'USA',
+                                            postalCode: '94158'
+                                        });
                                     var address = contact.addresses()[0];
-                                    address.id().should.be.a.Number;
-                                    should.exist(address.id());
-                                    address.id().should.not.be.eql(undefined);
-                                    address.tag().should.be.eql('work');
-                                    should.exist(address.address());
-                                    address.address().should.be.eql('500 Terry A Francois');
-                                    address.neighborhood().should.be.eql('Awesomeville');
-                                    should.exist(address.city());
-                                    address.city().should.be.eql('San Francisco');
-                                    address.region().should.be.eql('CA');
-                                    address.country().should.be.eql('USA');
-                                    address.postalCode().should.be.eql('94158');
-                                    done();
+                                    contact.postAddress(address).then(
+                                        function (contact) {
+                                            var address = contact.addresses()[0];
+                                            address.id().should.be.a.Number;
+                                            should.exist(address.id());
+                                            address.id().should.not.be.eql(undefined);
+                                            address.tag().should.be.eql('work');
+                                            should.exist(address.address());
+                                            address.address().should.be.eql('500 Terry A Francois');
+                                            address.neighborhood().should.be.eql('Awesomeville');
+                                            should.exist(address.city());
+                                            address.city().should.be.eql('San Francisco');
+                                            address.region().should.be.eql('CA');
+                                            address.country().should.be.eql('USA');
+                                            address.postalCode().should.be.eql('94158');
+                                            done();
+                                        },
+                                        function (error) {
+                                            done(error);
+                                        }
+                                    ).done(null, done);
                                 },
                                 function (error) {
                                     done(error);
@@ -1054,22 +1141,29 @@ describe('Contact', function() {
                     var contact = api.Contacts.newContact();
                     contact.addEmail({tag: 'work', email: 'karenc@wix.com', emailStatus: api.Contacts.EMAIL_STATUS_TYPES.RECURRING});
                     api.Contacts.create(contact).then(
-                        function (contact) {
-                            contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
-                            var phone = contact.phones()[0];
-                            contact.postPhone(phone).then(
-                                function (contact) {
+                        function (contactId) {
+                            api.Contacts.getContactById(contactId).then(
+                                function(contact) {
+                                    contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                                     var phone = contact.phones()[0];
-                                    phone.id().should.be.a.Number;
-                                    phone.id().should.not.be.eql(undefined);
-                                    phone.tag().should.be.eql('work');
-                                    phone.phone().should.be.eql('+1-415-639-5555');
-                                    done();
+                                    contact.postPhone(phone).then(
+                                        function (contact) {
+                                            var phone = contact.phones()[0];
+                                            phone.id().should.be.a.Number;
+                                            phone.id().should.not.be.eql(undefined);
+                                            phone.tag().should.be.eql('work');
+                                            phone.phone().should.be.eql('+1-415-639-5555');
+                                            done();
+                                        },
+                                        function (error) {
+                                            done(error);
+                                        }
+                                    )
                                 },
                                 function (error) {
                                     done(error);
                                 }
-                            )
+                            ).done(null, done);
                         },
                         function (error) {
                             done(error);
@@ -1092,22 +1186,29 @@ describe('Contact', function() {
                     var contact = api.Contacts.newContact();
                     contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     api.Contacts.create(contact).then(
-                        function (contact) {
-                            contact.addUrl({ tag: 'work', url: 'http://www.wix.com/'});
-                            var url = contact.urls()[0];
-                            contact.postUrl(url).then(
-                                function (contact) {
+                        function (contactId) {
+                            api.Contacts.getContactById(contactId).then(
+                                function(contact) {
+                                    contact.addUrl({ tag: 'work', url: 'http://www.wix.com/'});
                                     var url = contact.urls()[0];
-                                    url.id().should.be.a.Number;
-                                    url.id().should.not.be.eql(undefined);
-                                    url.tag().should.be.eql('work');
-                                    url.url().should.be.eql('http://www.wix.com/');
-                                    done();
+                                    contact.postUrl(url).then(
+                                        function (contact) {
+                                            var url = contact.urls()[0];
+                                            url.id().should.be.a.Number;
+                                            url.id().should.not.be.eql(undefined);
+                                            url.tag().should.be.eql('work');
+                                            url.url().should.be.eql('http://www.wix.com/');
+                                            done();
+                                        },
+                                        function (error) {
+                                            done(error);
+                                        }
+                                    )
                                 },
                                 function (error) {
                                     done(error);
                                 }
-                            )
+                            ).done(null, done);
                         },
                         function (error) {
                             done(error);
@@ -1130,24 +1231,31 @@ describe('Contact', function() {
                     var contact = api.Contacts.newContact();
                     contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     api.Contacts.create(contact).then(
-                        function (contact) {
-                            contact.addDate({ tag: 'work', date: '1994-11-05T13:15:30Z'});
-                            var date = contact.dates()[0];
-                            contact.postDate(date).then(
-                                function (contact) {
+                        function (contactId) {
+                            api.Contacts.getContactById(contactId).then(
+                                function(contact) {
+                                    contact.addDate({ tag: 'work', date: '1994-11-05T13:15:30Z'});
                                     var date = contact.dates()[0];
-                                    date.id().should.be.a.Number;
-                                    date.id().should.not.be.eql(undefined);
-                                    date.tag().should.be.eql('work');
-                                    var dExpected = new Date('1994-11-05T13:15:30Z').toString();
-                                    var dActual = new Date(date.date().toString()).toString();
-                                    dExpected.should.be.eql(dActual);
-                                    done();
+                                    contact.postDate(date).then(
+                                        function (contact) {
+                                            var date = contact.dates()[0];
+                                            date.id().should.be.a.Number;
+                                            date.id().should.not.be.eql(undefined);
+                                            date.tag().should.be.eql('work');
+                                            var dExpected = new Date('1994-11-05T13:15:30Z').toString();
+                                            var dActual = new Date(date.date().toString()).toString();
+                                            dExpected.should.be.eql(dActual);
+                                            done();
+                                        },
+                                        function (error) {
+                                            done(error);
+                                        }
+                                    )
                                 },
                                 function (error) {
                                     done(error);
                                 }
-                            )
+                            ).done(null, done);
                         },
                         function (error) {
                             done(error);
@@ -1167,23 +1275,29 @@ describe('Contact', function() {
                 });
 
                 it('should add new note to Contact', function (done) {
-                    throw 'pending HAPI-9';
                     var contact = api.Contacts.newContact();
                     contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     api.Contacts.create(contact).then(
-                        function (contact) {
-                            contact.addNote({ content: 'Your rent is due'});
-                            var note = contact.notes()[0];
-                            contact.postNote(note).then(
-                                function (contact) {
+                        function (contactId) {
+                            api.Contacts.getContactById(contactId).then(
+                                function(contact) {
+                                    contact.addNote({ content: 'Your rent is due'});
                                     var note = contact.notes()[0];
-                                    should.exist(note.id());
-                                    note.id().should.be.a.Number;
-                                    note.id().should.not.be.eql(undefined);
-                                    should.exist(note.modifiedAt());
-                                    note.modifiedAt().should.not.be.eql(undefined);
-                                    note.content().should.be.eql('Your rent is due');
-                                    done();
+                                    contact.postNote(note).then(
+                                        function (contact) {
+                                            var note = contact.notes()[0];
+                                            should.exist(note.id());
+                                            note.id().should.be.a.Number;
+                                            note.id().should.not.be.eql(undefined);
+                                            should.exist(note.modifiedAt());
+                                            note.modifiedAt().should.not.be.eql(undefined);
+                                            note.content().should.be.eql('Your rent is due');
+                                            done();
+                                        },
+                                        function (error) {
+                                            done(error);
+                                        }
+                                    ).done(null, done);
                                 },
                                 function (error) {
                                     done(error);
@@ -1211,22 +1325,29 @@ describe('Contact', function() {
                     var contact = api.Contacts.newContact();
                     contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                     api.Contacts.create(contact).then(
-                        function (contact) {
-                            contact.addCustomField({ field: 'whats the time?', value: 'Hammer time!'});
-                            var customField = contact.customFields()[0];
-                            contact.postCustomField(customField).then(
-                                function (contact) {
+                        function (contactId) {
+                            api.Contacts.getContactById(contactId).then(
+                                function(contact) {
+                                    contact.addCustomField({ field: 'whats the time?', value: 'Hammer time!'});
                                     var customField = contact.customFields()[0];
-                                    customField.id().should.be.a.Number;
-                                    customField.id().should.not.be.eql(undefined);
-                                    customField.field().should.be.eql('whats the time?');
-                                    customField.value().should.be.eql('Hammer time!');
-                                    done();
+                                    contact.postCustomField(customField).then(
+                                        function (contact) {
+                                            var customField = contact.customFields()[0];
+                                            customField.id().should.be.a.Number;
+                                            customField.id().should.not.be.eql(undefined);
+                                            customField.field().should.be.eql('whats the time?');
+                                            customField.value().should.be.eql('Hammer time!');
+                                            done();
+                                        },
+                                        function (error) {
+                                            done(error);
+                                        }
+                                    )
                                 },
                                 function (error) {
                                     done(error);
                                 }
-                            )
+                            ).done(null, done);
                         },
                         function (error) {
                             done(error);
@@ -1263,18 +1384,25 @@ describe('Contact', function() {
                 contact.name({first: 'Karen', last: 'Meep'});
                 contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                 api.Contacts.create(contact).then(
-                    function(contact){
-                        contact.addActivity(activity, api).then(
-                            function(data){
-                                data.activityId.should.be.a.String;
-                                data.contactId.should.be.a.String;
-                                data.contactId.should.be.eql(contact.id().id());
-                                done();
+                    function (contactId) {
+                        api.Contacts.getContactById(contactId).then(
+                            function(contact) {
+                                contact.addActivity(activity, api).then(
+                                    function(data){
+                                        data.activityId.should.be.a.String;
+                                        data.contactId.should.be.a.String;
+                                        data.contactId.should.be.eql(contact.id().id());
+                                        done();
+                                    },
+                                    function(error){
+                                        done(error);
+                                    }
+                                );
                             },
                             function(error){
                                 done(error);
                             }
-                        );
+                        ).done(null, done);
                     },
                     function(error){
                         done(error);
@@ -1284,6 +1412,8 @@ describe('Contact', function() {
         });
 
         describe('GetActivities', function() {
+            this.timeout(10000);
+
             var activity = api.Activities.newActivity(api.Activities.TYPES.ALBUM_FAN);
             activity.activityLocationUrl = "http://www.wix.com";
             activity.activityDetails.summary = "test";
@@ -1295,19 +1425,26 @@ describe('Contact', function() {
                 contact.name({first: 'Karen', last: 'Meep'});
                 contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                 api.Contacts.create(contact).then(
-                    function(contact){
-                        contact.addActivity(activity, api).then(
-                            function(data){
-                                data.activityId.should.be.a.String;
-                                data.contactId.should.be.a.String;
-                                data.contactId.should.be.eql(contact.id().id());
+                    function (contactId) {
+                        api.Contacts.getContactById(contactId).then(
+                            function(contact) {
+                                contact.addActivity(activity, api).then(
+                                    function(data){
+                                        data.activityId.should.be.a.String;
+                                        data.contactId.should.be.a.String;
+                                        data.contactId.should.be.eql(contact.id().id());
 
-                                contact.getActivities().then(
-                                    function(pagingActivitiesResult){
-                                        var activities = pagingActivitiesResult.results;
-                                        activities.should.have.length(1);
-                                        should.exist(pagingActivitiesResult.pageSize);
-                                        done();
+                                        contact.getActivities().then(
+                                            function(pagingActivitiesResult){
+                                                var activities = pagingActivitiesResult.results;
+                                                activities.should.have.length(1);
+                                                should.exist(pagingActivitiesResult.pageSize);
+                                                done();
+                                            },
+                                            function(error){
+                                                done(error);
+                                            }
+                                        ).done(null, done);
                                     },
                                     function(error){
                                         done(error);
@@ -1330,31 +1467,38 @@ describe('Contact', function() {
                 contact.name({first: 'Karen', last: 'Meep'});
                 contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
                 api.Contacts.create(contact).then(
-                    function(contact){
-                        contact.addActivity(activity, api).then(
-                            function(data){
-                                data.activityId.should.be.a.String;
-                                data.contactId.should.be.a.String;
-                                data.contactId.should.be.eql(contact.id().id());
+                    function (contactId) {
+                        api.Contacts.getContactById(contactId).then(
+                            function(contact) {
+                                contact.addActivity(activity, api).then(
+                                    function(data){
+                                        data.activityId.should.be.a.String;
+                                        data.contactId.should.be.a.String;
+                                        data.contactId.should.be.eql(contact.id().id());
 
-                                var ONE_HOUR = 60 * 60 * 1000;
-                                var oneHourAgo = new Date(new Date().getTime() - ONE_HOUR);
+                                        var ONE_HOUR = 60 * 60 * 1000;
+                                        var oneHourAgo = new Date(new Date().getTime() - ONE_HOUR);
 
-                                contact.getActivities(null,
-                                    {
-                                        from: oneHourAgo.toISOString(),
-                                        until: new Date().toISOString(),
-                                        activityTypes: [api.Activities.TYPES.ALBUM_FAN.name, api.Activities.TYPES.ALBUM_SHARE.name],
-                                        scope: 'app',
-                                        pageSize: 50
-                                    }).then(
-                                    function(pagingActivitiesResult){
-                                        var activities = pagingActivitiesResult.results;
-                                        activities.should.have.length(1);
-                                        should.exist(pagingActivitiesResult.pageSize);
-                                        should.exist(pagingActivitiesResult.pageSize);
-                                        assert(pagingActivitiesResult.pageSize <= 50);
-                                        done();
+                                        contact.getActivities(null,
+                                            {
+                                                from: oneHourAgo.toISOString(),
+                                                until: new Date().toISOString(),
+                                                activityTypes: [api.Activities.TYPES.ALBUM_FAN.name, api.Activities.TYPES.ALBUM_SHARE.name],
+                                                scope: 'app',
+                                                pageSize: 50
+                                            }).then(
+                                            function(pagingActivitiesResult){
+                                                var activities = pagingActivitiesResult.results;
+                                                activities.should.have.length(1);
+                                                should.exist(pagingActivitiesResult.pageSize);
+                                                should.exist(pagingActivitiesResult.pageSize);
+                                                assert(pagingActivitiesResult.pageSize <= 50);
+                                                done();
+                                            },
+                                            function(error){
+                                                done(error);
+                                            }
+                                        ).done(null, done);
                                     },
                                     function(error){
                                         done(error);
