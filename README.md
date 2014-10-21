@@ -10,7 +10,11 @@ Read about [developing a third party app for the Wix platform](http://dev.wix.co
 - **Get the Javascript SDK** [here](http://dev.wix.com/docs/display/DRAF/JavaScript+SDK). You'll need it for any data altering API calls (such as creating an activity).
 
 ## Installation
-    $ npm install openapi-node
+Install [npm](https://www.npmjs.org/doc/README.html), then install the package:
+
+```js
+$ npm install openapi-node
+```
 
 ## API Documentation
 [Read the docs](http://wix.github.io/openapi-node/) and take a look at our Mocha tests to learn more ways to use the library.
@@ -388,6 +392,15 @@ api.Activities.postActivity(activity, SESSION_ID)
         console.log ('oh no!');
     });
 ```
+
+## Running the tests
+1. Install [Grunt](http://gruntjs.com/installing-grunt)
+2. Run
+```js
+$ grunt schemas
+```
+3. Install [Mocha](https://www.npmjs.org/package/mocha) (-g)
+4. Run the tests using Mocha (use '-R nyan' for fun!)
 
 ## Questions?
 
