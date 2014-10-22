@@ -181,7 +181,7 @@ describe('Contacts', function() {
         });
 
         it('should create new contact with note and customField and return contact object', function (done) {
-            throw 'pending HAPI-3';
+//            throw 'pending HAPI-3';
             var contact = api.Contacts.newContact(api);
             contact.name().prefix('Sir');
             contact.name().first('Mix');
@@ -204,7 +204,7 @@ describe('Contacts', function() {
                 });
             contact.addDate({ tag: 'work', date: '1994-11-05T13:15:30Z'});
             contact.addUrl({ tag: 'work', url: 'http://www.wix.com/'});
-            contact.addNote({ content: 'blah blah blah'});
+            contact.addNote({ content: 'blah blah blah' });
             contact.addCustomField({ field: 'Host', value: 'Wayne Campbell'});
             api.Contacts.create(contact).then(
                 function (contactId) {
