@@ -43,6 +43,7 @@
     "Wix"
   ],
   "author": "Wix <davidz@wix.com> (http://dev.wix.com/)",
+  "contributors": ["Karen Cohen <karenc@wix.com> (http://dev.wix.com/)", "David Zuckerman <davidz@wix.com> (http://dev.wix.com/)"],
   "license": "Apache 2",
   "bugs": {
     "url": "https://github.com/wix/openapi-node/issues"
