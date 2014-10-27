@@ -3,8 +3,6 @@
 */
 
 var should = require('should');
-var request = require('supertest');
-var expect = require('expect.js');
 var config = require("./config.js");
 var APP_SECRET = config.appSecret;
 var APP_KEY = config.appKey;
