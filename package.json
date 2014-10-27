@@ -41,7 +41,9 @@
     "node": ">= 0.10.20"
   },
   "keywords": [
-    "Wix"
+    "Wix",
+    "Hive",
+    "API"
   ],
   "author": "Wix <davidz@wix.com> (http://dev.wix.com/)",
   "contributors": ["Karen Cohen <karenc@wix.com> (http://dev.wix.com/)", "David Zuckerman <davidz@wix.com> (http://dev.wix.com/)"],
