@@ -1,6 +1,6 @@
 {
   "name": "openapi-node",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "A Node library to interact with the Wix Hive (RESTful API)",
   "main": "lib/WixClient.js",
   "homepage": "http://dev.wix.com",
@@ -12,13 +12,14 @@
     "url": "https://github.com/wix/openapi-node"
   },
   "dependencies": {
-    "url": "latest",
-    "http": "latest",
     "crypto-js": "3.1.2-2",
     "extend": "latest",
+    "http": "latest",
+    "jsondiffpatch": "^0.1.17",
     "lodash-node": "2.4.1",
     "q": "1.0.0",
-    "restler": "3.2.0"
+    "restler": "3.2.0",
+    "url": "latest"
   },
   "devDependencies": {
     "assert": "^1.1.1",
@@ -30,9 +31,9 @@
     "grunt-jsdoc": "0.5.4",
     "ink-docstrap": "latest",
     "grunt-gh-pages": "latest",
-    "grunt-jsbeautifier" : "latest",
-    "mkdirp" : "0.3.5",
-    "handlebars" : "latest",
+    "grunt-jsbeautifier": "latest",
+    "mkdirp": "0.3.5",
+    "handlebars": "latest",
     "mocha": "^1.20.1",
     "supertest": "^0.13.0",
     "should": "^4.0.4"
@@ -46,7 +47,10 @@
     "API"
   ],
   "author": "Wix <davidz@wix.com> (http://dev.wix.com/)",
-  "contributors": ["Karen Cohen <karenc@wix.com> (http://dev.wix.com/)", "David Zuckerman <davidz@wix.com> (http://dev.wix.com/)"],
+  "contributors": [
+    "Karen Cohen <karenc@wix.com> (http://dev.wix.com/)",
+    "David Zuckerman <davidz@wix.com> (http://dev.wix.com/)"
+  ],
   "license": "Apache 2",
   "bugs": {
     "url": "https://github.com/wix/openapi-node/issues"
