@@ -1,4 +1,4 @@
-openapi-node
+Wix-Hive-Node
 ============
 
 # Node library to work with the the Wix RESTful API.
