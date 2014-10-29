@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/wix/openapi-node"
+    "url": "https://github.com/wix/wix-hive-node"
   },
   "dependencies": {
     "crypto-js": "3.1.2-2",
@@ -52,6 +52,6 @@
   ],
   "license": "Apache 2",
   "bugs": {
-    "url": "https://github.com/wix/openapi-node/issues"
+    "url": "https://github.com/wix/wix-hive-node/issues"
   }
 }
