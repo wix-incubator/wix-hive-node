@@ -1,6 +1,6 @@
 {
   "name": "openapi-node",
-  "version": "3.0.1",
+  "version": "3.0.3",
   "description": "A Node library to interact with the Wix Hive (RESTful API)",
   "main": "lib/WixClient.js",
   "homepage": "http://dev.wix.com",
