@@ -96,6 +96,64 @@ describe('Contact', function() {
 
     describe('Methods', function() {
 
+        describe('getDiff', function() {
+            this.timeout(60000);
+            it('should throw error when given an unsaved Contact', function (done) {
+
+                var getContact = function(contactId) {
+                    var q = require("q");
+                    var deferred = q.defer();
+                    api.Contacts.getContactById(contactId).then(
+                        function(contact) {
+                            deferred.resolve(contact);
+                        },
+                        function (error) {
+                            deferred.reject(error);
+                        }
+                    );
+                    return deferred.promise;
+                };
+
+                var contact = api.Contacts.newContact();
+                contact.name({first: 'Karen', last: 'Meep'});
+                contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
+                api.Contacts.create(contact).then(
+                    function (contactId) {
+                        api.Contacts.getContactById(contactId).then(
+                            function(contact) {
+
+                                contact.name().prefix('Sir');
+                                contact.name().first('Mix');
+                                contact.name().middle('A');
+                                contact.name().last('Lot');
+                                contact.addEmail({tag: 'work', email: 'karenc@wix.com', emailStatus: api.Contacts.EMAIL_STATUS_TYPES.RECURRING});
+
+                                getContact(contactId).then(
+                                    function(orig){
+                                        var jsonpatch = require('fast-json-patch');
+                                        var diff = jsonpatch.compare(orig.toJson(), contact.toJson());
+
+                                        console.log(diff);
+                                        done();
+                                    },
+                                    function(error){
+                                        done(error);
+                                    }
+                                );
+                            },
+                            function (error) {
+                                done(error);
+                            }
+                        ).done(null, done);
+                    },
+                    function (error) {
+                        done(error);
+                    }
+                ).done(null, done);
+
+            });
+        });
+
         describe('Update Contact', function() {
 
             it('should throw error when given an unsaved Contact', function (done) {
