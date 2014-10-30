@@ -378,7 +378,7 @@ Note: This code posts an Activity without any connection to a Contact. To post a
 api.Activities.postActivity(activity, SESSION_ID)
     .then(function(data) {
 
-        // Great success!
+        console.log ('oh YEAAAHHHH!');
 
     }, function(error) {
         console.log ('oh no!');
