@@ -241,9 +241,17 @@ describe('Api', function() {
         trackLyrics.activityInfo = { artist: { name: 'Wix', id: '1234' }, album: { name: 'Wix', id: '1234' }, track: { name: 'Wix', id: '1234' } };
 
         var trackShare = api.Activities.newActivity(api.Activities.TYPES.TRACK_SHARE);
-        trackShare.withLocationUrl('http://www.wix.com');
-        trackShare.withActivityDetails('test', 'http://www.wix.com');
-        trackShare.activityInfo = { artist: { name: 'Wix', id: '1234' }, album: { name: 'Wix', id: '1234' }, track: { name: 'Wix', id: '1234' }, sharedTo: 'FACEBOOK' };
+        trackShare.withLocationUrl('http://www.wix.com'); // where on the site did this happen?
+
+        // Activity Details will appear on the site owner's Feed
+        trackShare.withActivityDetails('A user shared a song from your site!', 'http://www.twitter.com/linkToTweet');
+        trackShare.activityInfo =
+            {
+                artist: { name: 'Sir Mix-a-Lot', id: '111' },
+                track: { name: 'Baby Got Back', id: '1' },
+                album: { name: 'Mack Daddy', id: '5555' },
+                sharedTo: 'TWITTER'
+            };
 
         var trackPlay = api.Activities.newActivity(api.Activities.TYPES.TRACK_PLAY);
         trackPlay.withLocationUrl('http://www.wix.com');
@@ -335,11 +343,18 @@ describe('Api', function() {
         var shipping = {total: 1, formattedTotal: 1};
         var payment = {total: '1', subtotal: '1', formattedTotal: '1.0', formattedSubtotal: '1.0', currency: 'EUR', coupon: coupon, tax: tax, shipping: shipping};
         var media = {thumbnail: 'PIC'};
-        var item = {id: 1, sku: 'sky', title: 'title', quantity: 1, price: '1', formattedPrice: '1.1', currency: 'EUR', productLink: 'link', weight: '1', formattedWeight: '1.0KG', media: media, variants: [{title: 'title', value: '1'}]};
-        var shipping_address = {firstName: 'Wix' , lastName: 'Cool', email: 'wix@example.com', phone: '12345566', country: 'Macedonia', countryCode: 'MK', region: 'Bitola', regionCode: '7000', city: 'Bitola', address1: 'Marshal Tito', address2: 'Marshal Tito', zip: '7000', company: 'Wix.com'};
-        var purchase = { cartId: '11111',
-            storeId: '11111',
-            orderId: '11111',
+        var item = { id: 1, sku: 'sky', title: 'title', quantity: 1, price: '1', formattedPrice: '1.1', currency: 'EUR', productLink: 'link', weight: '1', formattedWeight: '1.0KG', media: media, variants: [{title: 'title', value: '1'}]};
+        var shipping_address =
+            {
+                firstName: 'Wix' , lastName: 'Cool',
+                email: 'wix@example.com', phone: '12345566',
+                city: 'Bitola', address1: 'Marshal Tito', address2: 'Marshal Tito',
+                region: 'Bitola', regionCode: '7000',
+                country: 'USA', countryCode: 'US',
+                zip: '7000',
+                company: 'Wix.com'
+            };
+        var purchase = { cartId: '11111', storeId: '11111', orderId: '11111',
             items: [item],
             payment: payment,
             shippingAddress: shipping_address,

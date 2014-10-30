@@ -181,11 +181,18 @@ The code below posts an Activity against the given Contact.
 Note: Use the Activities.postActivity function to post an Activity in no relation to a Contact.
 
 ```js
-var activity = api.Activities.newActivity(api.Activities.TYPES.ALBUM_FAN);
-activity.activityLocationUrl = "http://www.wix.com";
-activity.activityDetails.summary = "test";
-activity.activityDetails.additionalInfoUrl = "http://www.wix.com";
-activity.activityInfo = { album: { name: 'Wix', id: '1234' } };
+var trackShare = api.Activities.newActivity(api.Activities.TYPES.TRACK_SHARE);
+trackShare.withLocationUrl('http://www.wix.com'); // where on the site did this happen?
+
+// Activity Details will appear on the site owner's Feed
+trackShare.withActivityDetails('A user shared a song from your site!', 'http://www.twitter.com/linkToTweet');
+trackShare.activityInfo =
+    {
+        artist: { name: 'Sir Mix-a-Lot', id: '111' },
+        track: { name: 'Baby Got Back', id: '1' },
+        album: { name: 'Mack Daddy', id: '5555' },
+        sharedTo: 'TWITTER'
+    };
 
 api.Contacts.getContactById(contactId).then(
     function(contact){
@@ -311,13 +318,34 @@ To create an Activity either use our builder (as shown in the Contact Form Activ
 ##### Create an Activity Using JSON
 
 ```js
-var activity = api.Activities.newActivity(api.Activities.TYPES.ECOMMERCE_PURCHASE);
+var ecommPurchase = api.Activities.newActivity(api.Activities.TYPES.ECOMMERCE_PURCHASE);
 var coupon = {total: '1', title: 'Dis'};
-var payment = {total: '1', subtotal: '1', currency: 'EUR', coupon: coupon};
-var purchase = { items:[], cartId: '11111', storeId: '11111', payment: payment };
-activity.withLocationUrl('http://www.wix.com');
-activity.withActivityDetails('test', 'http://www.wix.com');
-activity.activityInfo = purchase;
+var tax = {total: 1, formattedTotal: 1};
+var shipping = {total: 1, formattedTotal: 1};
+var payment = {total: '1', subtotal: '1', formattedTotal: '1.0', formattedSubtotal: '1.0', currency: 'EUR', coupon: coupon, tax: tax, shipping: shipping};
+var media = {thumbnail: 'PIC'};
+var item = { id: 1, sku: 'sky', title: 'title', quantity: 1, price: '1', formattedPrice: '1.1', currency: 'EUR', productLink: 'link', weight: '1', formattedWeight: '1.0KG', media: media, variants: [{title: 'title', value: '1'}]};
+var shipping_address =
+    {
+        firstName: 'Wix' , lastName: 'Cool',
+        email: 'wix@example.com', phone: '12345566',
+        city: 'Bitola', address1: 'Marshal Tito', address2: 'Marshal Tito',
+        region: 'Bitola', regionCode: '7000',
+        country: 'USA', countryCode: 'US',
+        zip: '7000',
+        company: 'Wix.com'
+    };
+var purchase = { cartId: '11111', storeId: '11111', orderId: '11111',
+    items: [item],
+    payment: payment,
+    shippingAddress: shipping_address,
+    billingAddress: shipping_address,
+    paymentGateway: 'PAYPAL',
+    note: 'Note',
+    buyerAcceptsMarketing: true };
+ecommPurchase.withLocationUrl('http://www.wix.com');
+ecommPurchase.withActivityDetails('test', 'http://www.wix.com');
+ecommPurchase.activityInfo = purchase;
 ```
 
 ##### Create an Activity Using The Object Builder
