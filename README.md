@@ -87,7 +87,9 @@ app.post('/app/settingsupdate', authenticate, routes.settingsupdate);
 #### Create a Contact and post it to the Wix Hive
 
 The newContact function returns a new Contact object.
+
 The Contact created is only known locally, it has not been saved to the Wix Hive and does not have an ID.
+
 To share your Contact with the Wix Hive, use the create function as shown below.
 
 ```js
