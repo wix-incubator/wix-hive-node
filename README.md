@@ -202,8 +202,6 @@ api.Contacts.getContactById(contactId).then(
 
                 var activityId = data.activityId;
                 var contactId = data.contactId;
-
-                // Do something with this information
             },
             function(error){
                 throw error;
