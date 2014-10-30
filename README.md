@@ -84,13 +84,15 @@ app.post('/app/settingsupdate', authenticate, routes.settingsupdate);
 
 ### Working with the Contact Object
 
-#### Create a Contact a post it to the Wix Hive
+#### Create a Contact and post it to the Wix Hive
 
 The newContact function returns a Contact object. The Contact created is only known locally, it has not been saved to the Wix Hive and does not have an ID.
 To share your Contact with the Wix Hive, use the create function as shown below.
 
 ```js
-var contact = api.Contacts.newContact(api); // Created a new Contact object. This Contact is only known locally, at this point it has not been saved to the Wix Hive.
+// Create a new Contact object.
+// This Contact is only known locally at this point, it has not been saved to the Wix Hive.
+var contact = api.Contacts.newContact(api);
 contact.name({first: 'Karen', last: 'Meep'});
 contact.company({role: 'MyRole', name: 'MyName'});
 contact.picture('http://elcaminodeamanda.files.wordpress.com/2011/03/mc_hammer.png');
@@ -107,6 +109,8 @@ contact.addAddress(
     });
 contact.addDate({ tag: 'work', date: '1994-11-05T13:15:30Z'});
 contact.addUrl({ tag: 'work', url: 'http://www.wix.com/'});
+
+// Save this Contact to the Hive
 api.Contacts.create(contact).then(
     function (contact) {
 
