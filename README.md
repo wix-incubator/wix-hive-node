@@ -97,10 +97,10 @@ To share your Contact with the Wix Hive, use the create function as shown below.
 // This Contact is only known locally at this point, it has not been saved to the Wix Hive.
 var contact = api.Contacts.newContact(api);
 contact.name({first: 'Karen', last: 'Meep'});
-contact.company({role: 'MyRole', name: 'MyName'});
-contact.picture('http://elcaminodeamanda.files.wordpress.com/2011/03/mc_hammer.png');
+contact.company({role: 'SDK Product', name: 'Wix'});
+contact.picture('http://www.mypicture.com');
 contact.addEmail({tag: 'work', email: 'karenc@wix.com', emailStatus: api.Contacts.EMAIL_STATUS_TYPES.RECURRING});
-contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
+contact.addPhone({ tag: 'work', phone: '+1-415-555-5555'});
 contact.addAddress(
     {
         tag: 'work',
@@ -111,7 +111,7 @@ contact.addAddress(
         postalCode: 94158
     });
 contact.addDate({ tag: 'some date', date: '1994-11-05T13:15:30Z'});
-contact.addUrl({ tag: 'work', url: 'http://www.wix.com/'});
+contact.addUrl({ tag: 'Dev Center', url: 'http://dev.wix.com/'});
 
 // Save this Contact to the Hive
 api.Contacts.create(contact).then(
