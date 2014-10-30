@@ -115,9 +115,10 @@ contact.addUrl({ tag: 'Dev Center', url: 'http://dev.wix.com/'});
 
 // Save this Contact to the Hive
 api.Contacts.create(contact).then(
-    function (contact) {
+    function (contactId) {
 
         // The Contact now exists in the Wix Hive. It has an ID which can be used to query it.
+        console.log('Your Contact has been saved, its ID is: '+ contactId);
     },
     function (error) {
         throw error;
@@ -125,62 +126,32 @@ api.Contacts.create(contact).then(
 );
 ```
 
-#### Update Contact properties
-Use this method update many Contact properties at once.
+#### Get a Contact from The Wix Hive
+
+Use this function to get an existing Contact from the Wix Hive
 
 ```js
+api.Contacts.getContactById('SOME_CONTACT_ID').then(
+    function(contact){
 
-var contact = api.Contacts.newContact(api);
-api.Contacts.create(contact).then(
-    function (contact) {
-
-        contact.name().prefix('Sir');
-        contact.name().first('Mix');
-        contact.name().middle('A');
-        contact.name().last('Lot');
-        contact.name().suffix('The III');
-        contact.company({role: 'MyRole', name: 'MyName'});
-        contact.picture('http://assets.objectiface.com/hashed_silo_content/silo_content/6506/resized/mchammer.jpg');
-        contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
-        contact.addEmail({tag: 'work', email: 'karenc@wix.com', emailStatus: api.Contacts.EMAIL_STATUS_TYPES.RECURRING});
-        contact.addAddress(
-            {
-                tag: 'work',
-                address: '500 Terry A Francois',
-                city: 'San Francisco',
-                region: 'CA',
-                country: 'USA',
-                postalCode: 94158
-            });
-        contact.addDate({ tag: 'work', date: '1994-11-05T13:15:30Z'});
-        contact.addUrl({ tag: 'work', url: 'http://www.wix.com/'});
-
-        contact.update().then(
-            function(contact){
-
-                // Do more stuff with the returned updated contact
-            },
-            function(error){
-                throw error;
-            }
-        );
+        // Do stuff with this Contact
     },
-    function (error) {
-        throw error;
+    function(error){
+        throw(error);
     }
 );
 ```
 
-#### Explicit property update methods
-To explicitly and immediately update Contact properties use the Contact.update<propertyName> methods. These methods make an HTTP PUT call to one of the /contacts/{contactId}/<propertyName> endpoints.
-We recommend using the Contact.update method if you need to change more than one property at a time.
+#### Updating a Contact's properties
+
+To explicitly and immediately update Contact information use the Contact.update<propertyName> methods.
+
+These methods make an HTTP PUT call to one of the /contacts/{contactId}/<propertyName> endpoints.
 
 The example below shows how to update the name property of a Contact.
 
 ```js
-var contact = api.Contacts.newContact();
-contact.name({first: 'Karen', last: 'Meep'});
-api.Contacts.create(contact).then(
+api.Contacts.getContactById(contactId).then(
     function (contact) {
         contact.name().prefix('Sir');
         contact.name().first('Mix');
@@ -215,9 +186,8 @@ activity.activityLocationUrl = "http://www.wix.com";
 activity.activityDetails.summary = "test";
 activity.activityDetails.additionalInfoUrl = "http://www.wix.com";
 activity.activityInfo = { album: { name: 'Wix', id: '1234' } };
-var contact = api.Contacts.newContact();
-contact.name({first: 'Karen', last: 'Meep'});
-api.Contacts.create(contact).then(
+
+api.Contacts.getContactById(contactId).then(
     function(contact){
 
         contact.addActivity(activity, api).then(
@@ -290,19 +260,6 @@ api.Contacts.getContacts(
 );
 ```
 
-### Get a Contact from The Wix Hive
-
-```js
-api.Contacts.getContactById('SOME_CONTACT_ID').then(
-    function(contact){
-
-        // Do stuff with this Contact
-    },
-    function(error){
-        throw(error);
-    }
-);
-```
 
 ### Get a list of site Activities
 ```js
