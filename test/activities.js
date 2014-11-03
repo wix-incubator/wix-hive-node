@@ -377,6 +377,30 @@ describe('Api', function() {
         var attendees = [ contact1, contact2 ];
         schedulerAppointment.activityInfo = { title: 'my appointment', description: 'write these tests', location: location, time: time, attendees: attendees};
 
+        var shippingDelivered = api.Activities.newActivity(api.Activities.TYPES.SHIPPING_DELIVERED);
+        shippingDelivered.withLocationUrl('http://www.wix.com');
+        shippingDelivered.withActivityDetails('test', 'http://www.wix.com');
+        var item = {id: 1, sku: 'sky', title: 'title', quantity: 1, price: '1', formattedPrice: '1.1', currency: 'EUR', productLink: 'link'};
+        shippingDelivered.activityInfo = { orderId: '11111', items: [item], shippingDetails: {tracking: '123456'}, note: 'Note' };
+
+        var shippingShipped = api.Activities.newActivity(api.Activities.TYPES.SHIPPING_SHIPPED);
+        shippingShipped.withLocationUrl('http://www.wix.com');
+        shippingShipped.withActivityDetails('test', 'http://www.wix.com');
+        var shippingAddress = {firstName: 'Wix' , lastName: 'Cool', email: 'wix@example.com', phone: '12345566', country: 'Macedonia', countryCode: 'MK', region: 'Bitola', regionCode: '7000', city: 'Bitola', address1: 'Marshal Tito', address2: 'Marshal Tito', zip: '7000', company: 'Wix.com'};
+        var deliveryEstimate = { start: oneDayAgo, end: oneDay.toISOString() };
+        var shippingDetails = {method: 'USPS', tracking: '123456', deliveryEstimate: deliveryEstimate};
+        var item = {id: 1, sku: 'sky', title: 'title', quantity: 1, price: '1', formattedPrice: '1.1', currency: 'EUR', productLink: 'link'};
+        shippingShipped.activityInfo =  { orderId: '11111', items: [item], shippingDetails: shippingDetails, shippingAddress: shippingAddress, note: 'Note' };
+
+        var shippingStatusChange = api.Activities.newActivity(api.Activities.TYPES.SHIPPING_STATUS_CHANGE);
+        shippingStatusChange.withLocationUrl('http://www.wix.com');
+        shippingStatusChange.withActivityDetails('test', 'http://www.wix.com');
+        var shippingAddress = {firstName: 'Wix' , lastName: 'Cool', email: 'wix@example.com', phone: '12345566', country: 'Macedonia', countryCode: 'MK', region: 'Bitola', regionCode: '7000', city: 'Bitola', address1: 'Marshal Tito', address2: 'Marshal Tito', zip: '7000', company: 'Wix.com'};
+        var deliveryEstimate = { start: oneDayAgo, end: oneDay.toISOString() };
+        var shippingDetails = {method: 'USPS', tracking: '123456', deliveryEstimate: deliveryEstimate};
+        var item = {id: 1, sku: 'sky', title: 'title', quantity: 1, price: '1', formattedPrice: '1.1', currency: 'EUR', productLink: 'link'};
+        shippingStatusChange.activityInfo =  { orderId: '11111', items: [item], status: 'awaiting_shipment', shippingDetails: shippingDetails, shippingAddress: shippingAddress, note: 'Note' };
+
         var contactForm = api.Activities.newActivity(api.Activities.TYPES.CONTACT_FORM);
         var cu = contactForm.contactUpdate;
         cu.addEmail(cu.newEmail().withTag("main").withEmail("name@wexample.com"));
@@ -767,6 +791,124 @@ describe('Api', function() {
                             done();
                         });
                     });
+                });
+            });
+
+            describe('Shipping Activities', function () {
+
+                describe('Shipped Activity', function () {
+
+                    it('should post full activity without throwing error', function (done) {
+                        var activity = shippingShipped;
+                        api.Activities.postActivity(activity, SESSION_ID)
+                            .then(function (data) {
+                                data.should.not.equal(undefined);
+                                data.should.be.a.String;
+                                data.should.not.be.empty;
+                                data.should.not.be.length(0);
+                                done();
+                            }, function (error) {
+                                done(error);
+                            }).done(null, done);
+                    });
+
+                    it('should post activity without optional fields without throwing error', function (done) {
+                        var activity = api.Activities.newActivity(api.Activities.TYPES.SHIPPING_SHIPPED);
+                        activity.withLocationUrl('http://www.wix.com');
+                        activity.withActivityDetails('test', 'http://www.wix.com');
+                        var shippingAddress = {firstName: 'Wix' , lastName: 'Cool', email: 'wix@example.com', phone: '12345566', country: 'Macedonia', countryCode: 'MK', region: 'Bitola', regionCode: '7000', city: 'Bitola', address1: 'Marshal Tito', address2: 'Marshal Tito', zip: '7000', company: 'Wix.com'};
+                        var deliveryEstimate = { start: oneDayAgo, end: oneDay.toISOString() };
+                        var shippingDetails = {method: 'USPS', deliveryEstimate: deliveryEstimate};
+                        var item = {id: 1, sku: 'sky', title: 'title', quantity: 1, price: '1', formattedPrice: '1.1', currency: 'EUR', productLink: 'link'};
+                        activity.activityInfo =  { orderId: '11111', items: [item], shippingDetails: shippingDetails, shippingAddress: shippingAddress, note: 'Note' };
+                        api.Activities.postActivity(activity, SESSION_ID)
+                            .then(function (data) {
+                                data.should.not.equal(undefined);
+                                data.should.be.a.String;
+                                data.should.not.be.empty;
+                                data.should.not.be.length(0);
+                                done();
+                            }, function (error) {
+                                done(error);
+                            }).done(null, done);
+                    });
+
+                });
+
+                describe('Delivered Activity', function () {
+
+                    it('should post full activity without throwing error', function (done) {
+                        var activity = shippingDelivered;
+                        api.Activities.postActivity(activity, SESSION_ID)
+                            .then(function (data) {
+                                data.should.not.equal(undefined);
+                                data.should.be.a.String;
+                                data.should.not.be.empty;
+                                data.should.not.be.length(0);
+                                done();
+                            }, function (error) {
+                                done(error);
+                            }).done(null, done);
+                    });
+
+                    it('should post activity without optional fields without throwing error', function (done) {
+
+                        var activity = api.Activities.newActivity(api.Activities.TYPES.SHIPPING_DELIVERED);
+                        activity.withLocationUrl('http://www.wix.com');
+                        activity.withActivityDetails('test', 'http://www.wix.com');
+                        var item = {id: 1, sku: 'sky', title: 'title', quantity: 1, price: '1', formattedPrice: '1.1', currency: 'EUR', productLink: 'link'};
+                        activity.activityInfo = { orderId: '11111', items: [item], shippingDetails: {tracking: '123456'}, note: 'Note' };
+
+                        api.Activities.postActivity(activity, SESSION_ID)
+                            .then(function (data) {
+                                data.should.not.equal(undefined);
+                                data.should.be.a.String;
+                                data.should.not.be.empty;
+                                data.should.not.be.length(0);
+                                done();
+                            }, function (error) {
+                                done(error);
+                            }).done(null, done);
+                    });
+
+                });
+
+                describe('Status Change Activity', function () {
+
+                    it('should post full activity without throwing error', function (done) {
+                        var activity = shippingStatusChange;
+                        api.Activities.postActivity(activity, SESSION_ID)
+                            .then(function (data) {
+                                data.should.not.equal(undefined);
+                                data.should.be.a.String;
+                                data.should.not.be.empty;
+                                data.should.not.be.length(0);
+                                done();
+                            }, function (error) {
+                                done(error);
+                            }).done(null, done);
+                    });
+
+                    it('should post activity without optional fields without throwing error', function (done) {
+                        var activity = api.Activities.newActivity(api.Activities.TYPES.SHIPPING_STATUS_CHANGE);
+                        activity.withLocationUrl('http://www.wix.com');
+                        activity.withActivityDetails('test', 'http://www.wix.com');
+                        var shippingAddress = {firstName: 'Wix' , lastName: 'Cool', email: 'wix@example.com', phone: '12345566', country: 'Macedonia', countryCode: 'MK', region: 'Bitola', regionCode: '7000', city: 'Bitola', address1: 'Marshal Tito', address2: 'Marshal Tito', zip: '7000', company: 'Wix.com'};
+                        var item = {id: 1, title: 'title', quantity: 1, currency: 'EUR' };
+                        activity.activityInfo =  { orderId: '11111', items: [item], status: 'awaiting_shipment', shippingAddress: shippingAddress, note: 'Note' };
+
+                        api.Activities.postActivity(activity, SESSION_ID)
+                            .then(function (data) {
+                                data.should.not.equal(undefined);
+                                data.should.be.a.String;
+                                data.should.not.be.empty;
+                                data.should.not.be.length(0);
+                                done();
+                            }, function (error) {
+                                done(error);
+                            }).done(null, done);
+                    });
+
                 });
             });
 
