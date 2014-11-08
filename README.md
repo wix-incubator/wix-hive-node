@@ -1,7 +1,7 @@
 Wix-Hive-Node
 ============
 
-# Node library to work with the the Wix RESTful API.
+# Node library to work with the Wix RESTful API.
 
 Read about [developing a third party app for the Wix platform](http://dev.wix.com/docs/display/DRAF/Third+Party+Apps+-+Introduction).
 
@@ -17,7 +17,7 @@ $ npm install openapi-node
 ```
 
 ## API Documentation
-[Read the docs](http://wix.github.io/openapi-node/) and take a look at our Mocha tests to learn more ways to use the library.
+[Read the docs](http://wix.github.io/wix-hive-node/) and take a look at our Mocha tests to learn more ways to use the library.
 
 ## Quick Start
 
