@@ -102,6 +102,20 @@
 					</ul>
 				</li>
 				
+				<li class="dropdown">
+					<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b
+						class="caret"></b></a>
+
+					<ul class="dropdown-menu ">
+						
+						<li>
+							<a href="global.html#ContactFormSchema">ContactFormSchema</a>
+						</li>
+						
+
+					</ul>
+				</li>
+				
 			</ul>
 		</div>
 	</div>
@@ -139,7 +153,7 @@
 
 
     <section>
-        <article><h1>openapi-node</h1>
+        <article><h1>Wix-Hive-Node</h1>
 <h1>Node library to work with the the Wix RESTful API.</h1>
 <p>Read about <a href="http://dev.wix.com/docs/display/DRAF/Third+Party+Apps+-+Introduction">developing a third party app for the Wix platform</a>.</p>
 <h2>Prerequisites</h2>
@@ -148,16 +162,17 @@
 <li><strong>Get the Javascript SDK</strong> <a href="http://dev.wix.com/docs/display/DRAF/JavaScript+SDK">here</a>. You'll need it for any data altering API calls (such as creating an activity).</li>
 </ul>
 <h2>Installation</h2>
-<pre><code>$ npm install openapi-node</code></pre>
+<p>Install <a href="https://www.npmjs.org/doc/README.html">npm</a>, then install the package:</p>
+<pre><code class="lang-js">$ npm install openapi-node</code></pre>
 <h2>API Documentation</h2>
 <p><a href="http://wix.github.io/openapi-node/">Read the docs</a> and take a look at our Mocha tests to learn more ways to use the library.</p>
 <h2>Quick Start</h2>
 <pre><code class="lang-js">var express = require('express');
 var app = express();
-var openapi = require('openapi-node');
+var wix = require('openapi-node');
 
-var APP_SECRET = 'YOUR_APP_SECRET';
-var APP_ID = 'YOUR_APP_ID';
+var APP_ID = 'YOUR_APP_KEY';
+var APP_SECRET = 'YOUR_APP_SECRET_KEY';
 
 // The route should match the app endpoint set during registration
 app.get('/', function (req, res) {
@@ -188,16 +203,35 @@ app.get('/', function (req, res) {
 });
 
 app.listen(3000);</code></pre>
+<p><strong>Note</strong> Remember to add <code>Wix.js</code> to you HTML files to avoid dismissal. See <a href="http://dev.wix.com/docs/display/DRAF/JavaScript+SDK">JavaScript SDK</a></p>
 <h2>Examples</h2>
+<h3>Using the authentication module as middleware</h3>
+<pre><code class="lang-js">var express = require('express');
+var routes = require('./routes');
+var Authentication = require('./authentication.js');
+var app = express();
+
+function authenticate(req, res, next) {
+    var authentication = new Authentication();
+    authentication.authenticate(req, res, next);
+}
+
+app.get('/widget', authenticate, routes.widget);
+app.get('/settings', authenticate, routes.settings);
+app.post('/app/settingsupdate', authenticate, routes.settingsupdate);</code></pre>
 <h3>Working with the Contact Object</h3>
-<h4>Create a Contact a post it to the Wix Hive</h4>
-<p>The newContact function returns a Contact object. The Contact created is only known locally, it has not been saved to the Wix Hive and does not have an ID.
-To share your Contact with the Wix Hive, use the create function as shown below.</p>
-<pre><code class="lang-js">var contact = api.Contacts.newContact(api); // Created a new Contact object. This Contact is only known locally, at this point it has not been saved to the Wix Hive.
+<h4>Create a Contact and post it to the Wix Hive</h4>
+<p>The newContact function returns a new Contact object.</p>
+<p>The Contact created is only known locally, it has not been saved to the Wix Hive and does not have an ID.</p>
+<p>To share your Contact with the Wix Hive, use the create function as shown below.</p>
+<pre><code class="lang-js">// Create a new Contact object.
+// This Contact is only known locally at this point, it has not been saved to the Wix Hive.
+var contact = api.Contacts.newContact(api);
 contact.name({first: 'Karen', last: 'Meep'});
-contact.company({role: 'MyRole', name: 'MyName'});
-contact.picture('http://elcaminodeamanda.files.wordpress.com/2011/03/mc_hammer.png');
-contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
+contact.company({role: 'SDK Product', name: 'Wix'});
+contact.picture('http://www.mypicture.com');
+contact.addEmail({tag: 'work', email: 'karenc@wix.com', emailStatus: api.Contacts.EMAIL_STATUS_TYPES.RECURRING});
+contact.addPhone({ tag: 'work', phone: '+1-415-555-5555'});
 contact.addAddress(
     {
         tag: 'work',
@@ -207,66 +241,36 @@ contact.addAddress(
         country: 'USA',
         postalCode: 94158
     });
-contact.addDate({ tag: 'work', date: '1994-11-05T13:15:30Z'});
-contact.addUrl({ tag: 'work', url: 'http://www.wix.com/'});
+contact.addDate({ tag: 'some date', date: '1994-11-05T13:15:30Z'});
+contact.addUrl({ tag: 'Dev Center', url: 'http://dev.wix.com/'});
+
+// Save this Contact to the Hive
 api.Contacts.create(contact).then(
-    function (contact) {
+    function (contactId) {
 
         // The Contact now exists in the Wix Hive. It has an ID which can be used to query it.
+        console.log('Your Contact has been saved, its ID is: '+ contactId);
     },
     function (error) {
         throw error;
     }
 );</code></pre>
-<h4>Update Contact properties</h4>
-<p>Use this method update many Contact properties at once.</p>
-<pre><code class="lang-js">
-var contact = api.Contacts.newContact(api);
-api.Contacts.create(contact).then(
-    function (contact) {
+<h4>Get a Contact from The Wix Hive</h4>
+<p>Use this function to get an existing Contact from the Wix Hive</p>
+<pre><code class="lang-js">api.Contacts.getContactById('SOME_CONTACT_ID').then(
+    function(contact){
 
-        contact.name().prefix('Sir');
-        contact.name().first('Mix');
-        contact.name().middle('A');
-        contact.name().last('Lot');
-        contact.name().suffix('The III');
-        contact.company({role: 'MyRole', name: 'MyName'});
-        contact.picture('http://assets.objectiface.com/hashed_silo_content/silo_content/6506/resized/mchammer.jpg');
-        contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
-        contact.addEmail({tag: 'work', email: 'karenc@wix.com'});
-        contact.addAddress(
-            {
-                tag: 'work',
-                address: '500 Terry A Francois',
-                city: 'San Francisco',
-                region: 'CA',
-                country: 'USA',
-                postalCode: 94158
-            });
-        contact.addDate({ tag: 'work', date: '1994-11-05T13:15:30Z'});
-        contact.addUrl({ tag: 'work', url: 'http://www.wix.com/'});
-
-        contact.update().then(
-            function(contact){
-
-                // Do more stuff with the returned updated contact
-            },
-            function(error){
-                throw error;
-            }
-        );
+        // Do stuff with this Contact
     },
-    function (error) {
-        throw error;
+    function(error){
+        throw(error);
     }
 );</code></pre>
-<h4>Explicit property update methods</h4>
-<p>To explicitly and immediately update Contact properties use the Contact.update<propertyName> methods. These methods make an HTTP PUT call to one of the /contacts/{contactId}/<propertyName> endpoints.
-We recommend using the Contact.update method if you need to change more than one property at a time.</p>
+<h4>Updating a Contact's properties</h4>
+<p>To explicitly and immediately update Contact information use the Contact.update<propertyName> methods.</p>
+<p>These methods make an HTTP PUT call to one of the /contacts/{contactId}/<propertyName> endpoints.</p>
 <p>The example below shows how to update the name property of a Contact.</p>
-<pre><code class="lang-js">var contact = api.Contacts.newContact();
-contact.name({first: 'Karen', last: 'Meep'});
-api.Contacts.create(contact).then(
+<pre><code class="lang-js">api.Contacts.getContactById(contactId).then(
     function (contact) {
         contact.name().prefix('Sir');
         contact.name().first('Mix');
@@ -291,15 +295,20 @@ api.Contacts.create(contact).then(
 <h4>Post an activity against a Contact</h4>
 <p>The code below posts an Activity against the given Contact.</p>
 <p>Note: Use the Activities.postActivity function to post an Activity in no relation to a Contact.</p>
-<pre><code class="lang-js">var activity = api.Activities.newActivity(api.Activities.TYPES.ALBUM_FAN);
-activity.activityLocationUrl = &quot;http://www.wix.com&quot;;
-activity.activityDetails.summary = &quot;test&quot;;
-activity.activityDetails.additionalInfoUrl = &quot;http://www.wix.com&quot;;
-activity.activityInfo.album.name = &quot;Wix&quot;;
-activity.activityInfo.album.id = &quot;1234&quot;;
-var contact = api.Contacts.newContact();
-contact.name({first: 'Karen', last: 'Meep'});
-api.Contacts.create(contact).then(
+<pre><code class="lang-js">var trackShare = api.Activities.newActivity(api.Activities.TYPES.TRACK_SHARE);
+trackShare.withLocationUrl('http://www.wix.com'); // where on the site did this happen?
+
+// Activity Details will appear on the site owner's Feed
+trackShare.withActivityDetails('A user shared a song from your site!', 'http://www.twitter.com/linkToTweet');
+trackShare.activityInfo =
+    {
+        artist: { name: 'Sir Mix-a-Lot', id: '111' },
+        track: { name: 'Baby Got Back', id: '1' },
+        album: { name: 'Mack Daddy', id: '5555' },
+        sharedTo: 'TWITTER'
+    };
+
+api.Contacts.getContactById(contactId).then(
     function(contact){
 
         contact.addActivity(activity, api).then(
@@ -307,8 +316,6 @@ api.Contacts.create(contact).then(
 
                 var activityId = data.activityId;
                 var contactId = data.contactId;
-
-                // Do something with this information
             },
             function(error){
                 throw error;
@@ -360,32 +367,6 @@ api.Contacts.create(contact).then(
         throw error;
     }
 );</code></pre>
-<h3>Get a Contact from The Wix Hive</h3>
-<pre><code class="lang-js">api.Contacts.getContactById('SOME_CONTACT_ID').then(
-    function(contact){
-
-        // Do stuff with this Contact
-    },
-    function(error){
-        throw(error);
-    }
-);</code></pre>
-<h3>Get a list of site Contact Subscribers</h3>
-<p>Subscribers are Contacts (for the given site) that have opted in to receiving communications from applications.</p>
-<pre><code class="lang-js">api.Contacts.getContactsSubscribers(
-    {
-        status: notSet, // or optIn
-        pageSize: 50 // or 25, 100. Default is 25
-    }
-).then(
-    function(pagingContactsResult) {
-
-        // Contact the site's subscribers
-    },
-    function(error) {
-        throw error;
-    }
-);</code></pre>
 <h3>Get a list of site Activities</h3>
 <pre><code class="lang-js">
 api.Activities.getActivities(
@@ -404,7 +385,8 @@ api.Activities.getActivities(
 }, function(error) {
     throw error;
 });</code></pre>
-<h3>Post an activity</h3>
+<h3>Post An Activity</h3>
+<h4>Obtain a User Session Token</h4>
 <p>This is where the <a href="http://dev.wix.com/docs/display/DRAF/JavaScript+SDK">Javascript SDK</a> comes in to play. Use it to obtain a user session token, then use the token to create an activity on behalf of the user.</p>
 <p>Here's an example of how to obtain the session token and then sending it to the NodeJS server</p>
 <pre><code class="lang-js">$(&quot;#createActivityButton&quot;).click(function() {
@@ -417,8 +399,38 @@ api.Activities.getActivities(
         }
     );
 });</code></pre>
-<p>Use the session token on your Node server to create an activity an post it to the Wix Hive.
-Note: This code posts an Activity without any connection to a Contact. To post an Activity against a Contact use the Contact.addActivity method.</p>
+<h4>Create an Activity Object</h4>
+<p>To create an Activity either use our builder (as shown in the Contact Form Activity example below) or use a JSON, following our Activity schemas (as shown in the Ecommerce Purchase Activity example below)</p>
+<h5>Create an Activity Using JSON</h5>
+<pre><code class="lang-js">var ecommPurchase = api.Activities.newActivity(api.Activities.TYPES.ECOMMERCE_PURCHASE);
+var coupon = {total: '1', title: 'Dis'};
+var tax = {total: 1, formattedTotal: 1};
+var shipping = {total: 1, formattedTotal: 1};
+var payment = {total: '1', subtotal: '1', formattedTotal: '1.0', formattedSubtotal: '1.0', currency: 'EUR', coupon: coupon, tax: tax, shipping: shipping};
+var media = {thumbnail: 'PIC'};
+var item = { id: 1, sku: 'sky', title: 'title', quantity: 1, price: '1', formattedPrice: '1.1', currency: 'EUR', productLink: 'link', weight: '1', formattedWeight: '1.0KG', media: media, variants: [{title: 'title', value: '1'}]};
+var shipping_address =
+    {
+        firstName: 'Wix' , lastName: 'Cool',
+        email: 'wix@example.com', phone: '12345566',
+        city: 'Bitola', address1: 'Marshal Tito', address2: 'Marshal Tito',
+        region: 'Bitola', regionCode: '7000',
+        country: 'USA', countryCode: 'US',
+        zip: '7000',
+        company: 'Wix.com'
+    };
+var purchase = { cartId: '11111', storeId: '11111', orderId: '11111',
+    items: [item],
+    payment: payment,
+    shippingAddress: shipping_address,
+    billingAddress: shipping_address,
+    paymentGateway: 'PAYPAL',
+    note: 'Note',
+    buyerAcceptsMarketing: true };
+ecommPurchase.withLocationUrl('http://www.wix.com');
+ecommPurchase.withActivityDetails('test', 'http://www.wix.com');
+ecommPurchase.activityInfo = purchase;</code></pre>
+<h5>Create an Activity Using The Object Builder</h5>
 <pre><code class="lang-js">var activity = api.Activities.newActivity(api.Activities.TYPES.CONTACT_FORM);
 activity.activityLocationUrl = &quot;http://www.wix.com&quot;;
 activity.activityDetails.summary = &quot;test&quot;;
@@ -434,18 +446,25 @@ var ai = activity.activityInfo;
 ai.addField(ai.newField().withName(&quot;email&quot;).withValue(&quot;name@wexample.com&quot;));
 ai.addField(ai.newField().withName(&quot;first&quot;).withValue(&quot;Your&quot;));
 ai.addField(ai.newField().withName(&quot;first&quot;).withValue(&quot;Your&quot;));
-ai.addField(ai.newField().withName(&quot;last&quot;).withValue(&quot;Customer&quot;));
-
-api.Activities.postActivity(activity, SESSION_ID)
+ai.addField(ai.newField().withName(&quot;last&quot;).withValue(&quot;Customer&quot;));</code></pre>
+<h5>Post an Activity From Your Server</h5>
+<p>Use the session token on your Node server to create an activity an post it to the Wix Hive.
+Note: This code posts an Activity without any connection to a Contact. To post an Activity against a Contact use the Contact.addActivity method.</p>
+<pre><code class="lang-js">api.Activities.postActivity(activity, SESSION_ID)
     .then(function(data) {
-        data.should.not.equal(undefined);
-        data.should.be.a.String;
-        data.should.not.be.empty;
-        data.should.not.be.length(0)
-        done();
+        console.log ('oh YEAAAHHHH!');
+
     }, function(error) {
-        throw error;
+        console.log ('oh no!');
     });</code></pre>
+<h2>Running the tests</h2>
+<ol>
+<li>Install <a href="http://gruntjs.com/installing-grunt">Grunt</a></li>
+<li>Run<pre><code class="lang-js">$ grunt schemas</code></pre>
+</li>
+<li>Install <a href="https://www.npmjs.org/package/mocha">Mocha</a> (-g)</li>
+<li>Run the tests using Mocha (use '-R nyan' for fun!)</li>
+</ol>
 <h2>Questions?</h2>
 <p>Explore the complete <a href="http://dev.wix.com/docs/display/DRAF/Working+with+the+Wix+RESTful+API">documentation</a></p></article>
     </section>
@@ -472,7 +491,7 @@ api.Activities.postActivity(activity, SESSION_ID)
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a>
-		on Thu Jul 31 2014 17:22:20 GMT+0300 (IDT) using the <a href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
+		on Sat Nov 08 2014 11:46:19 GMT-0000 (GMT) using the <a href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>
 			</div>
