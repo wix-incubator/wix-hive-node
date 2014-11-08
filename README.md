@@ -95,6 +95,7 @@ To share your Contact with the Wix Hive, use the create function as shown below.
 ```js
 // Create a new Contact object.
 // This Contact is only known locally at this point, it has not been saved to the Wix Hive.
+var api = wix.getAPI(APP_SECRET, APP_ID, instanceId);
 var contact = api.Contacts.newContact(api);
 contact.name({first: 'Karen', last: 'Meep'});
 contact.company({role: 'SDK Product', name: 'Wix'});
@@ -131,6 +132,7 @@ api.Contacts.create(contact).then(
 Use this function to get an existing Contact from the Wix Hive
 
 ```js
+var api = wix.getAPI(APP_SECRET, APP_ID, instanceId);
 api.Contacts.getContactById('SOME_CONTACT_ID').then(
     function(contact){
 
@@ -151,6 +153,7 @@ These methods make an HTTP PUT call to one of the /contacts/{contactId}/<propert
 The example below shows how to update the name property of a Contact.
 
 ```js
+var api = wix.getAPI(APP_SECRET, APP_ID, instanceId);
 api.Contacts.getContactById(contactId).then(
     function (contact) {
         contact.name().prefix('Sir');
@@ -181,6 +184,7 @@ The code below posts an Activity against the given Contact.
 Note: Use the Activities.postActivity function to post an Activity in no relation to a Contact.
 
 ```js
+var api = wix.getAPI(APP_SECRET, APP_ID, instanceId);
 var trackShare = api.Activities.newActivity(api.Activities.TYPES.TRACK_SHARE);
 trackShare.withLocationUrl('http://www.wix.com'); // where on the site did this happen?
 
@@ -250,6 +254,7 @@ contact.getActivities(nextCursor,
 ### Get a list of Contacts from The Wix Hive
 
 ```js
+var api = wix.getAPI(APP_SECRET, APP_ID, instanceId);
 api.Contacts.getContacts(
     null, // or cursor
     {
@@ -268,7 +273,7 @@ api.Contacts.getContacts(
 
 ### Get a list of site Activities
 ```js
-
+var api = wix.getAPI(APP_SECRET, APP_ID, instanceId);
 api.Activities.getActivities(
     null, // supply a cursor
     {
