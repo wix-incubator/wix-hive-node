@@ -20,7 +20,19 @@ describe('Sites', function() {
             api.Sites.getSite()
                 .then(function(data) {
                     data.should.not.equal(undefined);
-                    console.log(data);
+                    done();
+                }, function(error) {
+                    done(error);
+                }).done(null, done);
+        });
+    });
+
+    describe('getSitePages', function() {
+        it('should return return Site address', function(done) {
+
+            api.Sites.getSitePages()
+                .then(function(data) {
+                    data.should.not.equal(undefined);
                     done();
                 }, function(error) {
                     done(error);
