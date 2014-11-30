@@ -196,6 +196,7 @@ describe('Api', function() {
                                 "auth/register",
                                 "auth/status-change",
                                 "contact/contact-form",
+                                "contact/subscription-form"
                                 "contacts/create",
                                 "conversion/complete",
                                 "e_commerce/purchase",
@@ -1367,6 +1368,7 @@ describe('Api', function() {
         });
 
         describe('getActivities', function () {
+            this.timeout(10000);
             it('should not throw errors when called without parameters', function (done) {
 
                 api.Activities.getActivities(null, null).then(
