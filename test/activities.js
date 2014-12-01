@@ -196,7 +196,7 @@ describe('Api', function() {
                                 "auth/register",
                                 "auth/status-change",
                                 "contact/contact-form",
-                                "contact/subscription-form"
+                                "contact/subscription-form",
                                 "contacts/create",
                                 "conversion/complete",
                                 "e_commerce/purchase",
