@@ -367,6 +367,42 @@ describe('Api', function() {
         ecommPurchase.withActivityDetails('test', 'http://www.wix.com');
         ecommPurchase.activityInfo = purchase;
 
+        var ecommCartAdd = api.Activities.newActivity(api.Activities.TYPES.ECOMMERCE_CART_ADD);
+        ecommCartAdd.withLocationUrl('http://www.wix.com');
+        ecommCartAdd.withActivityDetails('test', 'http://www.wix.com');
+        var item = {
+            id: "id1", sku: "sku1", title: "an item", quantity: 2, price: 3.99, formattedPrice: "3.99$",
+            currency: "USD", productLink: "http://wix.com", weight: 1.3, formattedWeight: "1.3lbs", media: { thumbnail: "http://wix.com"},
+            variants: [ {title: "title1", value: "value1"}, {title: "title2", value: "value2"} ]
+        };
+        var cart = { cartId: "cartId1", storeId: "storeId1", item: item };
+        ecommCartAdd.activityInfo = cart;
+
+        var ecommCartRemove = api.Activities.newActivity(api.Activities.TYPES.ECOMMERCE_CART_REMOVE);
+        ecommCartRemove.withLocationUrl('http://www.wix.com');
+        ecommCartRemove.withActivityDetails('test', 'http://www.wix.com');
+        var item = {
+            id: "id1", sku: "sku1", title: "an item", quantity: 2, price: 3.99, formattedPrice: "3.99$",
+            currency: "USD", productLink: "http://wix.com", weight: 1.3, formattedWeight: "1.3lbs", media: { thumbnail: "http://wix.com"},
+            variants: [ {title: "title1", value: "value1"}, {title: "title2", value: "value2"} ]
+        };
+        var cart = { cartId: "cartId1", storeId: "storeId1", item: item };
+        ecommCartRemove.activityInfo = cart;
+
+        var ecommCartCheckout = api.Activities.newActivity(api.Activities.TYPES.ECOMMERCE_CART_CHECKOUT);
+        ecommCartCheckout.withLocationUrl('http://www.wix.com');
+        ecommCartCheckout.withActivityDetails('test', 'http://www.wix.com');
+        var item1 = {
+            id: "id1", sku: "sku1", title: "an item", quantity: 2, price: 3.99, formattedPrice: "3.99$",
+            currency: "USD", productLink: "http://wix.com", weight: 1.3, formattedWeight: "1.3lbs", media: { thumbnail: "http://wix.com"},
+            variants: [ {title: "title1", value: "value1"}, {title: "title2", value: "value2"} ] };
+        var item2 = {
+            id: "id2", sku: "sku2", title: "an item2", quantity: 4, price: 6.99, formattedPrice: "6.99$",
+            currency: "USD", productLink: "http://wix.com", weight: 2.3, formattedWeight: "2.3lbs", media: { thumbnail: "http://wix.com"},
+            variants: [ {title: "title1", value: "value1"}, {title: "title2", value: "value2"} ] };
+        var cart = { cartId: "cartId1", storeId: "storeId1", items: [item1, item2 ] };
+        ecommCartCheckout.activityInfo = cart;
+
         var schedulerAppointment = api.Activities.newActivity(api.Activities.TYPES.SCHEDULER_APPOINTMENT);
         schedulerAppointment.withLocationUrl('http://www.wix.com');
         schedulerAppointment.withActivityDetails('test', 'http://www.wix.com');
@@ -788,6 +824,409 @@ describe('Api', function() {
                                 items: [item] };
                             activity.activityInfo = purchase;
                             activity.activityInfo = { destination: { target: 'localhost'}};
+                            expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                            done();
+                        });
+                    });
+                });
+
+                describe('Ecomm Cart Add Activity', function () {
+
+                    it('should post full activity without throwing error', function (done) {
+                        var activity = ecommCartAdd;
+                        api.Activities.postActivity(activity, SESSION_ID)
+                            .then(function (data) {
+                                data.should.not.equal(undefined);
+                                data.should.be.a.String;
+                                data.should.not.be.empty;
+                                data.should.not.be.length(0);
+                                done();
+                            }, function (error) {
+                                done(error);
+                            }).done(null, done);
+                    });
+
+                    it('should post activity without optional fields without throwing error', function (done) {
+
+                        var ecommCartAdd = api.Activities.newActivity(api.Activities.TYPES.ECOMMERCE_CART_ADD);
+                        ecommCartAdd.withLocationUrl('http://www.wix.com');
+                        ecommCartAdd.withActivityDetails('test', 'http://www.wix.com');
+                        var item = {
+                            id: "id1", title: "an item", quantity: 2, currency: "USD"
+                        };
+                        var cart = { cartId: "cartId1", item: item };
+                        ecommCartAdd.activityInfo = cart;
+                        var activity = ecommCartAdd;
+
+                        api.Activities.postActivity(activity, SESSION_ID)
+                            .then(function (data) {
+                                data.should.not.equal(undefined);
+                                data.should.be.a.String;
+                                data.should.not.be.empty;
+                                data.should.not.be.length(0);
+                                done();
+                            }, function (error) {
+                                done(error);
+                            }).done(null, done);
+                    });
+
+
+                    describe('should throw error when posting activity without mandatory fields', function () {
+
+                        it('item', function (done) {
+                            var ecommCartAdd = api.Activities.newActivity(api.Activities.TYPES.ECOMMERCE_CART_ADD);
+                            ecommCartAdd.withLocationUrl('http://www.wix.com');
+                            ecommCartAdd.withActivityDetails('test', 'http://www.wix.com');
+                            var cart = { cartId: "cartId1" };
+                            ecommCartAdd.activityInfo = cart;
+                            var activity = ecommCartAdd;
+                            expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                            done();
+                        });
+                        it('cartId', function (done) {
+                            var ecommCartAdd = api.Activities.newActivity(api.Activities.TYPES.ECOMMERCE_CART_ADD);
+                            ecommCartAdd.withLocationUrl('http://www.wix.com');
+                            ecommCartAdd.withActivityDetails('test', 'http://www.wix.com');
+                            var item = {
+                                id: "id1", title: "an item", quantity: 2, currency: "USD"
+                            };
+                            var cart = { item: item };
+                            ecommCartAdd.activityInfo = cart;
+                            var activity = ecommCartAdd;
+                            expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                            done();
+                        });
+                        it('item.id', function (done) {
+                            var ecommCartAdd = api.Activities.newActivity(api.Activities.TYPES.ECOMMERCE_CART_ADD);
+                            ecommCartAdd.withLocationUrl('http://www.wix.com');
+                            ecommCartAdd.withActivityDetails('test', 'http://www.wix.com');
+                            var item = {
+                                title: "an item", quantity: 2, currency: "USD"
+                            };
+                            var cart = { cartId: "cartId1", item: item };
+                            ecommCartAdd.activityInfo = cart;
+                            var activity = ecommCartAdd;
+                            expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                            done();
+                        });
+                        it('item.title', function (done) {
+                            var ecommCartAdd = api.Activities.newActivity(api.Activities.TYPES.ECOMMERCE_CART_ADD);
+                            ecommCartAdd.withLocationUrl('http://www.wix.com');
+                            ecommCartAdd.withActivityDetails('test', 'http://www.wix.com');
+                            var item = {
+                                id: "id1", quantity: 2, currency: "USD"
+                            };
+                            var cart = { cartId: "cartId1", item: item };
+                            ecommCartAdd.activityInfo = cart;
+                            var activity = ecommCartAdd;
+                            expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                            done();
+                        });
+                        it('item.quantity', function (done) {
+                            var ecommCartAdd = api.Activities.newActivity(api.Activities.TYPES.ECOMMERCE_CART_ADD);
+                            ecommCartAdd.withLocationUrl('http://www.wix.com');
+                            ecommCartAdd.withActivityDetails('test', 'http://www.wix.com');
+                            var item = {
+                                id: "id1", title: "an item", currency: "USD"
+                            };
+                            var cart = { cartId: "cartId1", item: item };
+                            ecommCartAdd.activityInfo = cart;
+                            var activity = ecommCartAdd;
+                            expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                            done();
+                        });
+                        it('item.currency', function (done) {
+                            var ecommCartAdd = api.Activities.newActivity(api.Activities.TYPES.ECOMMERCE_CART_ADD);
+                            ecommCartAdd.withLocationUrl('http://www.wix.com');
+                            ecommCartAdd.withActivityDetails('test', 'http://www.wix.com');
+                            var item = {
+                                id: "id1", title: "an item", quantity: 2,
+                            };
+                            var cart = { cartId: "cartId1", item: item };
+                            ecommCartAdd.activityInfo = cart;
+                            var activity = ecommCartAdd;
+                            expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                            done();
+                        });
+                        it('variants.title', function (done) {
+
+                            var ecommCartAdd = api.Activities.newActivity(api.Activities.TYPES.ECOMMERCE_CART_ADD);
+                            ecommCartAdd.withLocationUrl('http://www.wix.com');
+                            ecommCartAdd.withActivityDetails('test', 'http://www.wix.com');
+                            var item = {
+                                id: "id1", title: "an item", quantity: 2, currency: "USD"
+                            };
+                            var cart = { cartId: "cartId1", item: item,
+                                variants: [ { value: "value1" } ] };
+                            ecommCartAdd.activityInfo = cart;
+                            var activity = ecommCartAdd;
+                            expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                            done()
+                        });
+                    });
+                });
+
+                describe('Ecomm Cart Remove Activity', function () {
+
+                    it('should post full activity without throwing error', function (done) {
+                        var activity = ecommCartRemove;
+                        api.Activities.postActivity(activity, SESSION_ID)
+                            .then(function (data) {
+                                data.should.not.equal(undefined);
+                                data.should.be.a.String;
+                                data.should.not.be.empty;
+                                data.should.not.be.length(0);
+                                done();
+                            }, function (error) {
+                                done(error);
+                            }).done(null, done);
+                    });
+
+                    it('should post activity without optional fields without throwing error', function (done) {
+
+                        var ecommCartRemove = api.Activities.newActivity(api.Activities.TYPES.ECOMMERCE_CART_REMOVE);
+                        ecommCartRemove.withLocationUrl('http://www.wix.com');
+                        ecommCartRemove.withActivityDetails('test', 'http://www.wix.com');
+                        var item = {
+                            id: "id1", title: "an item", quantity: 2, currency: "USD"
+                        };
+                        var cart = { cartId: "cartId1", item: item };
+                        ecommCartRemove.activityInfo = cart;
+                        var activity = ecommCartRemove;
+
+                        api.Activities.postActivity(activity, SESSION_ID)
+                            .then(function (data) {
+                                data.should.not.equal(undefined);
+                                data.should.be.a.String;
+                                data.should.not.be.empty;
+                                data.should.not.be.length(0);
+                                done();
+                            }, function (error) {
+                                done(error);
+                            }).done(null, done);
+                    });
+
+
+                    describe('should throw error when posting activity without mandatory fields', function () {
+
+                        it('item', function (done) {
+                            var ecommCartAdd = api.Activities.newActivity(api.Activities.TYPES.ECOMMERCE_CART_REMOVE);
+                            ecommCartAdd.withLocationUrl('http://www.wix.com');
+                            ecommCartAdd.withActivityDetails('test', 'http://www.wix.com');
+                            var cart = { cartId: "cartId1" };
+                            ecommCartAdd.activityInfo = cart;
+                            var activity = ecommCartAdd;
+                            expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                            done();
+                        });
+                        it('cartId', function (done) {
+                            var ecommCartAdd = api.Activities.newActivity(api.Activities.TYPES.ECOMMERCE_CART_REMOVE);
+                            ecommCartAdd.withLocationUrl('http://www.wix.com');
+                            ecommCartAdd.withActivityDetails('test', 'http://www.wix.com');
+                            var item = {
+                                id: "id1", title: "an item", quantity: 2, currency: "USD"
+                            };
+                            var cart = { item: item };
+                            ecommCartAdd.activityInfo = cart;
+                            var activity = ecommCartAdd;
+                            expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                            done();
+                        });
+                        it('item.id', function (done) {
+                            var ecommCartAdd = api.Activities.newActivity(api.Activities.TYPES.ECOMMERCE_CART_REMOVE);
+                            ecommCartAdd.withLocationUrl('http://www.wix.com');
+                            ecommCartAdd.withActivityDetails('test', 'http://www.wix.com');
+                            var item = {
+                                title: "an item", quantity: 2, currency: "USD"
+                            };
+                            var cart = { cartId: "cartId1", item: item };
+                            ecommCartAdd.activityInfo = cart;
+                            var activity = ecommCartAdd;
+                            expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                            done();
+                        });
+                        it('item.title', function (done) {
+                            var ecommCartAdd = api.Activities.newActivity(api.Activities.TYPES.ECOMMERCE_CART_REMOVE);
+                            ecommCartAdd.withLocationUrl('http://www.wix.com');
+                            ecommCartAdd.withActivityDetails('test', 'http://www.wix.com');
+                            var item = {
+                                id: "id1", quantity: 2, currency: "USD"
+                            };
+                            var cart = { cartId: "cartId1", item: item };
+                            ecommCartAdd.activityInfo = cart;
+                            var activity = ecommCartAdd;
+                            expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                            done();
+                        });
+                        it('item.quantity', function (done) {
+                            var ecommCartAdd = api.Activities.newActivity(api.Activities.TYPES.ECOMMERCE_CART_REMOVE);
+                            ecommCartAdd.withLocationUrl('http://www.wix.com');
+                            ecommCartAdd.withActivityDetails('test', 'http://www.wix.com');
+                            var item = {
+                                id: "id1", title: "an item", currency: "USD"
+                            };
+                            var cart = { cartId: "cartId1", item: item };
+                            ecommCartAdd.activityInfo = cart;
+                            var activity = ecommCartAdd;
+                            expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                            done();
+                        });
+                        it('item.currency', function (done) {
+                            var ecommCartAdd = api.Activities.newActivity(api.Activities.TYPES.ECOMMERCE_CART_REMOVE);
+                            ecommCartAdd.withLocationUrl('http://www.wix.com');
+                            ecommCartAdd.withActivityDetails('test', 'http://www.wix.com');
+                            var item = {
+                                id: "id1", title: "an item", quantity: 2,
+                            };
+                            var cart = { cartId: "cartId1", item: item };
+                            ecommCartAdd.activityInfo = cart;
+                            var activity = ecommCartAdd;
+                            expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                            done();
+                        });
+                        it('variants.title', function (done) {
+
+                            var ecommCartAdd = api.Activities.newActivity(api.Activities.TYPES.ECOMMERCE_CART_REMOVE);
+                            ecommCartAdd.withLocationUrl('http://www.wix.com');
+                            ecommCartAdd.withActivityDetails('test', 'http://www.wix.com');
+                            var item = {
+                                id: "id1", title: "an item", quantity: 2, currency: "USD"
+                            };
+                            var cart = { cartId: "cartId1", item: item,
+                                variants: [ { value: "value1" } ] };
+                            ecommCartAdd.activityInfo = cart;
+                            var activity = ecommCartAdd;
+                            expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                            done()
+                        });
+                    });
+                });
+
+                describe('Ecomm Cart Checkout Activity', function () {
+
+                    it('should post full activity without throwing error', function (done) {
+                        var activity = ecommCartCheckout;
+                        api.Activities.postActivity(activity, SESSION_ID)
+                            .then(function (data) {
+                                data.should.not.equal(undefined);
+                                data.should.be.a.String;
+                                data.should.not.be.empty;
+                                data.should.not.be.length(0);
+                                done();
+                            }, function (error) {
+                                done(error);
+                            }).done(null, done);
+                    });
+
+                    it('should post activity without optional fields without throwing error', function (done) {
+
+                        var ecommCartCheckout = api.Activities.newActivity(api.Activities.TYPES.ECOMMERCE_CART_CHECKOUT);
+                        ecommCartCheckout.withLocationUrl('http://www.wix.com');
+                        ecommCartCheckout.withActivityDetails('test', 'http://www.wix.com');
+                        var item1 = { id: "id1", title: "an item", quantity: 2, currency: "USD" };
+                        var cart = { cartId: "cartId1", items: [item1 ] };
+                        ecommCartCheckout.activityInfo = cart;
+                        var activity = ecommCartCheckout;
+
+                        api.Activities.postActivity(activity, SESSION_ID)
+                            .then(function (data) {
+                                data.should.not.equal(undefined);
+                                data.should.be.a.String;
+                                data.should.not.be.empty;
+                                data.should.not.be.length(0);
+                                done();
+                            }, function (error) {
+                                done(error);
+                            }).done(null, done);
+                    });
+
+
+                    describe('should throw error when posting activity without mandatory fields', function () {
+
+                        it('cartId', function (done) {
+                            var ecommCartCheckout = api.Activities.newActivity(api.Activities.TYPES.ECOMMERCE_CART_CHECKOUT);
+                            ecommCartCheckout.withLocationUrl('http://www.wix.com');
+                            ecommCartCheckout.withActivityDetails('test', 'http://www.wix.com');
+                            var item1 = { id: "id1", title: "an item", quantity: 2, currency: "USD" };
+                            var cart = { items: [item1 ] };
+                            ecommCartCheckout.activityInfo = cart;
+                            var activity = ecommCartCheckout;
+                            expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                            done();
+                        });
+                        it('items', function (done) {
+                            var ecommCartCheckout = api.Activities.newActivity(api.Activities.TYPES.ECOMMERCE_CART_CHECKOUT);
+                            ecommCartCheckout.withLocationUrl('http://www.wix.com');
+                            ecommCartCheckout.withActivityDetails('test', 'http://www.wix.com');
+                            var cart = { cartId: "cartId1" };
+                            ecommCartCheckout.activityInfo = cart;
+                            var activity = ecommCartCheckout;
+                            expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                            done();
+                        });
+                        it('items empty', function (done) {
+                            var ecommCartCheckout = api.Activities.newActivity(api.Activities.TYPES.ECOMMERCE_CART_CHECKOUT);
+                            ecommCartCheckout.withLocationUrl('http://www.wix.com');
+                            ecommCartCheckout.withActivityDetails('test', 'http://www.wix.com');
+                            var cart = { cartId: "cartId1", items: [ ] };
+                            ecommCartCheckout.activityInfo = cart;
+                            var activity = ecommCartCheckout;
+                            expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                            done();
+                        });
+                        it('items.item.id', function (done) {
+                            var ecommCartCheckout = api.Activities.newActivity(api.Activities.TYPES.ECOMMERCE_CART_CHECKOUT);
+                            ecommCartCheckout.withLocationUrl('http://www.wix.com');
+                            ecommCartCheckout.withActivityDetails('test', 'http://www.wix.com');
+                            var item1 = { title: "an item", quantity: 2, currency: "USD" };
+                            var cart = { items: [item1 ] };
+                            ecommCartCheckout.activityInfo = cart;
+                            var activity = ecommCartCheckout;
+                            expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                            done();
+                        });
+                        it('items.item.title', function (done) {
+                            var ecommCartCheckout = api.Activities.newActivity(api.Activities.TYPES.ECOMMERCE_CART_CHECKOUT);
+                            ecommCartCheckout.withLocationUrl('http://www.wix.com');
+                            ecommCartCheckout.withActivityDetails('test', 'http://www.wix.com');
+                            var item1 = { id: "id1", quantity: 2, currency: "USD" };
+                            var cart = { items: [item1 ] };
+                            ecommCartCheckout.activityInfo = cart;
+                            var activity = ecommCartCheckout;
+                            expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                            done();
+                        });
+                        it('items.item.quantity', function (done) {
+                            var ecommCartCheckout = api.Activities.newActivity(api.Activities.TYPES.ECOMMERCE_CART_CHECKOUT);
+                            ecommCartCheckout.withLocationUrl('http://www.wix.com');
+                            ecommCartCheckout.withActivityDetails('test', 'http://www.wix.com');
+                            var item1 = { id: "id1", title: "an item", currency: "USD" };
+                            var cart = { items: [item1 ] };
+                            ecommCartCheckout.activityInfo = cart;
+                            var activity = ecommCartCheckout;
+                            expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                            done();
+                        });
+                        it('items.item.currency', function (done) {
+                            var ecommCartCheckout = api.Activities.newActivity(api.Activities.TYPES.ECOMMERCE_CART_CHECKOUT);
+                            ecommCartCheckout.withLocationUrl('http://www.wix.com');
+                            ecommCartCheckout.withActivityDetails('test', 'http://www.wix.com');
+                            var item1 = { id: "id1", title: "an item", quantity: 2 };
+                            var cart = { items: [item1 ] };
+                            ecommCartCheckout.activityInfo = cart;
+                            var activity = ecommCartCheckout;
+                            expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                            done();
+                        });
+                        it('items.item.variants.title', function (done) {
+
+                            var ecommCartCheckout = api.Activities.newActivity(api.Activities.TYPES.ECOMMERCE_CART_CHECKOUT);
+                            ecommCartCheckout.withLocationUrl('http://www.wix.com');
+                            ecommCartCheckout.withActivityDetails('test', 'http://www.wix.com');
+                            var item1 = { id: "id1", title: "an item", quantity: 2, currency: "USD" };
+                            var cart = { cartId: "cartId1", item: item1, variants: [ { value: "value1" } ] };
+                            ecommCartCheckout.activityInfo = cart;
+                            var activity = ecommCartCheckout;
                             expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
                             done();
                         });

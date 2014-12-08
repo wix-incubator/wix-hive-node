@@ -1,0 +1,79 @@
+{
+    "type" : "object",
+    "properties" : {
+        "cartId": {
+            "type": "string",
+            "required": true
+        },
+        "storeId": {
+            "type": "string"
+        },
+        "items": {
+            "type": "array",
+            "required": true,
+            "item": {
+                "type": "object",
+                "required": true,
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "sku": {
+                        "type": "string"
+                    },
+                    "title": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "quantity": {
+                        "type": "integer",
+                        "required": true
+                    },
+                    "price": {
+                        "type": "number"
+                    },
+                    "formattedPrice": {
+                        "type": "string"
+                    },
+                    "currency": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "productLink": {
+                        "type": "string"
+                    },
+                    "weight": {
+                        "type": "number"
+                    },
+                    "formattedWeight": {
+                        "type": "string"
+                    },
+                    "media": {
+                        "type": "object",
+                        "properties": {
+                            "thumbnail": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "variants": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "title": {
+                                    "type": "string",
+                                    "required": true
+                                },
+                                "value": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -29,6 +29,24 @@ module.exports = function(grunt) {
                     out : "schemas/e_commerce/"
                 },
                 {
+                    type : "e_commerce/cart-add",
+                    name : "CartAddSchema",
+                    path: 'schemas/sources/e_commerce/cartAddSchema.json',
+                    out : "schemas/e_commerce/"
+                },
+                {
+                    type : "e_commerce/cart-remove",
+                    name : "CartCheckoutSchema",
+                    path: 'schemas/sources/e_commerce/cartRemoveSchema.json',
+                    out : "schemas/e_commerce/"
+                },
+                {
+                    type : "e_commerce/cart-checkout",
+                    name : "CartCheckoutSchema",
+                    path: 'schemas/sources/e_commerce/cartCheckoutSchema.json',
+                    out : "schemas/e_commerce/"
+                },
+                {
                     type : "hotels/purchase",
                     name : "HotelPurchaseSchema",
                     path: 'schemas/sources/hotels/purchaseSchema.json',
