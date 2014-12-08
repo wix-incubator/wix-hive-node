@@ -16,3 +16,4 @@ node_modules
 docs
 activityExample.js
 permissionsTesting.js
+test/config.js
