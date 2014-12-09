@@ -292,6 +292,44 @@ api.Activities.getActivities(
 });
 ```
 
+## Using Activities
+
+- What are Activities?
+
+  An Activity is a visitor’s interaction with the site, such as filling out a contact form, making a purchase, or sharing a page from the site on Twitter. Each Activity is reported back to the site owner via a feed. Activities are tracked by a visitor’s email, phone, or cookies. If a site visitor is a Contact, you will be able to link between the Contact and its Activities. Read more about the different activity types and their schemas here.
+
+### Creating an Activity object
+
+  When posting an Activity to Wix, the data must conform to a specific schema based on the type of the Activity.  Schemas are represented in JSON Schema format and represent the data interface for the Activities ecosystem.
+
+  The following an Activity schema for a Contact form. Below that is an example of how to post a Contact form Activity.
+  ```javascript
+  {
+    "type": "object",
+    "properties": {
+      "fields": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "required": true
+            },
+            "value": {
+              "type": "string",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  }
+
+  ```
+
+  See our [docs](http://dev.wix.com/docs/display/DRAF/Activity+Schema+Reference) for more Activity schemas.
 
 ### Post An Activity
 
@@ -299,7 +337,7 @@ api.Activities.getActivities(
 
 This is where the [Javascript SDK](http://dev.wix.com/docs/display/DRAF/JavaScript+SDK) comes in to play. Use it to obtain a user session token, then use the token to create an activity on behalf of the user.
 
-Here's an example of how to obtain the session token and then sending it to the NodeJS server
+Here's an example of how to obtain the session token and then sending it to your NodeJS server
 ```js
 $("#createActivityButton").click(function() {
     Wix.Activities.getUserSessionToken(
