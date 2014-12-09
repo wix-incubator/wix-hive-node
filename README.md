@@ -296,7 +296,11 @@ api.Activities.getActivities(
 
 - What are Activities?
 
-  An Activity is a visitor’s interaction with the site, such as filling out a contact form, making a purchase, or sharing a page from the site on Twitter. Each Activity is reported back to the site owner via a feed. Activities are tracked by a visitor’s email, phone, or cookies. If a site visitor is a Contact, you will be able to link between the Contact and its Activities. Read more about the different activity types and their schemas here.
+  An Activity is a visitor’s interaction with the site, such as filling out a contact form, making a purchase, or sharing a page from the site on Twitter. Each Activity is reported back to the site owner via a feed. Activities are tracked by a visitor’s email, phone, or cookies.
+
+  If a site visitor is a Contact, you will be able to link between the Contact and its Activities.
+
+  Read more about the different activity types and their schemas [here](http://dev.wix.com/docs/display/DRAF/Activity+Schema+Reference).
 
 ### Creating an Activity object
 
