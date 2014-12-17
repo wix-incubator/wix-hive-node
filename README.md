@@ -69,12 +69,31 @@ app.listen(3000);
 ```js
 var express = require('express');
 var routes = require('./routes');
-var Authentication = require('./authentication.js');
 var app = express();
 
+var authenticateWix = function(req, res) {
+    
+    var instance = req.query.instance;
+    try {
+        // Parse the instance parameter
+        var wixInstance = wix.getConnect();
+        var wixParse = wixInstance.parseInstance(instance, YOUR_APP_SECRET);
+        var instanceId = wixParse.instanceId;
+
+        wixAPI = wix.getAPI(APP_SECRET, APP_ID, instanceId); // Get a shortcut for the Wix RESTful API
+
+        //save instanceId and compId in request to be used in next function
+        req.instanceId = instanceId;
+        req.compId = req.query.compId;
+        req.origCompId = req.query.origCompId;
+    } catch(e) {
+        console.log("Wix API init failed. Check your app key, secret and instance Id: \n"+ e);
+        res.send( title );
+    }
+};
+
 function authenticate(req, res, next) {
-    var authentication = new Authentication();
-    authentication.authenticate(req, res, next);
+    authenticateWix(req, res, next);
 }
 
 app.get('/widget', authenticate, routes.widget);
