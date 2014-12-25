@@ -27,6 +27,7 @@ describe('Labels', function() {
                     done();
                 },
                 function(error) {
+                    console.log(error);
                     done(error);
                 }
             ).done(null, done);
@@ -44,6 +45,7 @@ describe('Labels', function() {
                     done();
                 },
                 function(error) {
+                    console.log(error);
                     done(error);
                 }
             ).done(null, done);
@@ -67,9 +69,26 @@ describe('Labels', function() {
                     done();
                 },
                 function(error) {
+                    console.log(error);
                     done(error);
                 }
             ).done(null, done);
+        });
+    });
+
+    describe('getLabelById', function() {
+        this.timeout(10000);
+        it('should return existing label with information', function (done) {
+            api.Labels.getLabelById("labelId").then(
+                function(data){
+                    console.log(data);
+                    done();
+                },
+                function(error){
+                    console.log(error);
+                    done(error);
+                }
+            );
         });
     });
 });
