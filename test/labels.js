@@ -20,6 +20,7 @@ describe('Labels', function() {
 
             api.Labels.getLabels().then(
                 function(pagingLabelsResult) {
+                    console.log(pagingLabelsResult);
                     pagingLabelsResult.should.not.equal(undefined);
                     pagingLabelsResult.should.be.a.Object;
                     pagingLabelsResult.should.not.be.empty;
@@ -27,7 +28,6 @@ describe('Labels', function() {
                     done();
                 },
                 function(error) {
-                    console.log(error);
                     done(error);
                 }
             ).done(null, done);
@@ -36,6 +36,7 @@ describe('Labels', function() {
 
             api.Labels.getLabels().then(
                 function(pagingLabelsResult) {
+                    console.log(pagingLabelsResult);
                     pagingLabelsResult.should.not.equal(undefined);
                     pagingLabelsResult.should.be.a.Object;
                     pagingLabelsResult.should.not.be.empty;
@@ -45,7 +46,6 @@ describe('Labels', function() {
                     done();
                 },
                 function(error) {
-                    console.log(error);
                     done(error);
                 }
             ).done(null, done);
@@ -58,6 +58,7 @@ describe('Labels', function() {
                 }
             ).then(
                 function(pagingLabelsResult) {
+                    console.log(pagingLabelsResult);
                     pagingLabelsResult.should.not.equal(undefined);
                     pagingLabelsResult.should.be.a.Object;
                     pagingLabelsResult.should.not.be.empty;
@@ -76,10 +77,10 @@ describe('Labels', function() {
         });
     });
 
-    describe('getLabelById', function() {
+    describe('getLabels', function() {
         this.timeout(10000);
         it('should return existing label with information', function (done) {
-            api.Labels.getLabelById("labelId").then(
+            api.Labels.getLabelById("contacts_server/customers").then(
                 function(data){
                     console.log(data);
                     done();
