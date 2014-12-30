@@ -8,6 +8,7 @@ var config = require("./config.js");
 var APP_SECRET = config.appSecret; // <---------- REPLACE THIS WITH YOUR OWN APP SECRET KEY
 var APP_KEY = config.appKey; // <---------- REPLACE THIS WITH YOUR OWN APP KEY
 var INSTANCE_ID = config.instanceId;
+var SESSION = config.sessionId;
 
 describe('Contacts', function() {
 
@@ -327,6 +328,20 @@ describe('Contacts', function() {
         it('should return Contact Id when given a phone shared with another Contacts', function(done) {
             var phone = '+1-415-639-5555';
             api.Contacts.upsert(phone).then(
+                function(contactId){
+                    contactId.should.not.eql(undefined);
+                    contactId.should.be.a.String;
+                    done();
+                },
+                function(error){
+                    done(error);
+                }
+            ).done(null, done);
+        });
+
+        it('should return Contact Id when given a sessionToken shared with another Contacts', function(done) {
+            var sessionToken = SESSION;
+            api.Contacts.upsert(sessionToken).then(
                 function(contactId){
                     contactId.should.not.eql(undefined);
                     contactId.should.be.a.String;
