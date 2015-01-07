@@ -212,7 +212,10 @@ describe('Api', function() {
                                 "music/track-played",
                                 "music/track-share",
                                 "music/track-skip",
-                                "scheduler/appointment"
+                                "scheduler/appointment",
+                                'shipping/delivered',
+                                'shipping/shipped',
+                                'shipping/status-change'
                             ]
                         };
 
@@ -400,7 +403,7 @@ describe('Api', function() {
         var deliveryEstimate = { start: oneDayAgo, end: oneDay.toISOString() };
         var shippingDetails = {method: 'USPS', tracking: '123456', deliveryEstimate: deliveryEstimate};
         var item = {id: 1, sku: 'sky', title: 'title', quantity: 1, price: '1', formattedPrice: '1.1', currency: 'EUR', productLink: 'link'};
-        shippingStatusChange.activityInfo =  { orderId: '11111', items: [item], status: 'awaiting_shipment', shippingDetails: shippingDetails, shippingAddress: shippingAddress, note: 'Note' };
+        shippingStatusChange.activityInfo =  { orderId: '11111', items: [item], status: 'AWAITING_SHIPMENT', shippingDetails: shippingDetails, shippingAddress: shippingAddress, note: 'Note' };
 
         var contactForm = api.Activities.newActivity(api.Activities.TYPES.CONTACT_FORM);
         var cu = contactForm.contactUpdate;
@@ -896,7 +899,7 @@ describe('Api', function() {
                         activity.withActivityDetails('test', 'http://www.wix.com');
                         var shippingAddress = {firstName: 'Wix' , lastName: 'Cool', email: 'wix@example.com', phone: '12345566', country: 'Macedonia', countryCode: 'MK', region: 'Bitola', regionCode: '7000', city: 'Bitola', address1: 'Marshal Tito', address2: 'Marshal Tito', zip: '7000', company: 'Wix.com'};
                         var item = {id: 1, title: 'title', quantity: 1, currency: 'EUR' };
-                        activity.activityInfo =  { orderId: '11111', items: [item], status: 'awaiting_shipment', shippingAddress: shippingAddress, note: 'Note' };
+                        activity.activityInfo =  { orderId: '11111', items: [item], status: 'AWAITING_SHIPMENT', shippingAddress: shippingAddress, note: 'Note' };
 
                         api.Activities.postActivity(activity, SESSION_ID)
                             .then(function (data) {
