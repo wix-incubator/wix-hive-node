@@ -106,7 +106,7 @@ describe('Contacts', function() {
             contact.company({role: 'MyRole', name: 'MyName'});
             contact.picture('http://assets.objectiface.com/hashed_silo_content/silo_content/6506/resized/mchammer.jpg');
             contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
-            contact.addEmail({tag: 'work', email: 'karenc@wix.com', emailStatus: api.Contacts.EMAIL_STATUS_TYPES.RECURRING});
+            contact.addEmail({tag: 'work', email: 'karen_meep@wix.com', emailStatus: api.Contacts.EMAIL_STATUS_TYPES.RECURRING});
             contact.addAddress(
                 {
                     tag: 'work',
@@ -138,7 +138,7 @@ describe('Contacts', function() {
                             var email = contact.emails()[0];
                             email.id().should.be.a.Number;
                             email.id().should.not.be.eql(undefined);
-                            email.email().should.be.eql('karenc@wix.com');
+                            email.email().should.be.eql('karen_meep@wix.com');
                             email.emailStatus().should.be.eql(api.Contacts.EMAIL_STATUS_TYPES.RECURRING);
                             email.tag().should.be.eql('work');
                             var address = contact.addresses()[0];
@@ -192,7 +192,7 @@ describe('Contacts', function() {
             contact.company({role: 'MyRole', name: 'MyName'});
             contact.picture('http://assets.objectiface.com/hashed_silo_content/silo_content/6506/resized/mchammer.jpg');
             contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
-            contact.addEmail({tag: 'work', email: 'karenc@wix.com', emailStatus: api.Contacts.EMAIL_STATUS_TYPES.RECURRING});
+            contact.addEmail({tag: 'work', email: 'karen_meep@wix.com', emailStatus: api.Contacts.EMAIL_STATUS_TYPES.RECURRING});
             contact.addAddress(
                 {
                     tag: 'work',
@@ -226,7 +226,7 @@ describe('Contacts', function() {
                             var email = contact.emails()[0];
                             email.id().should.be.a.Number;
                             email.id().should.not.be.eql(undefined);
-                            email.email().should.be.eql('karenc@wix.com');
+                            email.email().should.be.eql('karen_meep@wix.com');
                             email.emailStatus().should.be.eql(api.Contacts.EMAIL_STATUS_TYPES.RECURRING);
                             email.tag().should.be.eql('work');
                             var address = contact.addresses()[0];
@@ -312,7 +312,7 @@ describe('Contacts', function() {
         });
 
         it('should return Contact Id when given an email shared with another Contact', function(done) {
-            var email = 'karenc@wix.com';
+            var email = 'karen_meep@wix.com';
             api.Contacts.upsert(null, email).then(
                 function(contactId){
                     contactId.should.not.eql(undefined);
@@ -404,6 +404,91 @@ describe('Contacts', function() {
                     pagingContactsResult.currentData.total.should.not.be.eql(0);
                     should.exist(pagingContactsResult.currentData.pageSize);
                     assert(pagingContactsResult.currentData.pageSize <= 50);
+                    done();
+                },
+                function(error) {
+                    done(error);
+                }
+            ).done(null, done);
+        });
+        it('should return a non-empty list of contacts when called with firstName parameter', function (done) {
+
+            throw 'PENDING HAPI-10';
+            api.Contacts.getContacts(null,
+                {
+                    firstName: 'Karen'
+                }
+            ).then(
+                function(pagingContactsResult) {
+                    pagingContactsResult.should.not.equal(undefined);
+                    pagingContactsResult.should.be.a.Object;
+                    pagingContactsResult.should.not.be.empty;
+                    pagingContactsResult.currentData.results.should.be.a.Array;
+                    pagingContactsResult.currentData.results.should.not.have.length(0);
+                    pagingContactsResult.currentData.total.should.not.be.eql(0);
+                    done();
+                },
+                function(error) {
+                    done(error);
+                }
+            ).done(null, done);
+        });
+        it('should return a non-empty list of contacts when called with lastName parameter', function (done) {
+            throw 'PENDING HAPI-10';
+            api.Contacts.getContacts(null,
+                {
+                    lastName: 'Meep'
+                }
+            ).then(
+                function(pagingContactsResult) {
+                    pagingContactsResult.should.not.equal(undefined);
+                    pagingContactsResult.should.be.a.Object;
+                    pagingContactsResult.should.not.be.empty;
+                    pagingContactsResult.currentData.results.should.be.a.Array;
+                    pagingContactsResult.currentData.results.should.not.have.length(0);
+                    pagingContactsResult.currentData.total.should.not.be.eql(0);
+                    done();
+                },
+                function(error) {
+                    done(error);
+                }
+            ).done(null, done);
+        });
+        it('should return a non-empty list of contacts when called with email parameter', function (done) {
+            throw 'PENDING HAPI-10';
+            api.Contacts.getContacts(null,
+                {
+                    email: 'karen_meep@wix.com'
+                }
+            ).then(
+                function(pagingContactsResult) {
+                    pagingContactsResult.should.not.equal(undefined);
+                    pagingContactsResult.should.be.a.Object;
+                    pagingContactsResult.should.not.be.empty;
+                    pagingContactsResult.currentData.results.should.be.a.Array;
+                    pagingContactsResult.currentData.results.should.not.have.length(0);
+                    pagingContactsResult.currentData.total.should.not.be.eql(0);
+                    done();
+                },
+                function(error) {
+                    done(error);
+                }
+            ).done(null, done);
+        });
+        it('should return a non-empty list of contacts when called with phone parameter', function (done) {
+            throw 'PENDING HAPI-10';
+            api.Contacts.getContacts(null,
+                {
+                    phone: '+1-415-639-5555'
+                }
+            ).then(
+                function(pagingContactsResult) {
+                    pagingContactsResult.should.not.equal(undefined);
+                    pagingContactsResult.should.be.a.Object;
+                    pagingContactsResult.should.not.be.empty;
+                    pagingContactsResult.currentData.results.should.be.a.Array;
+                    pagingContactsResult.currentData.results.should.not.have.length(0);
+                    pagingContactsResult.currentData.total.should.not.be.eql(0);
                     done();
                 },
                 function(error) {

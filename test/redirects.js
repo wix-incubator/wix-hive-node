@@ -20,7 +20,6 @@ describe('Redirects', function() {
             api.Redirects.getRedirects()
                 .then(function(data) {
                     data.should.not.equal(undefined);
-                    console.log(data);
                     done();
                 }, function(error) {
                     done(error);

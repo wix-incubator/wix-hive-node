@@ -146,7 +146,24 @@ api.Contacts.create(contact).then(
 );
 ```
 
-#### Get a Contact from The Wix Hive
+
+#### Ensure that a Contact exists
+
+Use this function to ensure that a Contact with a given phone, email or session exists. If email, phone and sessionToken are specified, a Contact will only be returned if all properties match.
+
+```js
+var api = wix.getAPI(APP_SECRET, APP_ID, instanceId);
+api.Contacts.upsert(phone).then(
+    function(contactId){
+        // Do something with this Contact
+    },
+    function(error){
+        // Handle error
+    }
+);
+```
+
+#### Get a Contact by it's ID from The Wix Hive
 
 Use this function to get an existing Contact from the Wix Hive
 

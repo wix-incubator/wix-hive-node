@@ -67,10 +67,10 @@ describe('Contact', function() {
                 expect(contact.addEmail).withArgs({email: 'karenc@wix.com', emailStatus: api.Contacts.EMAIL_STATUS_TYPES.RECURRING}).to.throwException();
                 done();
             });
-            it('should throw exception with creating email without email status property', function(done) {
+            it('should not throw exception with creating email without email status property', function(done) {
 
                 var contact = api.Contacts.newContact();
-                expect(contact.addEmail).withArgs({email: 'karenc@wix.com', tag:'home'}).to.throwException();
+                contact.addEmail({tag: 'work', email: 'karenc@wix.com'});
                 done();
             });
             it('should ignore when setting tag property as null', function(done) {
