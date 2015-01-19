@@ -17,7 +17,7 @@ describe('Labels', function() {
     describe('getLabels', function() {
         this.timeout(10000);
         it('should not throw error when called with no parameters', function (done) {
-
+            throw 'PENDING HAPI-88';
             api.Labels.getLabels().then(
                 function(pagingLabelsResult) {
                     console.log(pagingLabelsResult);
@@ -33,7 +33,7 @@ describe('Labels', function() {
             ).done(null, done);
         });
         it('should return a non-empty list of Labels when called with no parameters', function (done) {
-
+            throw 'PENDING HAPI-88';
             api.Labels.getLabels().then(
                 function(pagingLabelsResult) {
                     console.log(pagingLabelsResult);
@@ -51,7 +51,7 @@ describe('Labels', function() {
             ).done(null, done);
         });
         it('should return a non-empty list of Labels when called with pageSize parameter', function (done) {
-
+            throw 'PENDING HAPI-88';
             api.Labels.getLabels(null,
                 {
                     pageSize: 50
@@ -78,6 +78,7 @@ describe('Labels', function() {
     });
 
     describe('getLabels', function() {
+        throw 'PENDING HAPI-89';
         this.timeout(10000);
         it('should return existing label with information', function (done) {
             api.Labels.getLabelById("contacts_server/customers").then(
