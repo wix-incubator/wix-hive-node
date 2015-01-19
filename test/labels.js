@@ -77,7 +77,7 @@ describe('Labels', function() {
         });
     });
 
-    describe('getLabels', function() {
+    describe('getLabelById', function() {
         throw 'PENDING HAPI-89';
         this.timeout(10000);
         it('should return existing label with information', function (done) {
