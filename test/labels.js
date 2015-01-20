@@ -78,9 +78,9 @@ describe('Labels', function() {
     });
 
     describe('getLabelById', function() {
-        throw 'PENDING HAPI-89';
         this.timeout(10000);
         it('should return existing label with information', function (done) {
+            throw 'PENDING HAPI-89';
             api.Labels.getLabelById("contacts_server/customers").then(
                 function(data){
                     console.log(data);
