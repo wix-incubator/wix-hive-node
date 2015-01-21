@@ -308,7 +308,17 @@ describe('Contacts', function() {
 
         it('should throw error when no email or phone is given', function(done) {
             expect(api.Contacts.upsert).to.throwException();
-            done()
+            done();
+        });
+
+        it('should throw error when given empty object', function(done) {
+            expect(api.Contacts.upsert).withArgs({}).to.throwException();
+            done();
+        });
+
+        it('should throw error when given object with no email or phone is given', function(done) {
+            expect(api.Contacts.upsert).withArgs({ userSessionToken: "nonononono" }).to.throwException();
+            done();
         });
 
         it('should return Contact Id when given an email shared with another Contact', function(done) {
@@ -339,9 +349,25 @@ describe('Contacts', function() {
             ).done(null, done);
         });
 
-        it('should return Contact Id when given a sessionToken shared with another Contacts', function(done) {
-            var sessionToken = SESSION;
-            api.Contacts.upsert(sessionToken).then(
+        it('should return Contact Id when given an email and a sessionToken', function(done) {
+            var userSessionToken = SESSION;
+            var email = 'karen_meep@wix.com';
+            api.Contacts.upsert({email: email, userSessionToken: userSessionToken}).then(
+                function(contactId){
+                    contactId.should.not.eql(undefined);
+                    contactId.should.be.a.String;
+                    done();
+                },
+                function(error){
+                    done(error);
+                }
+            ).done(null, done);
+        });
+
+        it('should return Contact Id when given a phone and a sessionToken', function(done) {
+            var userSessionToken = SESSION;
+            var phone = '+1-415-639-5555';
+            api.Contacts.upsert({phone: phone, userSessionToken: userSessionToken}).then(
                 function(contactId){
                     contactId.should.not.eql(undefined);
                     contactId.should.be.a.String;
