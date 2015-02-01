@@ -414,6 +414,16 @@ describe('Api', function() {
         ai.addField(ai.newField().withName("email").withValue("john@mail.com"));
         ai.addField(ai.newField().withName("first").withValue("John"));
 
+        var subscriptionForm = api.Activities.newActivity(api.Activities.TYPES.SUBSCIRPTION_FORM);
+        subscriptionForm.withLocationUrl('http://www.wix.com');
+        subscriptionForm.withActivityDetails('test', 'http://www.wix.com');
+        subscriptionForm.activityInfo = {
+            email: "karen@meep.com",
+            name: { prefix: "Dr.", first: "Karen", middle: "Mc", last: "meep", suffix: "The III"},
+            phone: "554-2234",
+            fields: [ {name: "item", value: "1"} ]
+        };
+
         describe('Post Activity', function() {
 
             this.timeout(10000);
@@ -448,8 +458,24 @@ describe('Api', function() {
             });
 
             describe('Contact Form Activity', function () {
-                it('should post contact form activity without throwing error', function (done) {
+                it('should post contact form activity with ContactUpdate without throwing error', function (done) {
                     var activity = contactForm;
+                    api.Activities.postActivity(activity, SESSION_ID)
+                        .then(function (data) {
+                            data.should.not.equal(undefined);
+                            data.should.be.a.String;
+                            data.should.not.be.empty;
+                            data.should.not.be.length(0);
+                            done();
+                        }, function (error) {
+                            done(error);
+                        }).done(null, done);
+                });
+            });
+
+            describe('Subscription Form Activity', function () {
+                it('should post Subscription form activity without throwing error', function (done) {
+                    var activity = subscriptionForm;
                     api.Activities.postActivity(activity, SESSION_ID)
                         .then(function (data) {
                             data.should.not.equal(undefined);
