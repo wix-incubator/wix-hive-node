@@ -17,7 +17,7 @@ describe('Labels', function() {
     describe('getLabels', function() {
         this.timeout(10000);
         it('should not throw error when called with no parameters', function (done) {
-            throw 'PENDING HAPI-88';
+            //throw 'PENDING HAPI-88';
             api.Labels.getLabels().then(
                 function(pagingLabelsResult) {
                     console.log(pagingLabelsResult);
@@ -93,4 +93,24 @@ describe('Labels', function() {
             );
         });
     });
+
+    describe('postLabel', function() {
+        this.timeout(10000);
+        it('should create label and return label ID', function (done) {
+            api.Labels.postLabel({name: 'Karens Label', description: 'Test Label'}).then(
+                function(labelId){
+                    console.log(labelId);
+                    labelId.should.not.equal(undefined);
+                    labelId.should.be.a.String;
+                    labelId.should.not.be.length(0);
+                    done();
+                },
+                function(error){
+                    console.log(error);
+                    done(error);
+                }
+            );
+        });
+    });
 });
+
