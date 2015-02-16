@@ -99,14 +99,12 @@ describe('Labels', function() {
         it('should create label and return label ID', function (done) {
             api.Labels.postLabel({name: 'Karens Label', description: 'Test Label'}).then(
                 function(labelId){
-                    console.log(labelId);
                     labelId.should.not.equal(undefined);
                     labelId.should.be.a.String;
                     labelId.should.not.be.length(0);
                     done();
                 },
                 function(error){
-                    console.log(error);
                     done(error);
                 }
             );
