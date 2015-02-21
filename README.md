@@ -32,8 +32,8 @@ Read about [developing a third party app for the Wix platform](http://dev.wix.co
    * **[Contributing](#contributing)**
 
 ## Prerequisites
-- **Register your app** [here](http://dev.wix.com/docs/display/DRAF/Dev+Center+Registration+Guide) to **obtain** your **APP_KEY** and **APP_SECRET**
-- **Get the Javascript SDK** [here](http://dev.wix.com/docs/display/DRAF/JavaScript+SDK). You'll need it for any data altering API calls (such as creating an activity).
+- **Register your app** [here](http://dev.wix.com/docs/development/developing-your-app#overview) to **obtain** your **APP_KEY** and **APP_SECRET**
+- **Get the Javascript SDK** [here](http://dev.wix.com/docs/sdk/introduction#overview). You'll need it for any data altering API calls (such as creating an activity).
 
 ## Installation
 Install [npm](https://www.npmjs.org/doc/README.html), then install the package:
