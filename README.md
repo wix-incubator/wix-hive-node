@@ -358,7 +358,7 @@ api.Activities.getActivities(
 
   If a site visitor is a Contact, you will be able to link between the Contact and its Activities.
 
-  Read more about the different activity types and their schemas [here](http://dev.wix.com/docs/display/DRAF/Activity+Schema+Reference).
+  Read more about the different activity types and their schemas [here](http://dev.wix.com/docs/wixhive/activities).
 
 ### The Activity object
 
@@ -391,13 +391,13 @@ api.Activities.getActivities(
 
   ```
 
-  See our [docs](http://dev.wix.com/docs/display/DRAF/Activity+Schema+Reference) for more Activity schemas.
+  See our [docs](http://dev.wix.com/docs/wixhive/activities) for more Activity schemas.
 
 ### Post An Activity
 
 #### Obtain a User Session Token
 
-This is where the [Javascript SDK](http://dev.wix.com/docs/display/DRAF/JavaScript+SDK) comes in to play. Use it to obtain a user session token, then use the token to create an activity on behalf of the user.
+This is where the [Javascript SDK](http://dev.wix.com/docs/sdk/introduction) comes in to play. Use it to obtain a user session token, then use the token to create an activity on behalf of the user.
 
 Here's an example of how to obtain the session token and then sending it to your NodeJS server
 ```js
