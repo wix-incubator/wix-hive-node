@@ -10,9 +10,22 @@ Read about [developing a third party app for the Wix platform](http://dev.wix.co
 1. **[Prerequisites](#prerequisites)**  
 2. **[Installation](#installation)**
 3. **[Quick Start](#quick-start)**
-4. **[Examples](#examples)**    
-   * **[Using the authentication module as middleware](#Using-the-authentication-module-as-middleware)**
-
+4. **[Manual](#examples)**    
+   * **[Using the authentication module as middleware](#using-the-authentication-module-as-middleware)**
+   * **[Contacts](#working-with-the-contact-object)**
+     * **[Creating a Contact](#create-a-contact-and-post-it-to-the-wix-hive)**
+     * **[Ensure a Contact exists](#ensure-that-a-contact-exists)**
+     * **[Get a Contact by ID](#get-a-contact-by-its-id-from-the-wix-hive)**
+     * **[Update a Contact's properties](#updating-a-contacts-properties)**
+     * **[Get a list of Contacts](#get-a-list-of-contacts-from-the-wix-hive)**
+   * **[Activities](#using-activities)**
+     * **[The Activity Object](#the-activity-object)**
+     * **[Posting an Activity for a visitor session](#post-an-activity)**
+     * **[Post an Activity for a Contact](#post-an-activity-against-a-contact)**
+     * **[Get a Contact's Activities](#get-contact-activities)**
+     * **[Get a list of Site Activities](#get-a-list-of-site-activities)**
+   * **[Test](#running-the-tests)**
+   * **[Contributing](#contributing)**
 
 ## Prerequisites
 - **Register your app** [here](http://dev.wix.com/docs/display/DRAF/Dev+Center+Registration+Guide) to **obtain** your **APP_KEY** and **APP_SECRET**
@@ -347,7 +360,7 @@ api.Activities.getActivities(
 
   Read more about the different activity types and their schemas [here](http://dev.wix.com/docs/display/DRAF/Activity+Schema+Reference).
 
-### Creating an Activity object
+### The Activity object
 
   When posting an Activity to Wix, the data must conform to a specific schema based on the type of the Activity.  Schemas are represented in JSON Schema format and represent the data interface for the Activities ecosystem.
 
@@ -483,9 +496,36 @@ $ grunt schemas
 3. Install [Mocha](https://www.npmjs.org/package/mocha) (-g)
 4. Run the tests using Mocha (use '-R nyan' for fun!)
 
+## Contributing
+
+**Everyone** is encouraged to help **improve** this gem. Some of the ways you can contribute include:
+
+1. Use alpha, beta, and pre-release versions.
+2. Report bugs.
+3. Suggest new features.
+4. Write or edit documentation.
+5. Write specifications.
+6. Write code (**no patch is too small**: fix typos, clean up inconsistent whitespace).
+7. Refactor code.
+8. Fix [issues](https://github.com/wix/wix-hive-node/issues).
+9. Submit an Issue
+
+### Submitting an Issue
+
+We use the GitHub issue tracker to track bugs and features. Before submitting a bug report or feature request, check to make sure it hasn't already been submitted. When submitting a bug report, please include a Gist that includes a stack trace and any details that may be necessary to reproduce the bug, including your package version, Node version, and operating system. Ideally, a bug report should include a pull request with failing specs.
+
+### Submitting a Pull Request
+
+1. Fork it ( https://github.com/[my-github-username]/wix-hive-ruby/fork )
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Implement your feature or bug fix.
+4. Commit your changes (`git commit -am 'Add some feature'`)
+5. Push to the branch (`git push origin my-new-feature`)
+6. Create a new [Pull Request](http://help.github.com/send-pull-requests/)
+
 ## Questions?
 
-Explore the complete [documentation](http://dev.wix.com/docs/display/DRAF/Working+with+the+Wix+RESTful+API)
+Explore the complete [documentation](http://dev.wix.com/docs)
 
 
 
