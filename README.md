@@ -5,6 +5,15 @@ Wix-Hive-Node
 
 Read about [developing a third party app for the Wix platform](http://dev.wix.com/docs/display/DRAF/Third+Party+Apps+-+Introduction).
 
+
+### Table of Contents
+1. **[Prerequisites](#prerequisites)**  
+2. **[Installation](#installation)**
+3. **[Quick Start](#quick-start)**
+4. **[Examples](#examples)**    
+   * **[Using the authentication module as middleware](#Using-the-authentication-module-as-middleware)**
+
+
 ## Prerequisites
 - **Register your app** [here](http://dev.wix.com/docs/display/DRAF/Dev+Center+Registration+Guide) to **obtain** your **APP_KEY** and **APP_SECRET**
 - **Get the Javascript SDK** [here](http://dev.wix.com/docs/display/DRAF/JavaScript+SDK). You'll need it for any data altering API calls (such as creating an activity).
