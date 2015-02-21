@@ -25,7 +25,7 @@ Read about [developing a third party app for the Wix platform](http://dev.wix.co
      * **[Get a Contact's Activities](#get-contact-activities)**
      * **[Get a list of Site Activities](#get-a-list-of-site-activities)**
    * **[Redirects](#redirects)**
-   * **[Sites](##using-the-sites-api)**
+   * **[Sites](#using-the-sites-api)**
      * **[Get a hosting site's URL and status](#get-a-hosting-sites-url-and-status)**
      * **[Get a hosting site's URL, status, and pages](#get-a-hosting-sites-url-status-and-pages)**
    * **[Test](#running-the-tests)**
