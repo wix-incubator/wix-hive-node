@@ -24,6 +24,8 @@ Read about [developing a third party app for the Wix platform](http://dev.wix.co
      * **[Post an Activity for a Contact](#post-an-activity-against-a-contact)**
      * **[Get a Contact's Activities](#get-contact-activities)**
      * **[Get a list of Site Activities](#get-a-list-of-site-activities)**
+   * **[Redirects](#redirects)**
+   * **[Sites](#Using-the-Sites-API)**
    * **[Test](#running-the-tests)**
    * **[Contributing](#contributing)**
 
@@ -486,6 +488,43 @@ api.Activities.postActivity(activity, SESSION_ID)
         console.log ('oh no!');
     });
 ```
+
+## Redirects
+
+  A redirect causes a visitor on the site to be automatically sent to a target (different location). The target can be a location on the site or within the app.
+
+  ```js
+      api.Redirects.getRedirects()
+      .then(function(data) {
+          console.log ('oh YEAAAHHHH!');
+      }, function(error) {
+          console.log ('oh no!');
+      });
+  ```
+
+
+## Using the Sites API
+
+### Get a hosting site's URL and status
+```js
+    api.Sites.getSite()
+    .then(function(data) {
+        console.log ('oh YEAAAHHHH!');
+    }, function(error) {
+        console.log ('oh no!');
+    });
+```
+
+### Get a hosting site's URL, status, and pages
+```js
+    api.Sites.getSitePages()
+    .then(function(data) {
+        console.log ('oh YEAAAHHHH!');
+    }, function(error) {
+        console.log ('oh no!');
+    });
+```
+
 
 ## Running the tests
 1. Install [Grunt](http://gruntjs.com/installing-grunt)
