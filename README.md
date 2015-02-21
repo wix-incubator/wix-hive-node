@@ -3,7 +3,7 @@ Wix-Hive-Node
 
 # Node library to work with the Wix RESTful API.
 
-Read about [developing a third party app for the Wix platform](http://dev.wix.com/docs/display/DRAF/Third+Party+Apps+-+Introduction).
+Read about [developing a third party app for the Wix platform](http://dev.wix.com/docs/getting-started).
 
 
 ### Table of Contents
@@ -82,7 +82,7 @@ app.get('/', function (req, res) {
 app.listen(3000);
 ```
 
-**Note** Remember to add `Wix.js` to you HTML files to avoid dismissal. See [JavaScript SDK](http://dev.wix.com/docs/display/DRAF/JavaScript+SDK)
+**Note** Remember to add `Wix.js` to you HTML files to avoid dismissal. See [JavaScript SDK](http://dev.wix.com/docs/sdk/introduction)
 
 ## Examples
 
