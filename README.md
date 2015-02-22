@@ -28,8 +28,8 @@ Read about [developing a third party app for the Wix platform](http://dev.wix.co
    * **[Sites](#using-the-sites-api)**
      * **[Get a hosting site's URL and status](#get-a-hosting-sites-url-and-status)**
      * **[Get a hosting site's URL, status, and pages](#get-a-hosting-sites-url-status-and-pages)**
-   * **[Test](#running-the-tests)**
-   * **[Contributing](#contributing)**
+5. **[Test](#running-the-tests)**
+6. **[Contributing](#contributing)**
 
 ## Prerequisites
 - **Register your app** [here](http://dev.wix.com/docs/development/developing-your-app#overview) to **obtain** your **APP_KEY** and **APP_SECRET**
