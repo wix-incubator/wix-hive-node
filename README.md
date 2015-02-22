@@ -28,7 +28,7 @@ Read about [developing a third party app for the Wix platform](http://dev.wix.co
    * **[Sites](#using-the-sites-api)**
      * **[Get a hosting site's URL and status](#get-a-hosting-sites-url-and-status)**
      * **[Get a hosting site's URL, status, and pages](#get-a-hosting-sites-url-status-and-pages)**
-5. **[Test](#running-the-tests)**
+5. **[E2E Tests](#running-e2e-tests)**
 6. **[Contributing](#contributing)**
 
 ## Prerequisites
@@ -528,14 +528,17 @@ api.Activities.postActivity(activity, SESSION_ID)
 ```
 
 
-## Running the tests
+## Running e2e tests
 1. Install [Grunt](http://gruntjs.com/installing-grunt)
 2. Run
 ```js
 $ grunt schemas
 ```
 3. Install [Mocha](https://www.npmjs.org/package/mocha) (-g)
-4. Run the tests using Mocha (use '-R nyan' for fun!)
+4. Fill in the configuration file under `/test/config.js` with your app key, secret key and instance ID:
+  * The `appSecret` and `appKey` are obtained by registering an app in the Dev Center, as it is outlined [here](http://dev.wix.com/docs/publish/registration)
+  * The `instanceId` is obtained by decoding the signed app instance. Learn more about this  [here](http://dev.wix.com/docs/infrastructure/app-instance#overview)
+5. Run the tests using Mocha (use '-R nyan' for fun!)
 
 ## Contributing
 
@@ -560,9 +563,10 @@ We use the GitHub issue tracker to track bugs and features. Before submitting a 
 1. Fork it ( https://github.com/[my-github-username]/wix-hive-ruby/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Implement your feature or bug fix.
-4. Commit your changes (`git commit -am 'Add some feature'`)
-5. Push to the branch (`git push origin my-new-feature`)
-6. Create a new [Pull Request](http://help.github.com/send-pull-requests/)
+4. Run the relevant e2e test or write tests for your changes.
+5. Commit your changes (`git commit -am 'Add some feature'`)
+6. Push to the branch (`git push origin my-new-feature`)
+7. Create a new [Pull Request](http://help.github.com/send-pull-requests/)
 
 ## Questions?
 
