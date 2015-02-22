@@ -535,7 +535,7 @@ api.Activities.postActivity(activity, SESSION_ID)
 $ grunt schemas
 ```
 3. Install [Mocha](https://www.npmjs.org/package/mocha) (-g)
-4. Fill in the configuration file under `/test/config.js` with your app key, secret key and instance ID:
+4. Fill in the configuration file under `/e2e/config.js` with your app key, secret key and instance ID:
   * The `appSecret` and `appKey` are obtained by registering an app in the Dev Center, as it is outlined [here](http://dev.wix.com/docs/publish/registration)
   * The `instanceId` is obtained by decoding the signed app instance. Learn more about this  [here](http://dev.wix.com/docs/infrastructure/app-instance#overview)
 5. Run the tests using Mocha (use '-R nyan' for fun!)
