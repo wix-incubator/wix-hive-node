@@ -409,7 +409,7 @@ describe('Api', function() {
         var cu = contactForm.contactUpdate;
         cu.addEmail(cu.newEmail().withTag("main").withEmail("name@wexample.com"));
         cu.name.withFirst("Your").withLast("Customer");
-        contactForm.withLocationUrl("http://www.test.com/").withActivityDetails("This is a e2e activity post", "http://www.test1.com/");
+        contactForm.withLocationUrl("http://www.test.com/").withActivityDetails("This is a test activity post", "http://www.test1.com/");
         var ai = contactForm.activityInfo;
         ai.addField(ai.newField().withName("email").withValue("john@mail.com"));
         ai.addField(ai.newField().withName("first").withValue("John"));
@@ -1378,7 +1378,7 @@ describe('Api', function() {
                                 var activity = data;
                                 activity.activityType.name.should.eql(api.Activities.TYPES.CONTACT_FORM.name);
                                 activity.activityDetails.additionalInfoUrl.should.eql("http://www.test1.com/");
-                                activity.activityDetails.summary.should.eql("This is a e2e activity post");
+                                activity.activityDetails.summary.should.eql("This is a test activity post");
                                 activity.activityLocationUrl.should.eql("http://www.test.com/");
                                 activity.activityInfo.fields[0].name.should.eql("email");
                                 activity.activityInfo.fields[1].name.should.eql("first");
