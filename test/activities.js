@@ -347,7 +347,15 @@ describe('Api', function() {
         var shipping = {total: 1, formattedTotal: 1};
         var payment = {total: '1', subtotal: '1', formattedTotal: '1.0', formattedSubtotal: '1.0', currency: 'EUR', coupon: coupon, tax: tax, shipping: shipping};
         var media = {thumbnail: 'PIC'};
-        var item = { id: 1, sku: 'sky', title: 'title', quantity: 1, price: '1', formattedPrice: '1.1', currency: 'EUR', productLink: 'link', weight: '1', formattedWeight: '1.0KG', media: media, variants: [{title: 'title', value: '1'}]};
+        var categories = ['shirt','clothing','wix'];
+        var metadata = [ {name: "item", value: "1"} ];
+        var item = { id: 1, type:'PHYSICAL', sku: 'sky', title: 'title',
+            quantity: 1, price: '1', formattedPrice: '1.1',
+            currency: 'EUR', productLink: 'link', weight: '1',
+            formattedWeight: '1.0KG', media: media,
+            categories: categories,
+            metadata: metadata,
+            variants: [{title: 'title', value: '1'}]};
         var shipping_address =
             {
                 firstName: 'Wix' , lastName: 'Cool',

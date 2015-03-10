@@ -21,6 +21,13 @@
                         "type": "string",
                         "required": true
                     },
+                    "type": {
+                        "type": "string",
+                        "enum": [
+                            "PHYSICAL",
+                            "DIGITAL"
+                        ]
+                    },
                     "sku": {
                         "type": "string"
                     },
@@ -74,6 +81,28 @@
                             }
                         },
                         "required": true
+                    },
+                    "categories": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "metadata": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "required": true
+                                },
+                                "value": {
+                                    "type": "string",
+                                    "required": true
+                                }
+                            }
+                        }
                     }
                 }
             },
@@ -238,7 +267,8 @@
             "type": "string"
         },
         "buyerAcceptsMarketing": {
-            "type" : "boolean"
+            "type": "boolean"
         }
     }
 }
+    
