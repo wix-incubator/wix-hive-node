@@ -17,7 +17,6 @@ describe('Labels', function() {
     describe('getLabels', function() {
         this.timeout(10000);
         it('should not throw error when called with no parameters', function (done) {
-            //throw 'PENDING HAPI-88';
             api.Labels.getLabels().then(
                 function(pagingLabelsResult) {
                     console.log(pagingLabelsResult);
@@ -33,7 +32,6 @@ describe('Labels', function() {
             ).done(null, done);
         });
         it('should return a non-empty list of Labels when called with no parameters', function (done) {
-            throw 'PENDING HAPI-88';
             api.Labels.getLabels().then(
                 function(pagingLabelsResult) {
                     console.log(pagingLabelsResult);
@@ -51,7 +49,6 @@ describe('Labels', function() {
             ).done(null, done);
         });
         it('should return a non-empty list of Labels when called with pageSize parameter', function (done) {
-            throw 'PENDING HAPI-88';
             api.Labels.getLabels(null,
                 {
                     pageSize: 50
@@ -77,11 +74,50 @@ describe('Labels', function() {
         });
     });
 
+    describe('getContactsByLabel', function() {
+        this.timeout(10000);
+        it('should return a non-empty list of contacts when called with pageSize parameter', function (done) {
+
+            api.Labels.postLabel({name: 'Karens Label', description: 'Test Label'}).then(
+                function(labelId){
+                    labelId.should.not.equal(undefined);
+                    labelId.should.be.a.String;
+                    labelId.should.not.be.length(0);
+                    done();
+                },
+                function(error){
+                    done(error);
+                }
+            );
+
+            api.Contacts.getContacts(null,
+                {
+                    pageSize: 50,
+                    labels: ['2751e1b9-10d3-49a5-9e30-26aed793adf0']
+                }
+            ).then(
+                function(pagingContactsResult) {
+                    console.log(pagingContactsResult.currentData);
+                    pagingContactsResult.should.not.equal(undefined);
+                    pagingContactsResult.should.be.a.Object;
+                    pagingContactsResult.should.not.be.empty;
+                    pagingContactsResult.currentData.results.should.be.a.Array;
+                    pagingContactsResult.currentData.results.should.not.have.length(0);
+                    pagingContactsResult.currentData.total.should.not.be.eql(0);
+                    should.exist(pagingContactsResult.currentData.pageSize);
+                    done();
+                },
+                function(error) {
+                    done(error);
+                }
+            ).done(null, done);
+        });
+    });
+
     describe('getLabelById', function() {
         this.timeout(10000);
         it('should return existing label with information', function (done) {
-            throw 'PENDING HAPI-89';
-            api.Labels.getLabelById("contacts_server/customers").then(
+            api.Labels.getLabelById("2751e1b9-10d3-49a5-9e30-26aed793adf0").then(
                 function(data){
                     console.log(data);
                     done();
@@ -108,6 +144,45 @@ describe('Labels', function() {
                     done(error);
                 }
             );
+        });
+    });
+
+    describe('addContactsToLabel', function() {
+        this.timeout(10000);
+        it('should add Contacts to a label without throwing error', function (done) {
+            var contact = api.Contacts.newContact(api);
+            contact.name({first: 'Karen', last: 'Meep'});
+            contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
+            api.Contacts.create(contact).then(
+                function (contactId) {
+
+                    var contactId = contactId;
+                    console.log("contactId = " + contactId);
+                    api.Labels.postLabel({name: 'Karens Label1', description: 'Test Label'}).then(
+                        function(labelId){
+
+                            console.log("labelId = " + labelId);
+                            api.Labels.addContactsToLabel(labelId, {dataType: 'CONTACTS', data: [contactId]} ).then(
+                                function(data){
+
+                                    console.log("data = " + data);
+                                    done();
+                                },
+                                function(error){
+                                    done(error);
+                                }
+                            );
+                        },
+                        function(error){
+                            done(error);
+                        }
+                    );
+
+                },
+                function (error) {
+                    done(error);
+                }
+            ).done(null, done);
         });
     });
 });
