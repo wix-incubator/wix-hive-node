@@ -51,11 +51,10 @@ describe('Labels', function() {
         it('should return a non-empty list of Labels when called with pageSize parameter', function (done) {
             api.Labels.getLabels(null,
                 {
-                    pageSize: 50
+                    pageSize: 13
                 }
             ).then(
                 function(pagingLabelsResult) {
-                    console.log(pagingLabelsResult);
                     pagingLabelsResult.should.not.equal(undefined);
                     pagingLabelsResult.should.be.a.Object;
                     pagingLabelsResult.should.not.be.empty;
@@ -63,11 +62,10 @@ describe('Labels', function() {
                     pagingLabelsResult.currentData.results.should.not.have.length(0);
                     pagingLabelsResult.currentData.total.should.not.be.eql(0);
                     should.exist(pagingLabelsResult.currentData.pageSize);
-                    assert(pagingLabelsResult.currentData.pageSize <= 50);
+                    assert(pagingLabelsResult.currentData.pageSize <= 13);
                     done();
                 },
                 function(error) {
-                    console.log(error);
                     done(error);
                 }
             ).done(null, done);
