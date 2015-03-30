@@ -560,7 +560,7 @@ We use the GitHub issue tracker to track bugs and features. Before submitting a 
 
 ### Submitting a Pull Request
 
-1. Fork it ( https://github.com/[my-github-username]/wix-hive-ruby/fork )
+1. Fork it ( https://github.com/[my-github-username]/wix-hive-node/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Implement your feature or bug fix.
 4. Run the relevant e2e test or write tests for your changes.
