@@ -192,33 +192,33 @@ describe('Api', function() {
                     function (types) {
                         var expectedTypes = {
                             "types": [
-                                "auth/login",
-                                "auth/register",
-                                "auth/status-change",
-                                "contact/contact-form",
-                                "contact/subscription-form",
-                                "contacts/create",
-                                "conversion/complete",
-                                "e_commerce/purchase",
-                                "hotels/cancel",
-                                "hotels/confirmation",
-                                "hotels/purchase",
-                                "hotels/purchase-failed",
-                                "messaging/send",
-                                "music/album-fan",
-                                "music/album-share",
-                                "music/track-lyrics",
-                                "music/track-play",
-                                "music/track-played",
-                                "music/track-share",
-                                "music/track-skip",
-                                "scheduler/appointment",
+                                'auth/login',
+                                'auth/register',
+                                'auth/status-change',
+                                'contact/contact-form',
+                                'contact/subscription-form',
+                                'contacts/create',
+                                'conversion/complete',
+                                'e_commerce/purchase',
+                                'hotels/cancel',
+                                'hotels/confirmation',
+                                'hotels/purchase',
+                                'hotels/purchase-failed',
+                                'messaging/send',
+                                'music/album-fan',
+                                'music/album-played',
+                                'music/album-share',
+                                'music/track-lyrics',
+                                'music/track-play',
+                                'music/track-played',
+                                'music/track-share',
+                                'music/track-skip',
+                                'scheduler/appointment',
                                 'shipping/delivered',
                                 'shipping/shipped',
                                 'shipping/status-change'
                             ]
                         };
-
                         types.should.not.equal(undefined);
                         assert.deepEqual(types, expectedTypes);
                         done();
