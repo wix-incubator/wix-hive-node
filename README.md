@@ -32,7 +32,7 @@ Read about [developing a third party app for the Wix platform](http://dev.wix.co
 6. **[Contributing](#contributing)**
 
 ## Prerequisites
-- **Register your app** [here](http://dev.wix.com/docs/development/developing-your-app#overview) to **obtain** your **APP_KEY** and **APP_SECRET**
+- **Register your app** [here](http://dev.wix.com/docs/development/developing-your-app#overview) to **obtain** your **APP_ID** and **APP_SECRET**
 - **Get the Javascript SDK** [here](http://dev.wix.com/docs/sdk/introduction#overview). You'll need it for any data altering API calls (such as creating an activity).
 
 ## Installation
