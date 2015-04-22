@@ -199,6 +199,7 @@ describe('Api', function() {
                                 'contact/subscription-form',
                                 'contacts/create',
                                 'conversion/complete',
+                                'downloads/downloaded',
                                 'e_commerce/purchase',
                                 'hotels/cancel',
                                 'hotels/confirmation',
@@ -340,6 +341,17 @@ describe('Api', function() {
         var oneDayAgo = new Date(new Date().getTime() - ONE_DAY);
         var stay = { checkin: oneDayAgo, checkout: new Date().toISOString() };
         hotelPurchaseFailed.activityInfo = { rates:[], rooms:[], guests: guest, stay: stay, payment: payment };
+
+        var downloaded = api.Activities.newActivity(api.Activities.TYPES.DOWNLOADS_DOWNLOADED);
+        downloaded.withLocationUrl('http://www.wix.com');
+        downloaded.withActivityDetails('downloaded test', 'http://www.wix.com');
+        var metadata = [ {name: "item", value: "1"} ];
+        var item = { id: 1, sku: 'sky', title: 'title',
+            quantity: 1, price: '1', formattedPrice: '1.1',
+            currency: 'EUR', productLink: 'link',
+            fileName: 'song.mp3',
+            metadata: metadata};
+        downloaded.activityInfo = { orderId: '1', item: item };
 
         var ecommPurchase = api.Activities.newActivity(api.Activities.TYPES.ECOMMERCE_PURCHASE);
         var coupon = {total: '1', title: 'Dis'};
@@ -704,6 +716,105 @@ describe('Api', function() {
                             }, function (error) {
                                 done(error);
                             }).done(null, done);
+                    });
+                });
+            });
+
+            describe('Downloads Activities', function () {
+                describe('Downloads Downloaded Activity', function () {
+
+                    it('should post full activity without throwing error', function (done) {
+                        var activity = downloaded;
+                        api.Activities.postActivity(activity, SESSION_ID)
+                            .then(function (data) {
+                                data.should.not.equal(undefined);
+                                data.should.be.a.String;
+                                data.should.not.be.empty;
+                                data.should.not.be.length(0);
+                                done();
+                            }, function (error) {
+                                done(error);
+                            }).done(null, done);
+                    });
+
+                    it('should post activity without optional fields without throwing error', function (done) {
+                        var activity = downloaded;
+                        var item = { id: 1, title: 'title', quantity: 1 };
+                        activity.activityInfo = { orderId: '1', item: item };
+                        api.Activities.postActivity(activity, SESSION_ID)
+                            .then(function (data) {
+                                data.should.not.equal(undefined);
+                                data.should.be.a.String;
+                                data.should.not.be.empty;
+                                data.should.not.be.length(0);
+                                done();
+                            }, function (error) {
+                                done(error);
+                            }).done(null, done);
+                    });
+
+                    describe('should throw error when posting activity without mandatory fields', function () {
+
+                        it('orderId', function (done) {
+                            var activity = downloaded;
+                            var metadata = [ {name: "item", value: "1"} ];
+                            var item = { id: 1, sku: 'sky', title: 'title',
+                                quantity: 1, price: '1', formattedPrice: '1.1',
+                                currency: 'EUR', productLink: 'link',
+                                fileName: 'song.mp3',
+                                metadata: metadata};
+                            activity.activityInfo = { /*orderId: '1', */ item: item };
+                            expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                            done();
+                        });
+                        it('item', function (done) {
+                            var activity = downloaded;
+                            var metadata = [ {name: "item", value: "1"} ];
+                            var item = { id: 1, sku: 'sky', title: 'title',
+                                quantity: 1, price: '1', formattedPrice: '1.1',
+                                currency: 'EUR', productLink: 'link',
+                                fileName: 'song.mp3',
+                                metadata: metadata};
+                            activity.activityInfo = { orderId: '1'/*,  item: item */};
+                            expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                            done();
+                        });
+                        it('item.id', function (done) {
+                            var activity = downloaded;
+                            var metadata = [ {name: "item", value: "1"} ];
+                            var item = { /*id: 1, */ sku: 'sky', title: 'title',
+                                quantity: 1, price: '1', formattedPrice: '1.1',
+                                currency: 'EUR', productLink: 'link',
+                                fileName: 'song.mp3',
+                                metadata: metadata};
+                            activity.activityInfo = { orderId: '1',  item: item};
+                            expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                            done();
+                        });
+                        it('item.title', function (done) {
+                            var activity = downloaded;
+                            var metadata = [ {name: "item", value: "1"} ];
+                            var item = { id: 1, sku: 'sky', /*title: 'title',*/
+                                quantity: 1, price: '1', formattedPrice: '1.1',
+                                currency: 'EUR', productLink: 'link',
+                                fileName: 'song.mp3',
+                                metadata: metadata};
+                            activity.activityInfo = { orderId: '1',  item: item};
+                            expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                            done();
+                        });
+                        it('item.quantity', function (done) {
+                            var activity = downloaded;
+                            var metadata = [ {name: "item", value: "1"} ];
+                            var item = { id: 1, sku: 'sky', title: 'title',
+                                /*quantity: 1,*/ price: '1', formattedPrice: '1.1',
+                                currency: 'EUR', productLink: 'link',
+                                fileName: 'song.mp3',
+                                metadata: metadata};
+                            activity.activityInfo = { orderId: '1',  item: item};
+                            expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                            done();
+                        });
                     });
                 });
             });
