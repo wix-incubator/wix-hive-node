@@ -1,8 +1,8 @@
 var should = require('should');
 var request = require('supertest');
 var config = require("./config.js");
-var APP_SECRET = config.appSecret; // <---------- REPLACE THIS WITH YOUR OWN APP SECRET KEY
-var APP_KEY = config.appKey; // <---------- REPLACE THIS WITH YOUR OWN APP KEY
+var APP_SECRET = config.appSecret;
+var APP_ID = config.appId;
 var INSTANCE_ID = config.instanceId;
 
 describe('REST API', function() {
@@ -14,7 +14,7 @@ describe('REST API', function() {
         describe('Activity Types', function() {
 
             var requestPath = '/activities/types';
-            var wixRequest = wixConnect.createRequest('GET', url + requestPath, APP_SECRET, APP_KEY, INSTANCE_ID);
+            var wixRequest = wixConnect.createRequest('GET', url + requestPath, APP_SECRET, APP_ID, INSTANCE_ID);
             var options = wixRequest.toHttpsOptions();
 
             it('should return a bad request status code for request with no wix headers', function(done) {

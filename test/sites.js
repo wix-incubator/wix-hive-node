@@ -5,11 +5,11 @@
 var should = require('should');
 var config = require("./config.js");
 var APP_SECRET = config.appSecret;
-var APP_KEY = config.appKey;
+var APP_ID = config.appId;
 var INSTANCE_ID = config.instanceId;
 
 var wixLib = require( '../lib/WixClient.js' );
-var api = wixLib.getAPI(APP_SECRET,APP_KEY, INSTANCE_ID);
+var api = wixLib.getAPI(APP_SECRET,APP_ID, INSTANCE_ID);
 
 describe('Sites', function() {
     this.timeout(10000);

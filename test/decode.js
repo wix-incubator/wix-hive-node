@@ -5,7 +5,6 @@
 var should = require('should');
 var config = require("./config.js");
 var APP_SECRET = config.appSecret;
-var APP_KEY = config.appKey;
 var INSTANCE = config.instance; // <---------- REPLACE THIS WITH A FRESH INSTANCE
 
 describe('OpenAPI-Node', function() {

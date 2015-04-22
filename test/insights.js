@@ -5,12 +5,12 @@
 var should = require('should');
 var expect = require('expect.js');
 var config = require("./config.js");
-var APP_SECRET = config.appSecret; // <---------- REPLACE THIS WITH YOUR OWN APP SECRET KEY
-var APP_KEY = config.appKey; // <---------- REPLACE THIS WITH YOUR OWN APP KEY
+var APP_SECRET = config.appSecret;
+var APP_ID = config.appId;
 var INSTANCE_ID = config.instanceId;
 
 var wixLib = require( '../lib/WixClient.js' );
-var api = wixLib.getAPI(APP_SECRET,APP_KEY, INSTANCE_ID);
+var api = wixLib.getAPI(APP_SECRET,APP_ID, INSTANCE_ID);
 
 describe('Insights', function() {
     this.timeout(10000);

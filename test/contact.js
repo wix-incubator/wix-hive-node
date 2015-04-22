@@ -7,13 +7,13 @@ var assert = require('assert');
 var expect = require('expect.js');
 var config = require("./config.js");
 var APP_SECRET = config.appSecret;
-var APP_KEY = config.appKey;
+var APP_ID = config.appId;
 var INSTANCE_ID = config.instanceId;
 
 describe('Contact', function() {
     this.timeout(10000);
     var wixLib = require( '../lib/WixClient.js' );
-    var api = wixLib.getAPI(APP_SECRET,APP_KEY, INSTANCE_ID);
+    var api = wixLib.getAPI(APP_SECRET, APP_ID, INSTANCE_ID);
 
     describe('Properties', function() {
         describe('Name', function() {
