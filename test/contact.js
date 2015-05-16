@@ -472,6 +472,7 @@ describe('Contact', function() {
                                             var phone = contact.phones()[0];
                                             phone.id().should.be.a.Number;
                                             phone.phone().should.be.eql('+1 646-862-0833');
+                                            phone.normalizedPhone().should.be.eql('+16468620833');
                                             phone.tag().should.be.eql('Wix NYC Lounge');
                                             done();
                                         },
@@ -968,6 +969,7 @@ describe('Contact', function() {
                                             phone.id().should.not.be.eql(undefined);
                                             phone.tag().should.be.eql('work');
                                             phone.phone().should.be.eql('+1-415-639-5555');
+                                            phone.normalizedPhone().should.be.eql('+14156395555');
                                             done();
                                         },
                                         function (error) {

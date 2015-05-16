@@ -156,6 +156,7 @@ describe('Contacts', function() {
                             phone.id().should.not.be.eql(undefined);
                             phone.tag().should.be.eql('work');
                             phone.phone().should.be.eql('+1-415-639-5555');
+                            phone.normalizedPhone().should.be.eql('+14156395555');
                             var url = contact.urls()[0];
                             url.id().should.be.a.Number;
                             url.id().should.not.be.eql(undefined);
@@ -244,6 +245,7 @@ describe('Contacts', function() {
                             phone.id().should.not.be.eql(undefined);
                             phone.tag().should.be.eql('work');
                             phone.phone().should.be.eql('+1-415-639-5555');
+                            phone.normalizedPhone().should.be.eql('+14156395555');
                             var url = contact.urls()[0];
                             url.id().should.be.a.Number;
                             url.id().should.not.be.eql(undefined);
@@ -418,7 +420,7 @@ describe('Contacts', function() {
 
             api.Contacts.getContacts(null,
                 {
-                    pageSize: 50
+                    pageSize: 53
                 }
             ).then(
                 function(pagingContactsResult) {
@@ -429,7 +431,7 @@ describe('Contacts', function() {
                     pagingContactsResult.currentData.results.should.not.have.length(0);
                     pagingContactsResult.currentData.total.should.not.be.eql(0);
                     should.exist(pagingContactsResult.currentData.pageSize);
-                    assert(pagingContactsResult.currentData.pageSize <= 50);
+                    assert(pagingContactsResult.currentData.pageSize <= 53);
                     done();
                 },
                 function(error) {
@@ -437,12 +439,13 @@ describe('Contacts', function() {
                 }
             ).done(null, done);
         });
-        it('should return a non-empty list of contacts when called with firstName parameter', function (done) {
+        it('should return a non-empty list of contacts when called with name.first parameter', function (done) {
 
-            throw 'PENDING HAPI-10';
             api.Contacts.getContacts(null,
                 {
-                    firstName: 'Karen'
+                    name: {
+                        first: 'Karen'
+                    }
                 }
             ).then(
                 function(pagingContactsResult) {
@@ -451,6 +454,7 @@ describe('Contacts', function() {
                     pagingContactsResult.should.not.be.empty;
                     pagingContactsResult.currentData.results.should.be.a.Array;
                     pagingContactsResult.currentData.results.should.not.have.length(0);
+                    pagingContactsResult.currentData.results[0].name.first.should.eql('Karen');
                     pagingContactsResult.currentData.total.should.not.be.eql(0);
                     done();
                 },
@@ -459,11 +463,12 @@ describe('Contacts', function() {
                 }
             ).done(null, done);
         });
-        it('should return a non-empty list of contacts when called with lastName parameter', function (done) {
-            throw 'PENDING HAPI-10';
+        it('should return a non-empty list of contacts when called with name.last parameter', function (done) {
             api.Contacts.getContacts(null,
                 {
-                    lastName: 'Meep'
+                    name: {
+                        last: 'Meep'
+                    }
                 }
             ).then(
                 function(pagingContactsResult) {
@@ -472,6 +477,7 @@ describe('Contacts', function() {
                     pagingContactsResult.should.not.be.empty;
                     pagingContactsResult.currentData.results.should.be.a.Array;
                     pagingContactsResult.currentData.results.should.not.have.length(0);
+                    pagingContactsResult.currentData.results[0].name.last.should.eql('Meep');
                     pagingContactsResult.currentData.total.should.not.be.eql(0);
                     done();
                 },
@@ -481,7 +487,6 @@ describe('Contacts', function() {
             ).done(null, done);
         });
         it('should return a non-empty list of contacts when called with email parameter', function (done) {
-            throw 'PENDING HAPI-10';
             api.Contacts.getContacts(null,
                 {
                     email: 'karen_meep@wix.com'
@@ -493,6 +498,8 @@ describe('Contacts', function() {
                     pagingContactsResult.should.not.be.empty;
                     pagingContactsResult.currentData.results.should.be.a.Array;
                     pagingContactsResult.currentData.results.should.not.have.length(0);
+                    pagingContactsResult.currentData.results[0].emails[0].should.not.have.length(0);
+                    pagingContactsResult.currentData.results[0].emails[0].email.should.eql('karen_meep@wix.com');
                     pagingContactsResult.currentData.total.should.not.be.eql(0);
                     done();
                 },
@@ -502,10 +509,9 @@ describe('Contacts', function() {
             ).done(null, done);
         });
         it('should return a non-empty list of contacts when called with phone parameter', function (done) {
-            throw 'PENDING HAPI-10';
             api.Contacts.getContacts(null,
                 {
-                    phone: '+1-415-639-5555'
+                    phone: '14156395555'
                 }
             ).then(
                 function(pagingContactsResult) {
@@ -524,12 +530,12 @@ describe('Contacts', function() {
         });
     });
 
-    describe('getContactsSubscribers', function() {
+    describe('getContactsMailingList', function() {
         this.timeout(10000);
         it('should not throw error when called with no parameters', function (done) {
 
             throw 'Pending - HAPI-18';
-            api.Contacts.getContactsSubscribers().then(
+            api.Contacts.getContactsMailingList().then(
                 function(pagingContactsResult) {
                     pagingContactsResult.should.not.equal(undefined);
                     pagingContactsResult.should.be.a.Object;
@@ -545,7 +551,7 @@ describe('Contacts', function() {
         it('should return a non-empty list of contacts when called with pageSize parameter', function (done) {
 
             throw 'Pending - HAPI-18';
-            api.Contacts.getContactsSubscribers(null,
+            api.Contacts.getContactsMailingList(null,
                 {
                     status: 'notSet',
                     pageSize: 50

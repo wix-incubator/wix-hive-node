@@ -459,18 +459,17 @@ describe('Api', function() {
         var eventUpdate = api.Activities.newActivity(api.Activities.TYPES.EVENTS_EVENT_UPDATE);
         eventUpdate.withLocationUrl('http://www.wix.com');
         eventUpdate.withActivityDetails('test', 'http://www.wix.com');
-        var source = 'STAFF';
         var status = 'RSVP';
         var summary = { going: 1, maybe: 2, invited: 3};
         var location = { address: '123 meep st.', city: 'meepsville', region: 'meep', postalCode: '124JKE', country: 'USSMEEP', url: 'http://www.wix.com' };
         var oneDay = new Date(new Date().getTime() + ONE_DAY);
         var time = { start: new Date().toISOString(), end: oneDay.toISOString(), timezone: 'ET'};
         var guests = [ { amount:1, kind: 'ADULT' }, { amount: 2, kind: 'CHILD' }, { amount: 1, kind: 'SENIOR' } ];
-        var contact1 = { contactId: '1234', name: {prefix:'sir', first: 'mix', middle:'a', last:'lot', suffix:'Sr.'}, phone:'555-2234', email: 'a@a.com', notes:'things and stuff', self: true, guests: guests };
-        var contact2 = { contactId: '1246', name: {prefix:'sir', first: 'mix', middle:'a', last:'lot', suffix:'Jr.'}, phone:'554-2234', email: 'b@a.com', notes:'things and stuff', RSVP: 'MAYBE' };
+        var contact1 = { contactId: '1234', name: {prefix:'sir', first: 'mix', middle:'a', last:'lot', suffix:'Sr.'}, phone:'555-2234', email: 'a@a.com', notes:'things and stuff', self: true, guests: guests, RSVP: 'MAYBE',kind: 'ADULT' };
+        var contact2 = { contactId: '1246', name: {prefix:'sir', first: 'mix', middle:'a', last:'lot', suffix:'Jr.'}, phone:'554-2234', email: 'b@a.com', notes:'things and stuff', RSVP: 'MAYBE', kind: 'ADULT' };
         var attendees = [ contact1, contact2 ];
         var price = { price: '1', currency: 'USD', formattedPrice: '$1.00'};
-        eventUpdate.activityInfo = { eventId: '1', infoLink: 'http://www.wix.com', price:price, source: source, title: 'my appointment', description: 'write these tests', location: location, time: time, attendees: attendees, summary: summary};
+        eventUpdate.activityInfo = { eventId: '1', infoLink: 'http://www.wix.com', status:status, price:price, title: 'my appointment', description: 'write these tests', location: location, time: time, attendees: attendees, summary: summary};
 
         var schedulerAppointment = api.Activities.newActivity(api.Activities.TYPES.SCHEDULER_APPOINTMENT);
         schedulerAppointment.withLocationUrl('http://www.wix.com');
@@ -1298,10 +1297,10 @@ describe('Api', function() {
                     it('should post activity without optional fields without throwing error', function (done) {
                         var activity = eventUpdate;
                         activity.activityInfo = {
+                            eventId: '1',
                             status: 'EVENT_DETAILS',
                             title: 'my appointment',
-                            description: 'write these tests',
-                            time: time
+                            description: 'write these tests'
                         };
                         api.Activities.postActivity(activity, SESSION_ID)
                             .then(function (data) {
@@ -1317,7 +1316,7 @@ describe('Api', function() {
 
                     describe('should throw error when posting activity without mandatory fields', function () {
 
-                        it('time', function (done) {
+                        it('eventId', function (done) {
                             var activity = eventUpdate;
                             activity.activityInfo = {
                                 status: 'EVENT_DETAILS',
@@ -1331,9 +1330,9 @@ describe('Api', function() {
                         it('status', function (done) {
                             var activity = eventUpdate;
                             activity.activityInfo = {
+                                eventId: '1',
                                 title: 'my appointment',
-                                description: 'write these tests',
-                                time: time
+                                description: 'write these tests'
                             };
                             expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
                             done();
@@ -1341,14 +1340,22 @@ describe('Api', function() {
 
                         it('title', function (done) {
                             var activity = eventUpdate;
-                            activity.activityInfo = {status: 'EVENT_DETAILS', description: 'write these tests', time: time};
+                            activity.activityInfo = {
+                                eventId: '1',
+                                status: 'EVENT_DETAILS',
+                                description: 'write these tests'
+                            };
                             expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
                             done();
                         });
 
                         it('description', function (done) {
                             var activity = eventUpdate;
-                            activity.activityInfo = {status: 'EVENT_DETAILS', title: 'my appointment', time: time};
+                            activity.activityInfo = {
+                                eventId: '1',
+                                status: 'EVENT_DETAILS',
+                                title: 'my appointment'
+                            };
                             expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
                             done();
                         });
