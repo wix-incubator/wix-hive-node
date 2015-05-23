@@ -399,7 +399,7 @@ describe('Api', function() {
                 zip: '7000',
                 company: 'Wix.com'
             };
-        var purchase = { cartId: '11111', storeId: '11111', orderId: '11111',
+        var purchase = { cartId: '11111', storeId: '11111', storeName: 'Meep', orderId: '11111',
             items: [item],
             payment: payment,
             shippingAddress: shipping_address,
@@ -452,9 +452,9 @@ describe('Api', function() {
             categories: categories,
             metadata: metadata,
             variants: [{title: 'title', value: '1'}]};
-        cartRemove.withLocationUrl('http://www.wix.com');
-        cartRemove.withActivityDetails('test', 'http://www.wix.com');
-        cartRemove.activityInfo = { cartId: '11111', storeId: '11111', storeName: 'WixStore', items: [item] };
+        cartCheckout.withLocationUrl('http://www.wix.com');
+        cartCheckout.withActivityDetails('test', 'http://www.wix.com');
+        cartCheckout.activityInfo = { cartId: '11111', storeId: '11111', storeName: 'WixStore', items: [item] };
 
         var eventUpdate = api.Activities.newActivity(api.Activities.TYPES.EVENTS_EVENT_UPDATE);
         eventUpdate.withLocationUrl('http://www.wix.com');
