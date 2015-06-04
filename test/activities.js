@@ -200,17 +200,17 @@ describe('Api', function() {
                                 'contacts/create',
                                 'conversion/complete',
                                 'downloads/downloaded',
-                                'e_commerce/purchase',
-                                'e_commerce/cart-add',
-                                'e_commerce/cart-remove',
-                                'e_commerce/cart-checkout',
                                 'e_commerce/cart-abandon',
+                                'e_commerce/cart-add',
+                                'e_commerce/cart-checkout',
+                                'e_commerce/cart-remove',
+                                'e_commerce/purchase',
                                 'events/event-update',
                                 'hotels/cancel',
                                 'hotels/confirmation',
-                                'hotels/reservation',
                                 'hotels/purchase',
                                 'hotels/purchase-failed',
+                                'hotels/reservation',
                                 'messaging/send',
                                 'music/album-fan',
                                 'music/album-played',
@@ -221,8 +221,8 @@ describe('Api', function() {
                                 'music/track-share',
                                 'music/track-skip',
                                 'scheduler/appointment',
-                                'scheduler/confirmation',
                                 'scheduler/cancel',
+                                'scheduler/confirmation',
                                 'shipping/delivered',
                                 'shipping/shipped',
                                 'shipping/status-change'
@@ -456,6 +456,21 @@ describe('Api', function() {
         cartCheckout.withActivityDetails('test', 'http://www.wix.com');
         cartCheckout.activityInfo = { cartId: '11111', storeId: '11111', storeName: 'WixStore', items: [item] };
 
+        var cartAbandon = api.Activities.newActivity(api.Activities.TYPES.ECOMMERCE_CART_ABANDON);
+        var media = {thumbnail: 'PIC'};
+        var categories = ['shirt','clothing','wix'];
+        var metadata = [ {name: "item", value: "1"} ];
+        var item = { id: 1, type:'PHYSICAL', sku: 'sky', title: 'title',
+            quantity: 1, price: '1', formattedPrice: '1.1',
+            currency: 'EUR', productLink: 'link', weight: '1',
+            formattedWeight: '1.0KG', media: media,
+            categories: categories,
+            metadata: metadata,
+            variants: [{title: 'title', value: '1'}]};
+        cartAbandon.withLocationUrl('http://www.wix.com');
+        cartAbandon.withActivityDetails('test', 'http://www.wix.com');
+        cartAbandon.activityInfo = { cartId: '1114411', storeId: '112111', storeName: 'WixStore', items: [item] };
+
         var eventUpdate = api.Activities.newActivity(api.Activities.TYPES.EVENTS_EVENT_UPDATE);
         eventUpdate.withLocationUrl('http://www.wix.com');
         eventUpdate.withActivityDetails('test', 'http://www.wix.com');
@@ -536,13 +551,14 @@ describe('Api', function() {
         shippingStatusChange.activityInfo =  { orderId: '11111', items: [item], status: 'AWAITING_SHIPMENT', shippingDetails: shippingDetails, shippingAddress: shippingAddress, note: 'Note' };
 
         var contactForm = api.Activities.newActivity(api.Activities.TYPES.CONTACT_FORM);
-        var cu = contactForm.contactUpdate;
-        cu.addEmail(cu.newEmail().withTag("main").withEmail("name@wexample.com"));
-        cu.name.withFirst("Your").withLast("Customer");
-        contactForm.withLocationUrl("http://www.test.com/").withActivityDetails("This is a e2e activity post", "http://www.test1.com/");
-        var ai = contactForm.activityInfo;
-        ai.addField(ai.newField().withName("email").withValue("john@mail.com"));
-        ai.addField(ai.newField().withName("first").withValue("John"));
+        contactForm.withLocationUrl('http://www.wix.com');
+        contactForm.withActivityDetails('test', 'http://www.wix.com');
+        contactForm.activityInfo = {
+            name: { prefix: "Dr.", first: "Karen", middle: "Mc", last: "meep", suffix: "The III"},
+            emails: [ {email: "karen@meep.com", tag: "primary"}, {email: "karen2@meep.com", tag: "work"} ],
+            phones: [ {phone: "554-2234", tag: "primary"} ],
+            fields: [ {name: "item", value: "1"} ]
+        };
 
         var subscriptionForm = api.Activities.newActivity(api.Activities.TYPES.SUBSCRIPTION_FORM);
         subscriptionForm.withLocationUrl('http://www.wix.com');
@@ -1748,6 +1764,101 @@ describe('Api', function() {
                         });
                         it('items', function (done) {
                             var activity = cartCheckout;
+                            var media = {thumbnail: 'PIC'};
+                            var categories = ['shirt','clothing','wix'];
+                            var metadata = [ {name: "item", value: "1"} ];
+                            var item = { id: 1, type:'PHYSICAL', sku: 'sky', title: 'title',
+                                quantity: 1, price: '1', formattedPrice: '1.1',
+                                currency: 'EUR', productLink: 'link', weight: '1',
+                                formattedWeight: '1.0KG', media: media,
+                                categories: categories,
+                                metadata: metadata,
+                                variants: [{title: 'title', value: '1'}]};
+                            activity.activityInfo = { cartId: '11111', storeId: '11111' };
+                            expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                            done();
+                        });
+                    });
+
+                });
+
+                describe('Ecomm Cart Abandon Activity', function () {
+
+                    it('should post full activity without throwing error', function (done) {
+                        var activity = cartAbandon;
+                        api.Activities.postActivity(activity, SESSION_ID)
+                            .then(function (data) {
+                                data.should.not.equal(undefined);
+                                data.should.be.a.String;
+                                data.should.not.be.empty;
+                                data.should.not.be.length(0);
+                                done();
+                            }, function (error) {
+                                done(error);
+                            }).done(null, done);
+                    });
+
+                    it('should post activity without optional fields without throwing error', function (done) {
+                        var activity = cartAbandon;
+                        var media = {thumbnail: 'PIC'};
+                        var categories = ['shirt','clothing','wix'];
+                        var metadata = [ {name: "item", value: "1"} ];
+                        var item = { id: 1, type:'PHYSICAL', sku: 'sky', title: 'title',
+                            quantity: 1, price: '1', formattedPrice: '1.1',
+                            currency: 'EUR', productLink: 'link', weight: '1',
+                            formattedWeight: '1.0KG', media: media,
+                            categories: categories,
+                            metadata: metadata,
+                            variants: [{title: 'title', value: '1'}]};
+                        activity.activityInfo = { cartId: '11111', storeId: '11111', items: [item] };
+                        api.Activities.postActivity(activity, SESSION_ID)
+                            .then(function (data) {
+                                data.should.not.equal(undefined);
+                                data.should.be.a.String;
+                                data.should.not.be.empty;
+                                data.should.not.be.length(0);
+                                done();
+                            }, function (error) {
+                                done(error);
+                            }).done(null, done);
+                    });
+
+                    describe('should throw error when posting activity without mandatory fields', function () {
+
+                        it('storeId', function (done) {
+                            var activity = cartAbandon;
+                            var media = {thumbnail: 'PIC'};
+                            var categories = ['shirt','clothing','wix'];
+                            var metadata = [ {name: "item", value: "1"} ];
+                            var item = { id: 1, type:'PHYSICAL', sku: 'sky', title: 'title',
+                                quantity: 1, price: '1', formattedPrice: '1.1',
+                                currency: 'EUR', productLink: 'link', weight: '1',
+                                formattedWeight: '1.0KG', media: media,
+                                categories: categories,
+                                metadata: metadata,
+                                variants: [{title: 'title', value: '1'}]};
+                            activity.activityInfo = { cartId: '11111', items: [item] };
+                            expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                            done();
+                        });
+                        it('cartId', function (done) {
+                            var activity = cartAbandon;
+                            var media = {thumbnail: 'PIC'};
+                            var categories = ['shirt','clothing','wix'];
+                            var metadata = [ {name: "item", value: "1"} ];
+                            var item = { id: 1, type:'PHYSICAL', sku: 'sky', title: 'title',
+                                quantity: 1, price: '1', formattedPrice: '1.1',
+                                currency: 'EUR', productLink: 'link', weight: '1',
+                                formattedWeight: '1.0KG', media: media,
+                                categories: categories,
+                                metadata: metadata,
+                                variants: [{title: 'title', value: '1'}]};
+                            activity.activityInfo = { storeId: '11111', items: [item] };
+                            expect(api.Activities.postActivity).withArgs(activity, SESSION_ID).to.throwException();
+                            done();
+                        });
+                        it('items', function (done) {
+                            var activity = cartAbandon;
                             var media = {thumbnail: 'PIC'};
                             var categories = ['shirt','clothing','wix'];
                             var metadata = [ {name: "item", value: "1"} ];

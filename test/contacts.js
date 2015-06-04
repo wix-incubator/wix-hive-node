@@ -511,7 +511,28 @@ describe('Contacts', function() {
         it('should return a non-empty list of contacts when called with phone parameter', function (done) {
             api.Contacts.getContacts(null,
                 {
-                    phone: '14156395555'
+                    phone: '+14156395555'
+                }
+            ).then(
+                function(pagingContactsResult) {
+                    pagingContactsResult.should.not.equal(undefined);
+                    pagingContactsResult.should.be.a.Object;
+                    pagingContactsResult.should.not.be.empty;
+                    pagingContactsResult.currentData.results.should.be.a.Array;
+                    pagingContactsResult.currentData.results.should.not.have.length(0);
+                    pagingContactsResult.currentData.total.should.not.be.eql(0);
+                    done();
+                },
+                function(error) {
+                    done(error);
+                }
+            ).done(null, done);
+        });
+        it('should return Contacts DTOs containing only requested fields when called with fields parameter', function (done) {
+            api.Contacts.getContacts(null,
+                {
+                    fields: 'NAME,EMAILS',
+                    pageSize: 1
                 }
             ).then(
                 function(pagingContactsResult) {
