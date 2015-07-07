@@ -183,7 +183,6 @@ describe('Contacts', function() {
         });
 
         it('should create new contact with note and customField and return contact object', function (done) {
-//            throw 'pending HAPI-3';
             var contact = api.Contacts.newContact(api);
             contact.name().prefix('Sir');
             contact.name().first('Mix');
@@ -273,6 +272,87 @@ describe('Contacts', function() {
                 function (error) {
                     done(error);
                 }
+            ).done(null, done);
+        });
+    });
+
+    describe('reconcile', function() {
+        this.timeout(600000);
+        it('should create new contact with information and return contact object', function (done) {
+            var contact = api.Contacts.newContact(api);
+
+            //contact.name().prefix('Sir');
+            //contact.name().first('Mix');
+            //contact.name().middle('A');
+            //contact.name().last('Lot');
+            //contact.name().suffix('The III');
+            //contact.company({role: 'MyRole', name: 'MyName'});
+            //contact.picture('http://assets.objectiface.com/hashed_silo_content/silo_content/6506/resized/mchammer.jpg');
+            //contact.addPhone({ tag: 'work', phone: '+1-415-639-5555'});
+            contact.addEmail({tag: 'work', email: 'karen_meep@wix.com', emailStatus: api.Contacts.EMAIL_STATUS_TYPES.RECURRING});
+            //contact.addAddress(
+            //    {
+            //        tag: 'work',
+            //        address: '500 Terry A Francois',
+            //        city: 'San Francisco',
+            //        neighborhood: 'Wixville',
+            //        region: 'CA',
+            //        country: 'USA',
+            //        postalCode: '94158'
+            //    });
+            //contact.addDate({ tag: 'work', date: '1994-11-05T13:15:30Z'});
+            //contact.addUrl({ tag: 'work', url: 'http://www.wix.com/'});
+            api.Contacts.reconcile(contact).then(
+                function (reconDetails) {
+                    var contact = reconDetails.contact;
+                    contact.id.should.not.equal(undefined);
+                    contact.id.should.be.a.String;
+                    contact.id.should.not.be.length(0);
+                    //contact.name.prefix.should.be.eql('Sir');
+                    //contact.name.first.should.be.eql('Mix');
+                    //contact.name.middle.should.be.eql('A');
+                    //contact.name.last.should.be.eql('Lot');
+                    //contact.name.suffix.should.be.eql('The III');
+                    //contact.picture.should.be.eql('http://assets.objectiface.com/hashed_silo_content/silo_content/6506/resized/mchammer.jpg');
+                    //contact.company.role().should.be.eql('MyRole');
+                    //contact.company.name().should.be.eql('MyName');
+                    var email = contact.emails()[0];
+                    email.id().should.be.a.Number;
+                    email.id().should.not.be.eql(undefined);
+                    email.email().should.be.eql('karen_meep@wix.com');
+                    email.emailStatus().should.be.eql(api.Contacts.EMAIL_STATUS_TYPES.RECURRING);
+                    email.tag().should.be.eql('work');
+                    //var address = contact.addresses()[0];
+                    //address.id().should.be.a.Number;
+                    //address.id().should.not.be.eql(undefined);
+                    //address.tag().should.be.eql('work');
+                    //address.address().should.be.eql('500 Terry A Francois');
+                    //address.neighborhood().should.be.eql('Wixville');
+                    //address.city().should.be.eql('San Francisco');
+                    //address.region().should.be.eql('CA');
+                    //address.country().should.be.eql('USA');
+                    //address.postalCode().should.be.eql('94158');
+                    var phone = contact.phones()[0];
+                    phone.id().should.be.a.Number;
+                    phone.id().should.not.be.eql(undefined);
+                    phone.tag().should.be.eql('work');
+                    phone.phone().should.be.eql('+1-415-639-5555');
+                    phone.normalizedPhone().should.be.eql('+14156395555');
+                    //var url = contact.urls()[0];
+                    //url.id().should.be.a.Number;
+                    //url.id().should.not.be.eql(undefined);
+                    //url.tag().should.be.eql('work');
+                    //url.url().should.be.eql('http://www.wix.com/');
+                    //var date = contact.dates()[0];
+                    //date.id().should.be.a.Number;
+                    //date.id().should.not.be.eql(undefined);
+                    //date.tag().should.be.eql('work');
+                    //var dExpected = new Date('1994-11-05T13:15:30Z').toString();
+                    //var dActual = new Date(date.date().toString()).toString();
+                    //dExpected.should.be.eql(dActual);
+                    done();
+                }
+
             ).done(null, done);
         });
     });
@@ -511,7 +591,7 @@ describe('Contacts', function() {
         it('should return a non-empty list of contacts when called with phone parameter', function (done) {
             api.Contacts.getContacts(null,
                 {
-                    phone: '+14156395555'
+                    phone: '+1415639?'
                 }
             ).then(
                 function(pagingContactsResult) {
