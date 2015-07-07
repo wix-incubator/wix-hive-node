@@ -39,4 +39,18 @@ describe('Sites', function() {
                 }).done(null, done);
         });
     });
+
+    describe('getSiteSettings', function() {
+        it('should return return Site settings', function(done) {
+
+            api.Sites.getSiteSettings()
+                .then(function(data) {
+                    console.log(data);
+                    data.should.not.equal(undefined);
+                    done();
+                }, function(error) {
+                    done(error);
+                }).done(null, done);
+        });
+    });
 });
