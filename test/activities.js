@@ -301,7 +301,7 @@ describe('Api', function() {
         sendMessage.withLocationUrl('http://www.wix.com');
         sendMessage.withActivityDetails('test', 'http://www.wix.com');
         var conversionTarget = { conversionType: 'FAN', metadata: [ {name: 'wix', value: '124'} ] };
-        var recipient = { method: 'SMS', contactId: '1234', destination: {name: {prefix:'sir', first: 'mix', middle:'a', last:'lot', suffix:'Sr.'},
+        var recipient = { method: 'CHAT', contactId: '1234', destination: {name: {prefix:'sir', first: 'mix', middle:'a', last:'lot', suffix:'Sr.'},
             target: 'localhost'}};
         sendMessage.activityInfo = {conversionTarget: conversionTarget, recipient: recipient, messageId: '1234'};
 
@@ -482,9 +482,9 @@ describe('Api', function() {
         var guests = [ { amount:1, kind: 'ADULT' }, { amount: 2, kind: 'CHILD' }, { amount: 1, kind: 'SENIOR' } ];
         var contact1 = { contactId: '1234', name: {prefix:'sir', first: 'mix', middle:'a', last:'lot', suffix:'Sr.'}, phone:'555-2234', email: 'a@a.com', notes:'things and stuff', self: true, guests: guests, RSVP: 'MAYBE',kind: 'ADULT' };
         var contact2 = { contactId: '1246', name: {prefix:'sir', first: 'mix', middle:'a', last:'lot', suffix:'Jr.'}, phone:'554-2234', email: 'b@a.com', notes:'things and stuff', RSVP: 'MAYBE', kind: 'ADULT' };
-        var attendees = [ contact1, contact2 ];
+        var invitees = [ contact1, contact2 ];
         var price = { price: '1', currency: 'USD', formattedPrice: '$1.00'};
-        eventUpdate.activityInfo = { eventId: '1', infoLink: 'http://www.wix.com', status:status, price:price, title: 'my appointment', description: 'write these tests', location: location, time: time, attendees: attendees, summary: summary};
+        eventUpdate.activityInfo = { eventId: '1', infoLink: 'http://www.wix.com', status:status, price:price, title: 'my appointment', description: 'write these tests', location: location, time: time, invitees: invitees, summary: summary};
 
         var schedulerAppointment = api.Activities.newActivity(api.Activities.TYPES.SCHEDULER_APPOINTMENT);
         schedulerAppointment.withLocationUrl('http://www.wix.com');
@@ -557,6 +557,13 @@ describe('Api', function() {
             name: { prefix: "Dr.", first: "Karen", middle: "Mc", last: "meep", suffix: "The III"},
             emails: [ {email: "karen@meep.com", tag: "primary"}, {email: "karen2@meep.com", tag: "work"} ],
             phones: [ {phone: "554-2234", tag: "primary"} ],
+            addresses: [ {tag: 'work',
+                address: '500 Terry A Francois',
+                city: 'San Francisco',
+                neighborhood: 'Wixville',
+                region: 'CA',
+                country: 'USA',
+                postalCode: '94158'} ],
             fields: [ {name: "item", value: "1"} ]
         };
 
@@ -1080,7 +1087,7 @@ describe('Api', function() {
                 it('should post activity without optional fields without throwing error', function (done) {
                     var activity = sendMessage;
                     activity.activityInfo = { method: 'SOCIAL', destination: { target: 'localhost'}};
-                    var recipient = { method: 'SMS', contactId: '1234', destination: {name: {prefix:'sir', first: 'mix', middle:'a', last:'lot', suffix:'Sr.'},
+                    var recipient = { method: 'CHAT', contactId: '1234', destination: {name: {prefix:'sir', first: 'mix', middle:'a', last:'lot', suffix:'Sr.'},
                         target: 'localhost'}};
                     sendMessage.activityInfo = {recipient: recipient};
                     api.Activities.postActivity(activity, SESSION_ID)
