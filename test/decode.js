@@ -20,5 +20,10 @@ describe('OpenAPI-Node', function() {
             wix.getAPI(APP_SECRET, APP_KEY, instanceId);
             done();
         });
+
+        it.only('should correctly decode ipAndPort', function() {
+            var wixInstance = wix.getConnect().parseInstance(INSTANCE, APP_SECRET);
+            wixInstance.ipAndPort.should.match(/.*\/.*/); // '*.*.*.*/*'
+        });
     });
 });
