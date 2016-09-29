@@ -1,7 +1,7 @@
 Wix-Hive-Node
 ============
 
-# Node library to work with the Wix RESTful API.
+# Node library to work with the Wix RESTful API. 
 
 Read about [developing a third party app for the Wix platform](http://dev.wix.com/docs/getting-started).
 
