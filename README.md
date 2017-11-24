@@ -1,4 +1,4 @@
-Wix-Hive-Node
+Wix-Hive-Node - DEPRECATED
 ============
 
 # Node library to work with the Wix RESTful API. 
